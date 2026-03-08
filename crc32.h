@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef CRC32_H
-#  define CRC32_H
+#ifndef CRC32_H
+# define CRC32_H
 
 unsigned int	lodepng_crc32(const unsigned char *data, size_t length);
 
-# endif
+#endif

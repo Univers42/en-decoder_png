@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef API_STATE_UTILS_H
-#  define API_STATE_UTILS_H
+#ifndef API_STATE_UTILS_H
+# define API_STATE_UTILS_H
 
-#  include "settings.h"
+# include "settings.h"
 
 void	lodepng_state_init(t_png_state *state);
 void	lodepng_state_cleanup(t_png_state *state);
 void	lodepng_state_copy(t_png_state *dest, const t_png_state *source);
 
-# endif
+#endif

@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   bit.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 22:52:08 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 22:52:08 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 20:55:29 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef BIT_H
-#  define BIT_H
+#ifndef BIT_H
+# define BIT_H
 
-#  include <unistd.h>
-#  include <stdlib.h>
-#  include <stdio.h>
-#  include <string.h>
-#  include "ucvector.h"
-#  include "uivector.h"
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <string.h>
+# include "ucvector.h"
+# include "uivector.h"
 
-#  ifndef READBIT
-#   define READBIT(bp, bs) (((bs)[(bp) >> 3] >> ((bp) & 0x7)) & 1u)
-#  endif
+# ifndef READBIT
+#  define READBIT(bp, bs) (((bs)[(bp) >> 3] >> ((bp) & 0x7)) & 1u)
+# endif
 
 unsigned int	lodepng_read_32bit_int(const unsigned char *buffer);
 void			lodepng_set_32bit_int(unsigned char *buffer,
@@ -48,4 +48,4 @@ void			set_bit_of_rev_stream(size_t *bp, unsigned char *bs,
 unsigned int	lodepng_chunk_length(const unsigned char *chunk);
 unsigned int	get_value_required_bits(unsigned char value);
 
-# endif
+#endif

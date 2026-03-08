@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef UCVECTOR_H
-#  define UCVECTOR_H
+#ifndef UCVECTOR_H
+# define UCVECTOR_H
 
-#  include <stddef.h>
-#  include "types.h"
-#  include "utils.h"
+# include <stddef.h>
+# include "types.h"
+# include "utils.h"
 
-#  ifndef UCVECTOR_DEFINED
-#   define UCVECTOR_DEFINED
+# ifndef UCVECTOR_DEFINED
+#  define UCVECTOR_DEFINED
 
 typedef struct s_ucvector
 {
@@ -27,7 +27,7 @@ typedef struct s_ucvector
 	size_t			allocsize;
 }	ucvector;
 
-#  endif
+# endif
 
 void	ucvector_init(ucvector *v);
 void	ucvector_init_buffer(ucvector *v, unsigned char *d, size_t s);
@@ -36,4 +36,4 @@ int		ucvector_reserve(ucvector *v, size_t s);
 int		ucvector_push_back(ucvector *v, unsigned char c);
 void	ucvector_cleanup(ucvector *v);
 
-# endif
+#endif

@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef ICC_H
-#  define ICC_H
+#ifndef ICC_H
+# define ICC_H
 
-#  include "str.h"
+# include "str.h"
 
 void			lodepng_clear_icc(t_png_info *info);
 unsigned int	lodepng_assign_icc(t_png_info *info, const char *name,
@@ -27,4 +27,4 @@ unsigned int		is_gray_icc_profile(const unsigned char *profile,
 unsigned int		is_rgb_icc_profile(const unsigned char *profile,
 					unsigned int	size);
 
-# endif
+#endif

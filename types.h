@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #ifndef TYPES_H
-#define TYPES_H
+# define TYPES_H
 
-#include <stddef.h>
-#include <stdlib.h>
+# include <stddef.h>
+# include <stdlib.h>
 
 /* PNG color types */
 typedef enum e_png_color_type
@@ -187,29 +187,29 @@ typedef struct s_png_state
 
 /* Vector types */
 // guard vector structs for re-includes
-#ifndef UCVECTOR_DEFINED
-#define UCVECTOR_DEFINED
+# ifndef UCVECTOR_DEFINED
+#  define UCVECTOR_DEFINED
 typedef struct s_ucvector
 {
 	unsigned char	*data;
 	size_t			size;
 	size_t			allocsize;
 } ucvector;
-#endif
+# endif
 
-#ifndef UIVECTOR_DEFINED
-#define UIVECTOR_DEFINED
+# ifndef UIVECTOR_DEFINED
+#  define UIVECTOR_DEFINED
 typedef struct s_uivector
 {
 	unsigned int	*data;
 	size_t			size;
 	size_t			allocsize;
 } uivector;
-#endif
+# endif
 
 /* Huffman tree */
-#ifndef HUFFMAN_TREE_DEFINED
-#define HUFFMAN_TREE_DEFINED
+# ifndef HUFFMAN_TREE_DEFINED
+#  define HUFFMAN_TREE_DEFINED
 typedef struct s_huffman_tree
 {
 	unsigned int	*tree2d;
@@ -218,11 +218,11 @@ typedef struct s_huffman_tree
 	unsigned int	max_bit_len;
 	unsigned int	numcodes;
 } t_huffman_tree;
-#endif
+# endif
 
 /* t_hash table for LZ77 */
-#ifndef HASH_STRUCT_DEFINED
-#define HASH_STRUCT_DEFINED
+# ifndef HASH_STRUCT_DEFINED
+#  define HASH_STRUCT_DEFINED
 typedef struct s_hash
 {
 	int				*head;
@@ -232,13 +232,13 @@ typedef struct s_hash
 	unsigned short	*chainz;
 	unsigned short	*zeros;
 } t_hash;
-#endif
+# endif
 
-#ifndef HASH_CONSTANTS_DEFINED
-#define HASH_CONSTANTS_DEFINED
-#define HASH_NUM_VALUES 65536
-#define HASH_BIT_MASK 65535
-#define MAX_SUPPORTED_DEFLATE_LENGTH 258
-#endif
+# ifndef HASH_CONSTANTS_DEFINED
+#  define HASH_CONSTANTS_DEFINED
+#  define HASH_NUM_VALUES 65536
+#  define HASH_BIT_MASK 65535
+#  define MAX_SUPPORTED_DEFLATE_LENGTH 258
+# endif
 
 #endif

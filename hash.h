@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef HASH_H
-#  define HASH_H
+#ifndef HASH_H
+# define HASH_H
 
-#  include "types.h"
+# include "types.h"
 
-#  ifndef HASH_STRUCT_DEFINED
+# ifndef HASH_STRUCT_DEFINED
 
 typedef struct s_hash
 {
@@ -27,7 +27,7 @@ typedef struct s_hash
 	unsigned short	*zeros;
 }	t_hash;
 
-#  endif
+# endif
 
 unsigned int	hash_init(t_hash *hash, unsigned int windowsize);
 void			hash_cleanup(t_hash *hash);
@@ -37,4 +37,4 @@ unsigned int	count_zeros(const unsigned char *data, size_t size,
 void			update_hash_chain(t_hash *hash, size_t wpos,
 					unsigned int	hashval, unsigned short numzeros);
 
-# endif
+#endif

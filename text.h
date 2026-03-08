@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef TEXT_H
-#  define TEXT_H
+#ifndef TEXT_H
+# define TEXT_H
 
 void			lodepng_text_init(t_png_info *info);
 void			lodepng_text_cleanup(t_png_info *info);
@@ -29,4 +29,4 @@ unsigned int	lodepng_add_itext(t_png_info *info, const char *key,
 					const char *langtag, const char *transkey,
 					const char	*str);
 
-# endif
+#endif

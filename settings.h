@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef PNGWRITER_SETTINGS_H
-#  define PNGWRITER_SETTINGS_H
+#ifndef PNGWRITER_SETTINGS_H
+# define PNGWRITER_SETTINGS_H
 
-#  include "types.h"
+# include "types.h"
 
 void	lodepng_compress_settings_init(t_compress_settings *s);
 void	lodepng_decompress_settings_init(t_decompress_settings *s);
@@ -23,4 +23,4 @@ unsigned int	lodepng_color_profile_add(t_png_color_profile *profile,
 				unsigned int	r, unsigned int g, unsigned int b, unsigned int a);
 void	lodepng_encoder_settings_init(t_encoder_settings *s);
 
-# endif
+#endif

@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef ERROR_H
-#  define ERROR_H
+#ifndef ERROR_H
+# define ERROR_H
 
 const char	*lodepng_error_text(unsigned int code);
 
-# endif
+#endif

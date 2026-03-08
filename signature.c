@@ -12,9 +12,8 @@
 
 #include "all.h"
 
-void write_signature(ucvector *out)
+void	write_signature(ucvector *out)
 {
-
 	ucvector_push_back(out, 137);
 	ucvector_push_back(out, 80);
 	ucvector_push_back(out, 78);

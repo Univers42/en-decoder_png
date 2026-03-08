@@ -11,23 +11,23 @@
 /* ************************************************************************** */
 
 #ifndef PNG_CODEC_H
-#define PNG_CODEC_H
+# define PNG_CODEC_H
 
-#include <string.h>
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
+# include <string.h>
+# include <limits.h>
+# include <stdio.h>
+# include <stdlib.h>
 
-#define FIRST_LENGTH_CODE_INDEX 257
-#define LAST_LENGTH_CODE_INDEX 285
-#define NUM_DEFLATE_CODE_SYMBOLS 288
-#define NUM_DISTANCE_SYMBOLS 32
-#define NUM_CODE_LENGTH_CODES 19
-#define LODEPNG_VERSION_STRING "20190210"
-#define MAX_SUPPORTED_DEFLATE_LENGTH 258
-#define HASH_NUM_VALUES 65536
-#define HASH_BIT_MASK 65535
-#define DEFAULT_WINDOWS 2048
+# define FIRST_LENGTH_CODE_INDEX 257
+# define LAST_LENGTH_CODE_INDEX 285
+# define NUM_DEFLATE_CODE_SYMBOLS 288
+# define NUM_DISTANCE_SYMBOLS 32
+# define NUM_CODE_LENGTH_CODES 19
+# define LODEPNG_VERSION_STRING "20190210"
+# define MAX_SUPPORTED_DEFLATE_LENGTH 258
+# define HASH_NUM_VALUES 65536
+# define HASH_BIT_MASK 65535
+# define DEFAULT_WINDOWS 2048
 
 typedef struct s_ctx
 {

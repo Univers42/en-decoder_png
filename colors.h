@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef COLORS_H
-#  define COLORS_H
+#ifndef COLORS_H
+# define COLORS_H
 
-#  include <stddef.h>
-#  include <stdlib.h>
-#  include "types.h"
-#  include "utils.h"
+# include <stddef.h>
+# include <stdlib.h>
+# include "types.h"
+# include "utils.h"
 
 unsigned int		check_color_validity(t_png_color_type colortype,
 						unsigned int	bd);
@@ -78,4 +78,4 @@ unsigned int		lodepng_auto_choose_color(t_png_color_mode *mode_out,
 unsigned int		get_palette_translucency(const unsigned char *palette,
 						size_t	palettesize);
 
-# endif
+#endif

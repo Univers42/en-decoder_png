@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef STR_H
-#  define STR_H
+#ifndef STR_H
+# define STR_H
 
-#  include <stdlib.h>
-#  include <string.h>
+# include <stdlib.h>
+# include <string.h>
 
 void	string_cleanup(char **out);
 char	*alloc_string(const char *in);
 
-# endif
+#endif
