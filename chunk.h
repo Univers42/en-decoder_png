@@ -53,6 +53,8 @@ unsigned		addChunk_IDAT(ucvector *out, const unsigned char *data,
 					LodePNGCompressSettings *zlibsettings);
 unsigned		addChunk_IEND(ucvector *out);
 void			writeSignature(ucvector *out);
+unsigned		addUnknownChunks(ucvector *out, unsigned char *data,
+					size_t datasize);
 
 # ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 

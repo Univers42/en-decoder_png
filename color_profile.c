@@ -244,7 +244,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 /*Adds a single color to the color profile. The profile must already have been inited. The color must be given as 16-bit
 (with 2 bytes repeating for 8-bit and 65535 for opaque alpha channel). This function is expensive, do not call it for
 all pixels of an image but only for a few additional values. */
-static unsigned lodepng_color_profile_add(LodePNGColorProfile *profile,
+unsigned lodepng_color_profile_add(LodePNGColorProfile *profile,
 										  unsigned r, unsigned g, unsigned b, unsigned a)
 {
 	unsigned error = 0;

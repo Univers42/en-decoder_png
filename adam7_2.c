@@ -1,0 +1,109 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   adam7_2.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/29 23:50:26 by marvin            #+#    #+#             */
+/*   Updated: 2026/03/08 19:08:30 by dlesieur         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "all.h"
+
+static void	a7_deint_bits(unsigned char *out, const unsigned char *in,
+		size_t *obp, size_t *ibp, unsigned bpp)
+{
+	unsigned	b;
+
+	b = 0;
+	while (b < bpp)
+	{
+		setBitOfReversedStream0(obp, out,
+			readBitFromReversedStream(ibp, in));
+		++b;
+	}
+}
+
+static void	a7_deint_byte_pass(unsigned char *out,
+		const unsigned char *in, unsigned w, size_t bw,
+		unsigned pass, unsigned pw, unsigned ph, size_t ps)
+{
+	unsigned	x;
+	unsigned	y;
+	unsigned	b;
+	size_t		pis;
+	size_t		pos;
+
+	y = 0;
+	while (y < ph)
+	{
+		x = 0;
+		while (x < pw)
+		{
+			pis = ps + (y * pw + x) * bw;
+			pos = ((g_adam7_iy[pass] + (size_t)(y * g_adam7_dy[pass]))
+				* w + g_adam7_ix[pass] + x * g_adam7_dx[pass]) * bw;
+			b = 0;
+			while (b < bw)
+			{
+				out[pos + b] = in[pis + b];
+				++b;
+			}
+			++x;
+		}
+		++y;
+	}
+}
+
+static void	a7_deint_bit_pass(unsigned char *out,
+		const unsigned char *in, unsigned w, unsigned bpp,
+		unsigned pass, unsigned pw, unsigned ph, size_t ps)
+{
+	unsigned	x;
+	unsigned	y;
+	size_t		ibp;
+	size_t		obp;
+
+	y = 0;
+	while (y < ph)
+	{
+		x = 0;
+		while (x < pw)
+		{
+			ibp = (8 * ps) + (y * (size_t)(bpp * pw) + x * bpp);
+			obp = (g_adam7_iy[pass] + (size_t)(y * g_adam7_dy[pass]))
+				* (bpp * w) + (g_adam7_ix[pass]
+				+ x * g_adam7_dx[pass]) * bpp;
+			a7_deint_bits(out, in, &obp, &ibp, bpp);
+			++x;
+		}
+		++y;
+	}
+}
+
+void	Adam7_deinterlace(unsigned char *out, const unsigned char *in,
+		unsigned w, unsigned h, unsigned bpp)
+{
+	unsigned	passw[7];
+	unsigned	passh[7];
+	size_t		filter_passstart[8];
+	size_t		padded_passstart[8];
+	size_t		passstart[8];
+	unsigned	i;
+
+	Adam7_getpassvalues(passw, passh, filter_passstart,
+		padded_passstart, passstart, w, h, bpp);
+	i = 0;
+	while (i != 7)
+	{
+		if (bpp >= 8)
+			a7_deint_byte_pass(out, in, w, bpp / 8, i,
+				passw[i], passh[i], passstart[i]);
+		else
+			a7_deint_bit_pass(out, in, w, bpp, i,
+				passw[i], passh[i], passstart[i]);
+		++i;
+	}
+}

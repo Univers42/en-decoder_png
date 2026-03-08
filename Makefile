@@ -24,7 +24,7 @@ ARFLAGS     := rcs
 CFLAGS      := -std=c99 -O3 -march=native -fno-math-errno -flto \
                -DNDEBUG -pipe \
                -D_POSIX_C_SOURCE=200809L \
-               -Wall -Wextra -Werror -Wno-unused-function
+               -Wall -Wextra -Werror
 
 INCLUDES    := -I .
 

@@ -22,5 +22,9 @@ unsigned int	lodepng_assign_icc(LodePNGInfo *info, const char *name,
 unsigned int	lodepng_set_icc(LodePNGInfo *info, const char *name,
 					const unsigned char *profile,
 					unsigned int profile_size);
+unsigned		isGrayICCProfile(const unsigned char *profile,
+					unsigned size);
+unsigned		isRGBICCProfile(const unsigned char *profile,
+					unsigned size);
 
 # endif
