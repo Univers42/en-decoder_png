@@ -14,7 +14,7 @@
 
 void	lodepng_chunk_type(char type[5], const unsigned char *chunk)
 {
-	unsigned	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i != 4)

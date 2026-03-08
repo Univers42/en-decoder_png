@@ -36,7 +36,7 @@ static int	pixel_overflow_check(size_t *line, unsigned int w, size_t bpp)
 }
 
 int	lodepng_pixel_overflow(unsigned int w, unsigned int h,
-		const LodePNGColorMode *pngcolor, const LodePNGColorMode *rawcolor)
+		const t_png_color_mode *pngcolor, const t_png_color_mode *rawcolor)
 {
 	size_t	bpp;
 	size_t	numpixels;

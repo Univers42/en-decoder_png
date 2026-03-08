@@ -12,12 +12,12 @@
 
 #include "all.h"
 
-unsigned	lodepng_decode_memory(unsigned char **out, unsigned *w,
-		unsigned *h, const unsigned char *in, size_t insize,
-		LodePNGColorType colortype, unsigned bitdepth)
+unsigned int	lodepng_decode_memory(unsigned char **out, unsigned int *w,
+		unsigned int *h, const unsigned char *in, size_t insize,
+		t_png_color_type colortype, unsigned int bitdepth)
 {
-	unsigned		error;
-	LodePNGState	state;
+	unsigned int		error;
+	t_png_state	state;
 
 	lodepng_state_init(&state);
 	state.info_raw.colortype = colortype;
@@ -27,32 +27,32 @@ unsigned	lodepng_decode_memory(unsigned char **out, unsigned *w,
 	return (error);
 }
 
-unsigned	lodepng_decode32_memory(unsigned char **out, unsigned *w,
-		unsigned *h, const unsigned char *in, size_t insize)
+unsigned int	lodepng_decode32_memory(unsigned char **out, unsigned int *w,
+		unsigned int *h, const unsigned char *in, size_t insize)
 {
 	return (lodepng_decode_memory(out, w, h, in, insize, LCT_RGBA, 8));
 }
 
-unsigned	lodepng_decode32(unsigned char **out, unsigned *w,
-		unsigned *h, const unsigned char *in, size_t insize)
+unsigned int	lodepng_decode32(unsigned char **out, unsigned int *w,
+		unsigned int *h, const unsigned char *in, size_t insize)
 {
 	return (lodepng_decode_memory(out, w, h, in, insize, LCT_RGBA, 8));
 }
 
-unsigned	lodepng_decode24(unsigned char **out, unsigned *w,
-		unsigned *h, const unsigned char *in, size_t insize)
+unsigned int	lodepng_decode24(unsigned char **out, unsigned int *w,
+		unsigned int *h, const unsigned char *in, size_t insize)
 {
 	return (lodepng_decode_memory(out, w, h, in, insize, LCT_RGB, 8));
 }
 
 #ifdef LODEPNG_COMPILE_DISK
-unsigned	lodepng_decode_file(unsigned char **out, unsigned *w,
-		unsigned *h, const char *filename,
-		LodePNGColorType colortype, unsigned bitdepth)
+unsigned int	lodepng_decode_file(unsigned char **out, unsigned int *w,
+		unsigned int *h, const char *filename,
+		t_png_color_type colortype, unsigned int bitdepth)
 {
 	unsigned char	*buffer;
 	size_t			buffersize;
-	unsigned		error;
+	unsigned int		error;
 
 	buffer = 0;
 	*out = 0;

@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-unsigned int	readBitsFromReversedStream(size_t *bitpointer,
+unsigned int	read_bits_from_rev_stream(size_t *bitpointer,
 		const unsigned char *bitstream, size_t nbits)
 {
 	unsigned int	result;
@@ -23,14 +23,14 @@ unsigned int	readBitsFromReversedStream(size_t *bitpointer,
 	while (i < nbits)
 	{
 		result <<= 1;
-		result |= (unsigned int)readBitFromReversedStream(bitpointer,
+		result |= (unsigned int)read_bit_from_rev_stream(bitpointer,
 				bitstream);
 		i++;
 	}
 	return (result);
 }
 
-void	setBitOfReversedStream0(size_t *bitpointer,
+void	set_bit_of_rev_stream0(size_t *bitpointer,
 		unsigned char *bitstream, unsigned char bit)
 {
 	if (bit)
@@ -39,7 +39,7 @@ void	setBitOfReversedStream0(size_t *bitpointer,
 	++(*bitpointer);
 }
 
-void	setBitOfReversedStream(size_t *bitpointer,
+void	set_bit_of_rev_stream(size_t *bitpointer,
 		unsigned char *bitstream, unsigned char bit)
 {
 	if (bit == 0)
@@ -53,10 +53,10 @@ void	setBitOfReversedStream(size_t *bitpointer,
 
 unsigned int	lodepng_chunk_length(const unsigned char *chunk)
 {
-	return (lodepng_read32bitInt(&chunk[0]));
+	return (lodepng_read_32bit_int(&chunk[0]));
 }
 
-unsigned int	getValueRequiredBits(unsigned char value)
+unsigned int	get_value_required_bits(unsigned char value)
 {
 	if (value == 0 || value == 255)
 		return (1);

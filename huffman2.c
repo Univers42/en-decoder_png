@@ -12,9 +12,9 @@
 
 #include "all.h"
 
-static void	make2d_clear_uninit(HuffmanTree *tree)
+static void	make2d_clear_uninit(t_huffman_tree *tree)
 {
-	unsigned	n;
+	unsigned int	n;
 
 	n = 0;
 	while (n < tree->numcodes * 2)
@@ -25,10 +25,10 @@ static void	make2d_clear_uninit(HuffmanTree *tree)
 	}
 }
 
-static unsigned	make2d_inner(HuffmanTree *tree, unsigned n,
-				unsigned *nodefilled, unsigned *treepos)
+static unsigned int	make2d_inner(t_huffman_tree *tree, unsigned int n,
+				unsigned int *nodefilled, unsigned int *treepos)
 {
-	unsigned		i;
+	unsigned int		i;
 	unsigned char	bit;
 
 	i = 0;
@@ -61,17 +61,17 @@ static unsigned	make2d_inner(HuffmanTree *tree, unsigned n,
 	return (0);
 }
 
-unsigned	HuffmanTree_make2DTree(HuffmanTree *tree)
+unsigned int	huffman_tree_make_2d_tree(t_huffman_tree *tree)
 {
-	unsigned	nodefilled;
-	unsigned	treepos;
-	unsigned	n;
-	unsigned	error;
+	unsigned int	nodefilled;
+	unsigned int	treepos;
+	unsigned int	n;
+	unsigned int	error;
 
 	nodefilled = 0;
 	treepos = 0;
-	tree->tree2d = (unsigned *)lodepng_malloc(
-			tree->numcodes * 2 * sizeof(unsigned));
+	tree->tree2d = (unsigned int *)lodepng_malloc(
+			tree->numcodes * 2 * sizeof(unsigned int));
 	if (!tree->tree2d)
 		return (83);
 	n = 0;

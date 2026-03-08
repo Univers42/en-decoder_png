@@ -14,27 +14,27 @@
 #include "bit.h"
 
 /* Forward declarations */
-void getPixelColorRGBA16(unsigned short *r, unsigned short *g, unsigned short *b, unsigned short *a,
-						 const unsigned char *in, size_t i, const LodePNGColorMode *mode);
-void getPixelColorRGBA8(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char *a,
-						const unsigned char *in, size_t i, const LodePNGColorMode *mode);
+void get_pixel_color_rgba16(unsigned short *r, unsigned short *g, unsigned short *b, unsigned short *a,
+						 const unsigned char *in, size_t i, const t_png_color_mode *mode);
+void get_pixel_color_rgba8(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char *a,
+						const unsigned char *in, size_t i, const t_png_color_mode *mode);
 
-unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
-								   const unsigned char *in, unsigned w, unsigned h,
-								   const LodePNGColorMode *mode_in)
+unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
+								   const unsigned char *in, unsigned int w, unsigned int h,
+								   const t_png_color_mode *mode_in)
 {
-	unsigned error = 0;
+	unsigned int error = 0;
 	size_t i;
-	ColorTree tree;
+	t_color_tree tree;
 	size_t numpixels = (size_t)w * (size_t)h;
 
-	unsigned colored_done = lodepng_is_greyscale_type(mode_in) ? 1 : 0;
-	unsigned alpha_done = lodepng_can_have_alpha(mode_in) ? 0 : 1;
-	unsigned numcolors_done = 0;
-	unsigned bpp = lodepng_get_bpp(mode_in);
-	unsigned bits_done = (profile->bits == 1 && bpp == 1) ? 1 : 0;
-	unsigned sixteen = 0;
-	unsigned maxnumcolors = 257;
+	unsigned int colored_done = lodepng_is_greyscale_type(mode_in) ? 1 : 0;
+	unsigned int alpha_done = lodepng_can_have_alpha(mode_in) ? 0 : 1;
+	unsigned int numcolors_done = 0;
+	unsigned int bpp = lodepng_get_bpp(mode_in);
+	unsigned int bits_done = (profile->bits == 1 && bpp == 1) ? 1 : 0;
+	unsigned int sixteen = 0;
+	unsigned int maxnumcolors = 257;
 	if (bpp <= 8)
 		maxnumcolors = LODEPNG_MIN(257, profile->numcolors + (1u << bpp));
 
@@ -69,7 +69,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 		unsigned short r, g, b, a;
 		for (i = 0; i != numpixels; ++i)
 		{
-			getPixelColorRGBA16(&r, &g, &b, &a, in, i, mode_in);
+			get_pixel_color_rgba16(&r, &g, &b, &a, in, i, mode_in);
 			if ((r & 255) != ((r >> 8) & 255) || (g & 255) != ((g >> 8) & 255) ||
 				(b & 255) != ((b >> 8) & 255) || (a & 255) != ((a >> 8) & 255))
 			{
@@ -88,7 +88,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 
 		for (i = 0; i != numpixels; ++i)
 		{
-			getPixelColorRGBA16(&r, &g, &b, &a, in, i, mode_in);
+			get_pixel_color_rgba16(&r, &g, &b, &a, in, i, mode_in);
 
 			if (!colored_done && (r != g || r != b))
 			{
@@ -98,7 +98,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 
 			if (!alpha_done)
 			{
-				unsigned matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
+				unsigned int matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
 				if (a != 65535 && (a != 0 || (profile->key && !matchkey)))
 				{
 					profile->alpha = 1;
@@ -128,7 +128,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 		{
 			for (i = 0; i != numpixels; ++i)
 			{
-				getPixelColorRGBA16(&r, &g, &b, &a, in, i, mode_in);
+				get_pixel_color_rgba16(&r, &g, &b, &a, in, i, mode_in);
 				if (a != 0 && r == profile->key_r && g == profile->key_g && b == profile->key_b)
 				{
 
@@ -144,12 +144,12 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 		unsigned char r = 0, g = 0, b = 0, a = 0;
 		for (i = 0; i != numpixels; ++i)
 		{
-			getPixelColorRGBA8(&r, &g, &b, &a, in, i, mode_in);
+			get_pixel_color_rgba8(&r, &g, &b, &a, in, i, mode_in);
 
 			if (!bits_done && profile->bits < 8)
 			{
 
-				unsigned bits = getValueRequiredBits(r);
+				unsigned int bits = get_value_required_bits(r);
 				if (bits > profile->bits)
 					profile->bits = bits;
 			}
@@ -165,7 +165,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 
 			if (!alpha_done)
 			{
-				unsigned matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
+				unsigned int matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
 				if (a != 255 && (a != 0 || (profile->key && !matchkey)))
 				{
 					profile->alpha = 1;
@@ -200,7 +200,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 					if (profile->numcolors < 256)
 					{
 						unsigned char *p = profile->palette;
-						unsigned n = profile->numcolors;
+						unsigned int n = profile->numcolors;
 						p[n * 4 + 0] = r;
 						p[n * 4 + 1] = g;
 						p[n * 4 + 2] = b;
@@ -219,7 +219,7 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 		{
 			for (i = 0; i != numpixels; ++i)
 			{
-				getPixelColorRGBA8(&r, &g, &b, &a, in, i, mode_in);
+				get_pixel_color_rgba8(&r, &g, &b, &a, in, i, mode_in);
 				if (a != 0 && r == profile->key_r && g == profile->key_g && b == profile->key_b)
 				{
 
@@ -244,12 +244,12 @@ unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 /*Adds a single color to the color profile. The profile must already have been inited. The color must be given as 16-bit
 (with 2 bytes repeating for 8-bit and 65535 for opaque alpha channel). This function is expensive, do not call it for
 all pixels of an image but only for a few additional values. */
-unsigned lodepng_color_profile_add(LodePNGColorProfile *profile,
-										  unsigned r, unsigned g, unsigned b, unsigned a)
+unsigned int lodepng_color_profile_add(t_png_color_profile *profile,
+										  unsigned int r, unsigned int g, unsigned int b, unsigned int a)
 {
-	unsigned error = 0;
+	unsigned int error = 0;
 	unsigned char image[8];
-	LodePNGColorMode mode;
+	t_png_color_mode mode;
 	lodepng_color_mode_init(&mode);
 	image[0] = r >> 8;
 	image[1] = r;

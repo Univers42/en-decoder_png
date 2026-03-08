@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-int	color_tree_has(ColorTree *tree, unsigned char r,
+int	color_tree_has(t_color_tree *tree, unsigned char r,
 		unsigned char g, unsigned char b, unsigned char a)
 {
 	return (color_tree_get(tree, r, g, b, a) >= 0);
@@ -25,7 +25,7 @@ static int	ct_child_idx(unsigned char r, unsigned char g,
 		+ 2 * ((b >> bit) & 1) + 1 * ((a >> bit) & 1));
 }
 
-void	color_tree_add(ColorTree *tree, unsigned char r,
+void	color_tree_add(t_color_tree *tree, unsigned char r,
 		unsigned char g, unsigned char b,
 		unsigned char a, unsigned int index)
 {
@@ -38,8 +38,8 @@ void	color_tree_add(ColorTree *tree, unsigned char r,
 		i = ct_child_idx(r, g, b, a, bit);
 		if (!tree->children[i])
 		{
-			tree->children[i] = (ColorTree *)lodepng_malloc(
-					sizeof(ColorTree));
+			tree->children[i] = (t_color_tree *)lodepng_malloc(
+					sizeof(t_color_tree));
 			color_tree_init(tree->children[i]);
 		}
 		tree = tree->children[i];
@@ -55,7 +55,7 @@ static int	abs_diff(int a, int b)
 	return (b - a);
 }
 
-unsigned char	paethPredictor(int a, int b, int c)
+unsigned char	paeth_predictor(int a, int b, int c)
 {
 	int	p;
 	int	pa;

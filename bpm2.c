@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-static void	sort_merge(BPMNode *dst, BPMNode *src,
+static void	sort_merge(t_bpm_node *dst, t_bpm_node *src,
 		size_t lo_mid[2], size_t hi)
 {
 	size_t	i;
@@ -32,7 +32,7 @@ static void	sort_merge(BPMNode *dst, BPMNode *src,
 	}
 }
 
-static void	sort_pass(BPMNode *dst, BPMNode *src,
+static void	sort_pass(t_bpm_node *dst, t_bpm_node *src,
 		size_t width, size_t num)
 {
 	size_t	i;
@@ -54,7 +54,7 @@ static void	sort_pass(BPMNode *dst, BPMNode *src,
 	}
 }
 
-static void	sort_copy(BPMNode *dst, BPMNode *src, size_t num)
+static void	sort_copy(t_bpm_node *dst, t_bpm_node *src, size_t num)
 {
 	size_t	i;
 
@@ -66,15 +66,15 @@ static void	sort_copy(BPMNode *dst, BPMNode *src, size_t num)
 	}
 }
 
-void	bpmnode_sort(BPMNode *leaves, size_t num)
+void	bpmnode_sort(t_bpm_node *leaves, size_t num)
 {
-	BPMNode	*mem;
+	t_bpm_node	*mem;
 	size_t	width;
 	int		toggle;
 
 	if (num <= 1)
 		return ;
-	mem = (BPMNode *)lodepng_malloc(sizeof(BPMNode) * num);
+	mem = (t_bpm_node *)lodepng_malloc(sizeof(t_bpm_node) * num);
 	if (!mem)
 		return ;
 	width = 1;

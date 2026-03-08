@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-static void	a7_compute_dims(unsigned passw[7], unsigned passh[7],
-		unsigned w, unsigned h)
+static void	a7_compute_dims(unsigned int passw[7], unsigned int passh[7],
+		unsigned int w, unsigned int h)
 {
-	unsigned	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i != 7)
@@ -32,10 +32,10 @@ static void	a7_compute_dims(unsigned passw[7], unsigned passh[7],
 	}
 }
 
-static void	a7_compute_starts(unsigned passw[7], unsigned passh[7],
-		size_t fp[8], size_t pp[8], size_t ps[8], unsigned bpp)
+static void	a7_compute_starts(unsigned int passw[7], unsigned int passh[7],
+		size_t fp[8], size_t pp[8], size_t ps[8], unsigned int bpp)
 {
-	unsigned	i;
+	unsigned int	i;
 	size_t		fval;
 
 	fp[0] = 0;
@@ -55,9 +55,9 @@ static void	a7_compute_starts(unsigned passw[7], unsigned passh[7],
 	}
 }
 
-void	Adam7_getpassvalues(unsigned passw[7], unsigned passh[7],
+void	adam7_getpassvalues(unsigned int passw[7], unsigned int passh[7],
 		size_t fp[8], size_t pp[8], size_t ps[8],
-		unsigned w, unsigned h, unsigned bpp)
+		unsigned int w, unsigned int h, unsigned int bpp)
 {
 	a7_compute_dims(passw, passh, w, h);
 	a7_compute_starts(passw, passh, fp, pp, ps, bpp);

@@ -12,9 +12,9 @@
 
 #include "all.h"
 
-unsigned	deflate(unsigned char **out, size_t *outsize,
+unsigned int	deflate(unsigned char **out, size_t *outsize,
 		const unsigned char *in, size_t insize,
-		const LodePNGCompressSettings *settings)
+		const t_compress_settings *settings)
 {
 	if (settings->custom_deflate)
 		return (settings->custom_deflate(out, outsize,
@@ -29,10 +29,10 @@ unsigned	deflate(unsigned char **out, size_t *outsize,
 **   256-279 : 7-bit codes
 **   280-287 : 8-bit codes
 */
-void	generateFixedLitLenTree(HuffmanTree *tree)
+void	gen_fixed_litlen_tree(t_huffman_tree *tree)
 {
-	unsigned	i;
-	unsigned	bl[288];
+	unsigned int	i;
+	unsigned int	bl[288];
 
 	i = 0;
 	while (i <= 143)
@@ -43,22 +43,22 @@ void	generateFixedLitLenTree(HuffmanTree *tree)
 		bl[i++] = 7;
 	while (i <= 287)
 		bl[i++] = 8;
-	HuffmanTree_makeFromLengths(tree, bl, 288, 15);
+	huffman_tree_make_from_len(tree, bl, 288, 15);
 }
 
-void	generateFixedDistanceTree(HuffmanTree *tree)
+void	gen_fixed_dist_tree(t_huffman_tree *tree)
 {
-	unsigned	i;
-	unsigned	bl[30];
+	unsigned int	i;
+	unsigned int	bl[30];
 
 	i = 0;
 	while (i < 30)
 		bl[i++] = 5;
-	HuffmanTree_makeFromLengths(tree, bl, 30, 15);
+	huffman_tree_make_from_len(tree, bl, 30, 15);
 }
 
-void	getTreeInflateFixed(HuffmanTree *tree_ll, HuffmanTree *tree_d)
+void	get_tree_inflate_fixed(t_huffman_tree *tree_ll, t_huffman_tree *tree_d)
 {
-	generateFixedLitLenTree(tree_ll);
-	generateFixedDistanceTree(tree_d);
+	gen_fixed_litlen_tree(tree_ll);
+	gen_fixed_dist_tree(tree_d);
 }

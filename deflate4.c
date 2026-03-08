@@ -12,13 +12,13 @@
 
 #include "all.h"
 
-unsigned	deflateDynamic(ucvector *out, size_t *bp, Hash *hash,
+unsigned int	deflate_dynamic(ucvector *out, size_t *bp, t_hash *hash,
 		const unsigned char *data, size_t datapos,
-		size_t dataend, const LodePNGCompressSettings *s,
-		unsigned final)
+		size_t dataend, const t_compress_settings *s,
+		unsigned int final)
 {
 	t_dd_ctx	ctx;
-	unsigned	error;
+	unsigned int	error;
 
 	dd_ctx_init(&ctx);
 	error = dd_lz77_encode(&ctx, hash, data, datapos, dataend, s);
@@ -41,16 +41,16 @@ unsigned	deflateDynamic(ucvector *out, size_t *bp, Hash *hash,
 }
 
 static void	dnc_write_block(ucvector *out, const unsigned char *data,
-		unsigned *datapos, size_t datasize, unsigned bfinal)
+		unsigned int *datapos, size_t datasize, unsigned int bfinal)
 {
-	unsigned	len;
-	unsigned	nlen;
+	unsigned int	len;
+	unsigned int	nlen;
 	size_t		j;
 
 	ucvector_push_back(out, (unsigned char)(bfinal));
 	len = 65535;
 	if (datasize - *datapos < 65535)
-		len = (unsigned)datasize - *datapos;
+		len = (unsigned int)datasize - *datapos;
 	nlen = 65535 - len;
 	ucvector_push_back(out, (unsigned char)(len & 255));
 	ucvector_push_back(out, (unsigned char)(len >> 8));
@@ -64,12 +64,12 @@ static void	dnc_write_block(ucvector *out, const unsigned char *data,
 	}
 }
 
-unsigned	deflateNoCompression(ucvector *out,
+unsigned int	deflate_no_compression(ucvector *out,
 		const unsigned char *data, size_t datasize)
 {
 	size_t		i;
 	size_t		numblocks;
-	unsigned	datapos;
+	unsigned int	datapos;
 
 	numblocks = (datasize + 65534) / 65535;
 	datapos = 0;
@@ -83,36 +83,36 @@ unsigned	deflateNoCompression(ucvector *out,
 	return (0);
 }
 
-unsigned	df_lz77(ucvector *out, size_t *bp, Hash *hash,
+unsigned int	df_lz77(ucvector *out, size_t *bp, t_hash *hash,
 		const unsigned char *data, size_t datapos,
-		size_t dataend, const LodePNGCompressSettings *s,
-		HuffmanTree *tree_ll, HuffmanTree *tree_d)
+		size_t dataend, const t_compress_settings *s,
+		t_huffman_tree *tree_ll, t_huffman_tree *tree_d)
 {
 	uivector	lz77_encoded;
-	unsigned	error;
+	unsigned int	error;
 
 	uivector_init(&lz77_encoded);
-	error = encodeLZ77(&lz77_encoded, hash, data, datapos,
+	error = encode_lz77(&lz77_encoded, hash, data, datapos,
 			dataend, s->windowsize, s->minmatch,
 			s->nicematch, s->lazymatching);
 	if (!error)
-		writeLZ77data(bp, out, &lz77_encoded, tree_ll, tree_d);
+		write_lz77_data(bp, out, &lz77_encoded, tree_ll, tree_d);
 	uivector_cleanup(&lz77_encoded);
 	return (error);
 }
 
 void	df_literal(ucvector *out, size_t *bp,
 		const unsigned char *data, size_t datapos,
-		size_t dataend, HuffmanTree *tree_ll)
+		size_t dataend, t_huffman_tree *tree_ll)
 {
 	size_t	i;
 
 	i = datapos;
 	while (i < dataend)
 	{
-		addHuffmanSymbol(bp, out,
-			HuffmanTree_getCode(tree_ll, data[i]),
-			HuffmanTree_getLength(tree_ll, data[i]));
+		add_huffman_symbol(bp, out,
+			huffman_tree_get_code(tree_ll, data[i]),
+			huffman_tree_get_length(tree_ll, data[i]));
 		++i;
 	}
 }

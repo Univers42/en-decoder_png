@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-unsigned	postProcessScanlines(unsigned char *out, unsigned char *in,
-			unsigned w, unsigned h, const LodePNGInfo *info_png)
+unsigned int	post_process_scanlines(unsigned char *out, unsigned char *in,
+			unsigned int w, unsigned int h, const t_png_info *info_png)
 {
-	unsigned	bpp;
+	unsigned int	bpp;
 
 	if (info_png->interlace_method != 0)
 		return (34);
@@ -23,14 +23,14 @@ unsigned	postProcessScanlines(unsigned char *out, unsigned char *in,
 	return (unfilter(out, in, w, h, bpp));
 }
 
-unsigned	readChunk_PLTE(LodePNGColorMode *color,
-			const unsigned char *data, size_t chunkLength)
+unsigned int	read_chunk_plte(t_png_color_mode *color,
+			const unsigned char *data, size_t chunk_length)
 {
 	size_t	i;
 
-	if (chunkLength % 3 != 0)
+	if (chunk_length % 3 != 0)
 		return (38);
-	color->palettesize = chunkLength / 3;
+	color->palettesize = chunk_length / 3;
 	color->palette = (unsigned char *)lodepng_malloc(
 			4 * color->palettesize);
 	if (!color->palette && color->palettesize)
@@ -47,17 +47,17 @@ unsigned	readChunk_PLTE(LodePNGColorMode *color,
 	return (0);
 }
 
-unsigned	readChunk_tRNS(LodePNGColorMode *color,
-			const unsigned char *data, size_t chunkLength)
+unsigned int	read_chunk_trns(t_png_color_mode *color,
+			const unsigned char *data, size_t chunk_length)
 {
 	(void)color;
 	(void)data;
-	(void)chunkLength;
+	(void)chunk_length;
 	return (0);
 }
 
-size_t	lodepng_get_raw_size_idat(unsigned w, unsigned h,
-		const LodePNGColorMode *color)
+size_t	lodepng_get_raw_size_idat(unsigned int w, unsigned int h,
+		const t_png_color_mode *color)
 {
 	size_t	linebytes;
 
@@ -65,9 +65,9 @@ size_t	lodepng_get_raw_size_idat(unsigned w, unsigned h,
 	return (h * (linebytes + 1));
 }
 
-void	preProcessScanlines(unsigned char **out, size_t *outsize,
-		const unsigned char *in, unsigned w, unsigned h,
-		const LodePNGInfo *info, const LodePNGEncoderSettings *settings)
+void	pre_process_scanlines(unsigned char **out, size_t *outsize,
+		const unsigned char *in, unsigned int w, unsigned int h,
+		const t_png_info *info, const t_encoder_settings *settings)
 {
 	(void)settings;
 	*outsize = lodepng_get_raw_size(w, h, &info->color);

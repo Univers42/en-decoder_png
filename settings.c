@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void	lodepng_compress_settings_init(LodePNGCompressSettings *s)
+void	lodepng_compress_settings_init(t_compress_settings *s)
 {
 	s->btype = 2;
 	s->use_lz77 = 1;
@@ -25,7 +25,7 @@ void	lodepng_compress_settings_init(LodePNGCompressSettings *s)
 	s->custom_context = 0;
 }
 
-void	lodepng_decompress_settings_init(LodePNGDecompressSettings *s)
+void	lodepng_decompress_settings_init(t_decompress_settings *s)
 {
 	s->ignore_adler32 = 0;
 	s->custom_zlib = 0;
@@ -33,7 +33,7 @@ void	lodepng_decompress_settings_init(LodePNGDecompressSettings *s)
 	s->custom_context = 0;
 }
 
-void	lodepng_decoder_settings_init(LodePNGDecoderSettings *settings)
+void	lodepng_decoder_settings_init(t_decoder_settings *settings)
 {
 	settings->color_convert = 1;
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
@@ -46,7 +46,7 @@ void	lodepng_decoder_settings_init(LodePNGDecoderSettings *settings)
 	lodepng_decompress_settings_init(&settings->zlibsettings);
 }
 
-void	lodepng_color_profile_init(LodePNGColorProfile *p)
+void	lodepng_color_profile_init(t_png_color_profile *p)
 {
 	p->colored = 0;
 	p->alpha = 0;
@@ -59,7 +59,7 @@ void	lodepng_color_profile_init(LodePNGColorProfile *p)
 	p->numcolors = 0;
 }
 
-void	lodepng_encoder_settings_init(LodePNGEncoderSettings *s)
+void	lodepng_encoder_settings_init(t_encoder_settings *s)
 {
 	lodepng_compress_settings_init(&s->zlibsettings);
 	s->filter_palette_zero = 1;

@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-static int	hash_alloc(Hash *hash, unsigned int windowsize)
+static int	hash_alloc(t_hash *hash, unsigned int windowsize)
 {
 	hash->head = (int *)lodepng_malloc(sizeof(int) * HASH_NUM_VALUES);
 	hash->val = (int *)lodepng_malloc(sizeof(int) * windowsize);
@@ -30,7 +30,7 @@ static int	hash_alloc(Hash *hash, unsigned int windowsize)
 	return (0);
 }
 
-static void	hash_fill_tables(Hash *hash, unsigned int windowsize)
+static void	hash_fill_tables(t_hash *hash, unsigned int windowsize)
 {
 	unsigned int	i;
 
@@ -56,7 +56,7 @@ static void	hash_fill_tables(Hash *hash, unsigned int windowsize)
 	}
 }
 
-unsigned int	hash_init(Hash *hash, unsigned int windowsize)
+unsigned int	hash_init(t_hash *hash, unsigned int windowsize)
 {
 	int	err;
 
@@ -67,7 +67,7 @@ unsigned int	hash_init(Hash *hash, unsigned int windowsize)
 	return (0);
 }
 
-void	hash_cleanup(Hash *hash)
+void	hash_cleanup(t_hash *hash)
 {
 	lodepng_free(hash->head);
 	lodepng_free(hash->val);
@@ -77,7 +77,7 @@ void	hash_cleanup(Hash *hash)
 	lodepng_free(hash->chainz);
 }
 
-void	updateHashChain(Hash *hash, size_t wpos,
+void	update_hash_chain(t_hash *hash, size_t wpos,
 		unsigned int hashval, unsigned short numzeros)
 {
 	hash->val[wpos] = (int)hashval;

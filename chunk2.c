@@ -22,14 +22,14 @@ const unsigned char	*lodepng_chunk_data_const(const unsigned char *chunk)
 	return (&chunk[8]);
 }
 
-unsigned	lodepng_chunk_check_crc(const unsigned char *chunk)
+unsigned int	lodepng_chunk_check_crc(const unsigned char *chunk)
 {
-	unsigned	length;
-	unsigned	crc;
-	unsigned	checksum;
+	unsigned int	length;
+	unsigned int	crc;
+	unsigned int	checksum;
 
 	length = lodepng_chunk_length(chunk);
-	crc = lodepng_read32bitInt(&chunk[length + 8]);
+	crc = lodepng_read_32bit_int(&chunk[length + 8]);
 	checksum = lodepng_crc32(&chunk[4], length + 4);
 	if (crc != checksum)
 		return (1);
@@ -38,10 +38,10 @@ unsigned	lodepng_chunk_check_crc(const unsigned char *chunk)
 
 void	lodepng_chunk_generate_crc(unsigned char *chunk)
 {
-	unsigned	length;
-	unsigned	crc;
+	unsigned int	length;
+	unsigned int	crc;
 
 	length = lodepng_chunk_length(chunk);
 	crc = lodepng_crc32(&chunk[4], length + 4);
-	lodepng_set32bitInt(chunk + 8 + length, crc);
+	lodepng_set_32bit_int(chunk + 8 + length, crc);
 }

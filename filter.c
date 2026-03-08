@@ -114,7 +114,7 @@ static void	uf_paeth(unsigned char *recon, const unsigned char *scanline,
 		}
 		while (i < len)
 		{
-			recon[i] = scanline[i] + paethPredictor(
+			recon[i] = scanline[i] + paeth_predictor(
 					recon[i - bw], precon[i], precon[i - bw]);
 			++i;
 		}
@@ -134,18 +134,18 @@ static void	uf_paeth(unsigned char *recon, const unsigned char *scanline,
 	}
 }
 
-unsigned	unfilterScanline(unsigned char *recon,
+unsigned int	unfilter_scanline(unsigned char *recon,
 		const unsigned char *scanline,
 		const unsigned char *precon, size_t bytewidth,
-		unsigned char filterType, size_t length)
+		unsigned char filter_type, size_t length)
 {
-	if (filterType <= 1)
-		uf_none_sub(recon, scanline, bytewidth, length, filterType);
-	else if (filterType == 2)
+	if (filter_type <= 1)
+		uf_none_sub(recon, scanline, bytewidth, length, filter_type);
+	else if (filter_type == 2)
 		uf_up(recon, scanline, precon, length);
-	else if (filterType == 3)
+	else if (filter_type == 3)
 		uf_avg(recon, scanline, precon, bytewidth, length);
-	else if (filterType == 4)
+	else if (filter_type == 4)
 		uf_paeth(recon, scanline, precon, bytewidth, length);
 	else
 		return (36);

@@ -21,7 +21,7 @@ static unsigned int	addcolorbits_mask(unsigned int bits)
 	return (1);
 }
 
-void	addColorBits(unsigned char *out, size_t index,
+void	add_color_bits(unsigned char *out, size_t index,
 		unsigned int bits, unsigned int in)
 {
 	unsigned int	m;
@@ -37,7 +37,7 @@ void	addColorBits(unsigned char *out, size_t index,
 		out[index * bits / 8] |= in;
 }
 
-void	color_tree_init(ColorTree *tree)
+void	color_tree_init(t_color_tree *tree)
 {
 	int	i;
 
@@ -50,7 +50,7 @@ void	color_tree_init(ColorTree *tree)
 	tree->index = -1;
 }
 
-void	color_tree_cleanup(ColorTree *tree)
+void	color_tree_cleanup(t_color_tree *tree)
 {
 	int	i;
 
@@ -73,7 +73,7 @@ static int	color_tree_child_index(unsigned char r, unsigned char g,
 		+ 2 * ((b >> bit) & 1) + 1 * ((a >> bit) & 1));
 }
 
-int	color_tree_get(ColorTree *tree, unsigned char r,
+int	color_tree_get(t_color_tree *tree, unsigned char r,
 		unsigned char g, unsigned char b, unsigned char a)
 {
 	int	bit;

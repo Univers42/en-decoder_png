@@ -22,7 +22,7 @@ static int	is_png_signature(const unsigned char *chunk)
 
 unsigned char	*lodepng_chunk_next(unsigned char *chunk)
 {
-	unsigned	total_chunk_length;
+	unsigned int	total_chunk_length;
 
 	if (is_png_signature(chunk))
 		return (chunk + 8);
@@ -32,7 +32,7 @@ unsigned char	*lodepng_chunk_next(unsigned char *chunk)
 
 const unsigned char	*lodepng_chunk_next_const(const unsigned char *chunk)
 {
-	unsigned	total_chunk_length;
+	unsigned int	total_chunk_length;
 
 	if (is_png_signature(chunk))
 		return (chunk + 8);

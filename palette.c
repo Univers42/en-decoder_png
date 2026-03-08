@@ -12,11 +12,11 @@
 
 #include "all.h"
 
-unsigned getPaletteTranslucency(const unsigned char *palette, size_t palettesize)
+unsigned int get_palette_translucency(const unsigned char *palette, size_t palettesize)
 {
 	size_t i;
-	unsigned key = 0;
-	unsigned r = 0, g = 0, b = 0;
+	unsigned int key = 0;
+	unsigned int r = 0, g = 0, b = 0;
 	for (i = 0; i != palettesize; ++i)
 	{
 		if (!key && palette[4 * i + 3] == 0)
@@ -35,12 +35,12 @@ unsigned getPaletteTranslucency(const unsigned char *palette, size_t palettesize
 	return key;
 }
 
-void	addLengthDistance(uivector *out, unsigned length, unsigned distance)
+void	add_length_distance(uivector *out, unsigned int length, unsigned int distance)
 {
-	unsigned	length_code;
-	unsigned	distance_code;
-	unsigned	len_sym;
-	unsigned	len_val;
+	unsigned int	length_code;
+	unsigned int	distance_code;
+	unsigned int	len_sym;
+	unsigned int	len_val;
 
 	length_code = length - 3;
 	distance_code = distance - 1;
@@ -58,7 +58,7 @@ void	addLengthDistance(uivector *out, unsigned length, unsigned distance)
 }
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-unsigned	addUnknownChunks(ucvector *out, unsigned char *data,
+unsigned int	add_unknown_chunks(ucvector *out, unsigned char *data,
 		size_t datasize)
 {
 	unsigned char *inchunk = data;

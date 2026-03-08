@@ -93,7 +93,7 @@ static const t_err_entry	g_err_table[] = {
 {84, "given image too small to contain all pixels to be encoded"},
 {86, "impossible offset in lz77 encoding (internal bug)"},
 {87, "must provide custom zlib function pointer if LODEPNG_COMPILE_ZLIB is not defined"},
-{88, "invalid filter strategy given for LodePNGEncoderSettings.filter_strategy"},
+{88, "invalid filter strategy given for t_encoder_settings.filter_strategy"},
 {89, "text chunk keyword too short or long: must have size 1-79"},
 {90, "windowsize must be a power of two"},
 {91, "invalid decompressed idat size"},

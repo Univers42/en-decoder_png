@@ -12,13 +12,13 @@
 
 #include "all.h"
 
-unsigned	inflateNoCompression(ucvector *out, const unsigned char *in,
+unsigned int	inflate_no_compression(ucvector *out, const unsigned char *in,
 			size_t *bp, size_t *pos, size_t inlength)
 {
 	size_t		p;
-	unsigned	len;
-	unsigned	nlen;
-	unsigned	n;
+	unsigned int	len;
+	unsigned int	nlen;
+	unsigned int	n;
 
 	while (((*bp) & 0x7) != 0)
 		++(*bp);
@@ -45,14 +45,14 @@ unsigned	inflateNoCompression(ucvector *out, const unsigned char *in,
 	return (0);
 }
 
-unsigned	lodepng_inflatev(ucvector *out, const unsigned char *in,
-			size_t insize, const LodePNGDecompressSettings *settings)
+unsigned int	lodepng_inflatev(ucvector *out, const unsigned char *in,
+			size_t insize, const t_decompress_settings *settings)
 {
 	size_t		bp;
-	unsigned	bfinal;
+	unsigned int	bfinal;
 	size_t		pos;
-	unsigned	error;
-	unsigned	btype;
+	unsigned int	error;
+	unsigned int	btype;
 
 	(void)settings;
 	bp = 0;
@@ -63,15 +63,15 @@ unsigned	lodepng_inflatev(ucvector *out, const unsigned char *in,
 	{
 		if (bp + 2 >= insize * 8)
 			return (52);
-		bfinal = readBitFromStream(&bp, in);
-		btype = 1u * readBitFromStream(&bp, in);
-		btype += 2u * readBitFromStream(&bp, in);
+		bfinal = read_bit_from_stream(&bp, in);
+		btype = 1u * read_bit_from_stream(&bp, in);
+		btype += 2u * read_bit_from_stream(&bp, in);
 		if (btype == 3)
 			return (20);
 		else if (btype == 0)
-			error = inflateNoCompression(out, in, &bp, &pos, insize);
+			error = inflate_no_compression(out, in, &bp, &pos, insize);
 		else
-			error = inflateHuffmanBlock(out, in, &bp, &pos,
+			error = inflate_huffman_block(out, in, &bp, &pos,
 					insize, btype);
 		if (error)
 			return (error);
@@ -79,11 +79,11 @@ unsigned	lodepng_inflatev(ucvector *out, const unsigned char *in,
 	return (error);
 }
 
-unsigned	lodepng_inflate(unsigned char **out, size_t *outsize,
+unsigned int	lodepng_inflate(unsigned char **out, size_t *outsize,
 			const unsigned char *in, size_t insize,
-			const LodePNGDecompressSettings *settings)
+			const t_decompress_settings *settings)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	v;
 
 	ucvector_init_buffer(&v, *out, *outsize);
@@ -93,9 +93,9 @@ unsigned	lodepng_inflate(unsigned char **out, size_t *outsize,
 	return (error);
 }
 
-unsigned	inflate(unsigned char **out, size_t *outsize,
+unsigned int	inflate(unsigned char **out, size_t *outsize,
 			const unsigned char *in, size_t insize,
-			const LodePNGDecompressSettings *settings)
+			const t_decompress_settings *settings)
 {
 	if (settings->custom_inflate)
 		return (settings->custom_inflate(out, outsize,

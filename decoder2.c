@@ -12,11 +12,11 @@
 
 #include "all.h"
 
-static int	dg_validate_chunk(LodePNGState *state,
+static int	dg_validate_chunk(t_png_state *state,
 		const unsigned char *chunk, const unsigned char *in,
 		size_t insize)
 {
-	unsigned	len;
+	unsigned int	len;
 
 	if ((size_t)((chunk - in) + 12) > insize || chunk < in)
 	{
@@ -42,8 +42,8 @@ static int	dg_validate_chunk(LodePNGState *state,
 	return (1);
 }
 
-static void	dg_post_chunk(LodePNGState *state,
-		const unsigned char *chunk, unsigned unknown, unsigned cpos)
+static void	dg_post_chunk(t_png_state *state,
+		const unsigned char *chunk, unsigned int unknown, unsigned int cpos)
 {
 	if (!state->decoder.ignore_crc && !unknown)
 	{
@@ -63,8 +63,8 @@ static void	dg_post_chunk(LodePNGState *state,
 #endif
 }
 
-static size_t	dg_predict_interlaced(unsigned w, unsigned h,
-		const LodePNGColorMode *color)
+static size_t	dg_predict_interlaced(unsigned int w, unsigned int h,
+		const t_png_color_mode *color)
 {
 	size_t	predict;
 
@@ -88,12 +88,12 @@ static size_t	dg_predict_interlaced(unsigned w, unsigned h,
 	return (predict);
 }
 
-void	dg_chunk_loop(LodePNGState *state, ucvector *idat,
+void	dg_chunk_loop(t_png_state *state, ucvector *idat,
 		const unsigned char *in, size_t insize)
 {
-	unsigned			iend;
-	unsigned			unknown;
-	unsigned			cpos;
+	unsigned int			iend;
+	unsigned int			unknown;
+	unsigned int			cpos;
 	const unsigned char	*chunk;
 
 	iend = 0;
@@ -113,8 +113,8 @@ void	dg_chunk_loop(LodePNGState *state, ucvector *idat,
 	}
 }
 
-void	dg_decompress(LodePNGState *state, unsigned char **out,
-		ucvector *idat, unsigned w, unsigned h)
+void	dg_decompress(t_png_state *state, unsigned char **out,
+		ucvector *idat, unsigned int w, unsigned int h)
 {
 	ucvector	scanlines;
 	size_t		predict;

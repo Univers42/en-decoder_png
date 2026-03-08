@@ -12,8 +12,8 @@
 
 #include "all.h"
 
-static void	dg_copy_idat(LodePNGState *st, ucvector *idat,
-		const unsigned char *d, unsigned len)
+static void	dg_copy_idat(t_png_state *st, ucvector *idat,
+		const unsigned char *d, unsigned int len)
 {
 	size_t	oldsize;
 	size_t	newsize;
@@ -39,51 +39,51 @@ static void	dg_copy_idat(LodePNGState *st, ucvector *idat,
 }
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-static int	dg_anc_text(LodePNGState *st, const unsigned char *ch,
-		const unsigned char *d, unsigned len)
+static int	dg_anc_text(t_png_state *st, const unsigned char *ch,
+		const unsigned char *d, unsigned int len)
 {
 	if (!st->decoder.read_text_chunks)
 		return (lodepng_chunk_type_equals(ch, "tEXt")
 			|| lodepng_chunk_type_equals(ch, "zTXt")
 			|| lodepng_chunk_type_equals(ch, "iTXt"));
 	if (lodepng_chunk_type_equals(ch, "tEXt"))
-		st->error = readChunk_tEXt(&st->info_png, d, len);
+		st->error = read_chunk_text(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "zTXt"))
-		st->error = readChunk_zTXt(&st->info_png,
+		st->error = read_chunk_ztxt(&st->info_png,
 				&st->decoder.zlibsettings, d, len);
 	else if (lodepng_chunk_type_equals(ch, "iTXt"))
-		st->error = readChunk_iTXt(&st->info_png,
+		st->error = read_chunk_itxt(&st->info_png,
 				&st->decoder.zlibsettings, d, len);
 	else
 		return (0);
 	return (1);
 }
 
-static int	dg_anc_other(LodePNGState *st, const unsigned char *ch,
-		const unsigned char *d, unsigned len)
+static int	dg_anc_other(t_png_state *st, const unsigned char *ch,
+		const unsigned char *d, unsigned int len)
 {
 	if (lodepng_chunk_type_equals(ch, "bKGD"))
-		st->error = readChunk_bKGD(&st->info_png, d, len);
+		st->error = read_chunk_bkgd(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "tIME"))
-		st->error = readChunk_tIME(&st->info_png, d, len);
+		st->error = read_chunk_time(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "pHYs"))
-		st->error = readChunk_pHYs(&st->info_png, d, len);
+		st->error = read_chunk_phys(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "gAMA"))
-		st->error = readChunk_gAMA(&st->info_png, d, len);
+		st->error = read_chunk_gama(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "cHRM"))
-		st->error = readChunk_cHRM(&st->info_png, d, len);
+		st->error = read_chunk_chrm(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "sRGB"))
-		st->error = readChunk_sRGB(&st->info_png, d, len);
+		st->error = read_chunk_srgb(&st->info_png, d, len);
 	else if (lodepng_chunk_type_equals(ch, "iCCP"))
-		st->error = readChunk_iCCP(&st->info_png,
+		st->error = read_chunk_iccp(&st->info_png,
 				&st->decoder.zlibsettings, d, len);
 	else
 		return (0);
 	return (1);
 }
 
-static void	dg_handle_extra(LodePNGState *st, const unsigned char *ch,
-		const unsigned char *d, unsigned len, unsigned *unk)
+static void	dg_handle_extra(t_png_state *st, const unsigned char *ch,
+		const unsigned char *d, unsigned int len, unsigned int *unk)
 {
 	if (dg_anc_text(st, ch, d, len))
 		return ;
@@ -94,8 +94,8 @@ static void	dg_handle_extra(LodePNGState *st, const unsigned char *ch,
 	*unk = 1;
 }
 #else
-static void	dg_handle_extra(LodePNGState *st, const unsigned char *ch,
-		const unsigned char *d, unsigned len, unsigned *unk)
+static void	dg_handle_extra(t_png_state *st, const unsigned char *ch,
+		const unsigned char *d, unsigned int len, unsigned int *unk)
 {
 	(void)d;
 	(void)len;
@@ -105,12 +105,12 @@ static void	dg_handle_extra(LodePNGState *st, const unsigned char *ch,
 }
 #endif
 
-void	dg_handle_chunk(LodePNGState *st, ucvector *idat,
-		const unsigned char *ch, unsigned *iend,
-		unsigned *unk, unsigned *cpos)
+void	dg_handle_chunk(t_png_state *st, ucvector *idat,
+		const unsigned char *ch, unsigned int *iend,
+		unsigned int *unk, unsigned int *cpos)
 {
 	const unsigned char	*d;
-	unsigned			len;
+	unsigned int			len;
 
 	len = lodepng_chunk_length(ch);
 	d = lodepng_chunk_data_const(ch);
@@ -124,11 +124,11 @@ void	dg_handle_chunk(LodePNGState *st, ucvector *idat,
 		*iend = 1;
 	else if (lodepng_chunk_type_equals(ch, "PLTE"))
 	{
-		st->error = readChunk_PLTE(&st->info_png.color, d, len);
+		st->error = read_chunk_plte(&st->info_png.color, d, len);
 		*cpos = 2;
 	}
 	else if (lodepng_chunk_type_equals(ch, "tRNS"))
-		st->error = readChunk_tRNS(&st->info_png.color, d, len);
+		st->error = read_chunk_trns(&st->info_png.color, d, len);
 	else
 		dg_handle_extra(st, ch, d, len, unk);
 }

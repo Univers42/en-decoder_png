@@ -19,27 +19,27 @@
 typedef struct s_bpm_node
 {
 	int					weight;
-	unsigned			index;
+	unsigned int			index;
 	struct s_bpm_node	*tail;
 	int					in_use;
-}	BPMNode;
+}	t_bpm_node;
 
 typedef struct s_bpm_lists
 {
-	unsigned	listsize;
-	unsigned	memsize;
-	unsigned	numfree;
-	unsigned	nextfree;
-	BPMNode		*memory;
-	BPMNode		**freelist;
-	BPMNode		**chains0;
-	BPMNode		**chains1;
-}	BPMLists;
+	unsigned int	listsize;
+	unsigned int	memsize;
+	unsigned int	numfree;
+	unsigned int	nextfree;
+	t_bpm_node		*memory;
+	t_bpm_node		**freelist;
+	t_bpm_node		**chains0;
+	t_bpm_node		**chains1;
+}	t_bpm_lists;
 
-BPMNode		*bpmnode_create(BPMLists *lists, int weight,
-				unsigned index, BPMNode *tail);
-void		bpmnode_sort(BPMNode *leaves, size_t num);
-void		boundaryPM(BPMLists *lists, BPMNode *leaves,
+t_bpm_node		*bpmnode_create(t_bpm_lists *lists, int weight,
+				unsigned int index, t_bpm_node *tail);
+void		bpmnode_sort(t_bpm_node *leaves, size_t num);
+void		boundary_pm(t_bpm_lists *lists, t_bpm_node *leaves,
 				size_t numpresent, int c, int num);
 
 #endif

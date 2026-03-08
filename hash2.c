@@ -32,7 +32,7 @@ static unsigned int	gethash_small(const unsigned char *data,
 	return (result);
 }
 
-unsigned int	getHash(const unsigned char *data, size_t size, size_t pos)
+unsigned int	get_hash(const unsigned char *data, size_t size, size_t pos)
 {
 	unsigned int	result;
 
@@ -48,7 +48,7 @@ unsigned int	getHash(const unsigned char *data, size_t size, size_t pos)
 	return (result & HASH_BIT_MASK);
 }
 
-unsigned int	countZeros(const unsigned char *data, size_t size,
+unsigned int	count_zeros(const unsigned char *data, size_t size,
 		size_t pos)
 {
 	const unsigned char	*start;

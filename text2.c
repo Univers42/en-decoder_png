@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void	LodePNGIText_init(LodePNGInfo *info)
+void	lodepng_itext_init(t_png_info *info)
 {
 	info->itext_num = 0;
 	info->itext_keys = NULL;
@@ -21,7 +21,7 @@ void	LodePNGIText_init(LodePNGInfo *info)
 	info->itext_strings = NULL;
 }
 
-void	LodePNGIText_cleanup(LodePNGInfo *info)
+void	lodepng_itext_cleanup(t_png_info *info)
 {
 	size_t	i;
 
@@ -40,8 +40,8 @@ void	LodePNGIText_cleanup(LodePNGInfo *info)
 	lodepng_free(info->itext_strings);
 }
 
-unsigned int	LodePNGIText_copy(LodePNGInfo *dest,
-		const LodePNGInfo *source)
+unsigned int	lodepng_itext_copy(t_png_info *dest,
+		const t_png_info *source)
 {
 	size_t	i;
 
@@ -61,9 +61,9 @@ unsigned int	LodePNGIText_copy(LodePNGInfo *dest,
 	return (0);
 }
 
-void	lodepng_clear_itext(LodePNGInfo *info)
+void	lodepng_clear_itext(t_png_info *info)
 {
-	LodePNGIText_cleanup(info);
+	lodepng_itext_cleanup(info);
 }
 
 static int	itext_alloc_fail(char **nk, char **nl,
@@ -80,7 +80,7 @@ static int	itext_alloc_fail(char **nk, char **nl,
 	return (0);
 }
 
-unsigned int	lodepng_add_itext(LodePNGInfo *info, const char *key,
+unsigned int	lodepng_add_itext(t_png_info *info, const char *key,
 		const char *langtag, const char *transkey, const char *str)
 {
 	char	**nk;

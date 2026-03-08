@@ -12,12 +12,12 @@
 
 #include "all.h"
 
-unsigned int	lodepng_is_palette_type(const LodePNGColorMode *info)
+unsigned int	lodepng_is_palette_type(const t_png_color_mode *info)
 {
 	return (info->colortype == LCT_PALETTE);
 }
 
-unsigned int	lodepng_has_palette_alpha(const LodePNGColorMode *info)
+unsigned int	lodepng_has_palette_alpha(const t_png_color_mode *info)
 {
 	size_t	i;
 
@@ -31,14 +31,14 @@ unsigned int	lodepng_has_palette_alpha(const LodePNGColorMode *info)
 	return (0);
 }
 
-unsigned int	lodepng_can_have_alpha(const LodePNGColorMode *info)
+unsigned int	lodepng_can_have_alpha(const t_png_color_mode *info)
 {
 	return (info->key_defined || lodepng_is_alpha_type(info)
 		|| lodepng_has_palette_alpha(info));
 }
 
 size_t	lodepng_get_raw_size_lct(unsigned int w, unsigned int h,
-		LodePNGColorType colortype, unsigned int bitdepth)
+		t_png_color_type colortype, unsigned int bitdepth)
 {
 	size_t	bpp;
 	size_t	n;
@@ -49,7 +49,7 @@ size_t	lodepng_get_raw_size_lct(unsigned int w, unsigned int h,
 }
 
 size_t	lodepng_get_raw_size(unsigned int w, unsigned int h,
-		const LodePNGColorMode *color)
+		const t_png_color_mode *color)
 {
 	return (lodepng_get_raw_size_lct(w, h,
 			color->colortype, color->bitdepth));

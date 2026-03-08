@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-unsigned	unfilter(unsigned char *out, const unsigned char *in,
-		unsigned w, unsigned h, unsigned bpp)
+unsigned int	unfilter(unsigned char *out, const unsigned char *in,
+		unsigned int w, unsigned int h, unsigned int bpp)
 {
-	unsigned		y;
+	unsigned int		y;
 	unsigned char	*prevline;
 	size_t			bytewidth;
 	size_t			linebytes;
@@ -28,7 +28,7 @@ unsigned	unfilter(unsigned char *out, const unsigned char *in,
 	while (y < h)
 	{
 		outindex = linebytes * y;
-		CERROR_TRY_RETURN(unfilterScanline(&out[outindex],
+		CERROR_TRY_RETURN(unfilter_scanline(&out[outindex],
 			&in[(1 + linebytes) * y + 1], prevline, bytewidth,
 			in[(1 + linebytes) * y], linebytes));
 		prevline = &out[outindex];
@@ -56,9 +56,9 @@ float	flog2(float f)
 		* (f * f * f / 3 - 3 * f * f / 2 + 3 * f - 1.83333f));
 }
 
-unsigned	filter_alloc(unsigned char **attempt, size_t lb)
+unsigned int	filter_alloc(unsigned char **attempt, size_t lb)
 {
-	unsigned	type;
+	unsigned int	type;
 
 	type = 0;
 	while (type != 5)
@@ -73,7 +73,7 @@ unsigned	filter_alloc(unsigned char **attempt, size_t lb)
 
 void	filter_free(unsigned char **attempt)
 {
-	unsigned	type;
+	unsigned int	type;
 
 	type = 0;
 	while (type != 5)
@@ -84,7 +84,7 @@ void	filter_free(unsigned char **attempt)
 }
 
 void	filter_copy_best(unsigned char *out, unsigned char **attempt,
-		unsigned char best_type, size_t lb, unsigned y)
+		unsigned char best_type, size_t lb, unsigned int y)
 {
 	size_t	x;
 

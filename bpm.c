@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-static void	bpmnode_gc_mark(BPMLists *lists)
+static void	bpmnode_gc_mark(t_bpm_lists *lists)
 {
-	unsigned	i;
-	BPMNode		*node;
+	unsigned int	i;
+	t_bpm_node		*node;
 
 	i = 0;
 	while (i != lists->memsize)
@@ -42,9 +42,9 @@ static void	bpmnode_gc_mark(BPMLists *lists)
 	}
 }
 
-static void	bpmnode_gc_sweep(BPMLists *lists)
+static void	bpmnode_gc_sweep(t_bpm_lists *lists)
 {
-	unsigned	i;
+	unsigned int	i;
 
 	lists->numfree = 0;
 	i = 0;
@@ -57,10 +57,10 @@ static void	bpmnode_gc_sweep(BPMLists *lists)
 	lists->nextfree = 0;
 }
 
-BPMNode	*bpmnode_create(BPMLists *lists, int weight,
-		unsigned index, BPMNode *tail)
+t_bpm_node	*bpmnode_create(t_bpm_lists *lists, int weight,
+		unsigned int index, t_bpm_node *tail)
 {
-	BPMNode	*result;
+	t_bpm_node	*result;
 
 	if (lists->nextfree >= lists->numfree)
 	{
@@ -74,10 +74,10 @@ BPMNode	*bpmnode_create(BPMLists *lists, int weight,
 	return (result);
 }
 
-void	boundaryPM(BPMLists *lists, BPMNode *leaves,
+void	boundary_pm(t_bpm_lists *lists, t_bpm_node *leaves,
 		size_t numpresent, int c, int num)
 {
-	unsigned	lastindex;
+	unsigned int	lastindex;
 	int			sum;
 
 	lastindex = lists->chains1[c]->index;
@@ -103,7 +103,7 @@ void	boundaryPM(BPMLists *lists, BPMNode *leaves,
 			lists->chains1[c - 1]);
 	if (num + 1 < (int)(2 * numpresent - 2))
 	{
-		boundaryPM(lists, leaves, numpresent, c - 1, num);
-		boundaryPM(lists, leaves, numpresent, c - 1, num);
+		boundary_pm(lists, leaves, numpresent, c - 1, num);
+		boundary_pm(lists, leaves, numpresent, c - 1, num);
 	}
 }

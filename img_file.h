@@ -21,11 +21,11 @@
 # include <limits.h>
 
 long		lodepng_filesize(const char *filename);
-unsigned	lodepng_buffer_file(unsigned char *out,
+unsigned int	lodepng_buffer_file(unsigned char *out,
 				size_t size, const char *filename);
-unsigned	lodepng_load_file(unsigned char **out,
+unsigned int	lodepng_load_file(unsigned char **out,
 				size_t *outsize, const char *filename);
-unsigned	lodepng_save_file(const unsigned char *buffer,
+unsigned int	lodepng_save_file(const unsigned char *buffer,
 				size_t buffersize, const char *filename);
 
 #endif

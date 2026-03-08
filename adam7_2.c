@@ -13,26 +13,26 @@
 #include "all.h"
 
 static void	a7_deint_bits(unsigned char *out, const unsigned char *in,
-		size_t *obp, size_t *ibp, unsigned bpp)
+		size_t *obp, size_t *ibp, unsigned int bpp)
 {
-	unsigned	b;
+	unsigned int	b;
 
 	b = 0;
 	while (b < bpp)
 	{
-		setBitOfReversedStream0(obp, out,
-			readBitFromReversedStream(ibp, in));
+		set_bit_of_rev_stream0(obp, out,
+			read_bit_from_rev_stream(ibp, in));
 		++b;
 	}
 }
 
 static void	a7_deint_byte_pass(unsigned char *out,
-		const unsigned char *in, unsigned w, size_t bw,
-		unsigned pass, unsigned pw, unsigned ph, size_t ps)
+		const unsigned char *in, unsigned int w, size_t bw,
+		unsigned int pass, unsigned int pw, unsigned int ph, size_t ps)
 {
-	unsigned	x;
-	unsigned	y;
-	unsigned	b;
+	unsigned int	x;
+	unsigned int	y;
+	unsigned int	b;
 	size_t		pis;
 	size_t		pos;
 
@@ -58,11 +58,11 @@ static void	a7_deint_byte_pass(unsigned char *out,
 }
 
 static void	a7_deint_bit_pass(unsigned char *out,
-		const unsigned char *in, unsigned w, unsigned bpp,
-		unsigned pass, unsigned pw, unsigned ph, size_t ps)
+		const unsigned char *in, unsigned int w, unsigned int bpp,
+		unsigned int pass, unsigned int pw, unsigned int ph, size_t ps)
 {
-	unsigned	x;
-	unsigned	y;
+	unsigned int	x;
+	unsigned int	y;
 	size_t		ibp;
 	size_t		obp;
 
@@ -83,17 +83,17 @@ static void	a7_deint_bit_pass(unsigned char *out,
 	}
 }
 
-void	Adam7_deinterlace(unsigned char *out, const unsigned char *in,
-		unsigned w, unsigned h, unsigned bpp)
+void	adam7_deinterlace(unsigned char *out, const unsigned char *in,
+		unsigned int w, unsigned int h, unsigned int bpp)
 {
-	unsigned	passw[7];
-	unsigned	passh[7];
+	unsigned int	passw[7];
+	unsigned int	passh[7];
 	size_t		filter_passstart[8];
 	size_t		padded_passstart[8];
 	size_t		passstart[8];
-	unsigned	i;
+	unsigned int	i;
 
-	Adam7_getpassvalues(passw, passh, filter_passstart,
+	adam7_getpassvalues(passw, passh, filter_passstart,
 		padded_passstart, passstart, w, h, bpp);
 	i = 0;
 	while (i != 7)

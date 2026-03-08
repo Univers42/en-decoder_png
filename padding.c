@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-void	removePaddingBits(unsigned char *out, const unsigned char *in,
-		size_t olinebits, size_t ilinebits, unsigned h)
+void	remove_padding_bits(unsigned char *out, const unsigned char *in,
+		size_t olinebits, size_t ilinebits, unsigned int h)
 {
-	unsigned	y;
+	unsigned int	y;
 	size_t		diff;
 	size_t		ibp;
 	size_t		obp;
@@ -30,8 +30,8 @@ void	removePaddingBits(unsigned char *out, const unsigned char *in,
 		x = 0;
 		while (x < olinebits)
 		{
-			setBitOfReversedStream(&obp, out,
-				readBitFromReversedStream(&ibp, in));
+			set_bit_of_rev_stream(&obp, out,
+				read_bit_from_rev_stream(&ibp, in));
 			++x;
 		}
 		ibp += diff;
@@ -39,10 +39,10 @@ void	removePaddingBits(unsigned char *out, const unsigned char *in,
 	}
 }
 
-void	addPaddingBits(unsigned char *out, const unsigned char *in,
-		size_t olinebits, size_t ilinebits, unsigned h)
+void	add_padding_bits(unsigned char *out, const unsigned char *in,
+		size_t olinebits, size_t ilinebits, unsigned int h)
 {
-	unsigned	y;
+	unsigned int	y;
 	size_t		diff;
 	size_t		obp;
 	size_t		ibp;
@@ -57,14 +57,14 @@ void	addPaddingBits(unsigned char *out, const unsigned char *in,
 		x = 0;
 		while (x < ilinebits)
 		{
-			setBitOfReversedStream(&obp, out,
-				readBitFromReversedStream(&ibp, in));
+			set_bit_of_rev_stream(&obp, out,
+				read_bit_from_rev_stream(&ibp, in));
 			++x;
 		}
 		x = 0;
 		while (x != diff)
 		{
-			setBitOfReversedStream(&obp, out, 0);
+			set_bit_of_rev_stream(&obp, out, 0);
 			++x;
 		}
 		++y;

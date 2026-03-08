@@ -14,11 +14,11 @@
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-unsigned	addChunk_zTXt(ucvector *out, const char *keyword,
+unsigned int	add_chunk_ztxt(ucvector *out, const char *keyword,
 			const char *textstring,
-			LodePNGCompressSettings *zlibsettings)
+			t_compress_settings *zlibsettings)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	data;
 	ucvector	compressed;
 	size_t		i;
@@ -41,14 +41,14 @@ unsigned	addChunk_zTXt(ucvector *out, const char *keyword,
 		i = 0;
 		while (i != compressed.size)
 			ucvector_push_back(&data, compressed.data[i++]);
-		error = addChunk(out, "zTXt", data.data, data.size);
+		error = add_chunk(out, "zTXt", data.data, data.size);
 	}
 	ucvector_cleanup(&compressed);
 	ucvector_cleanup(&data);
 	return (error);
 }
 
-static void	bkgd_fill(ucvector *bkgd, const LodePNGInfo *info)
+static void	bkgd_fill(ucvector *bkgd, const t_png_info *info)
 {
 	if (info->color.colortype == LCT_GREY
 		|| info->color.colortype == LCT_GREY_ALPHA)
@@ -70,41 +70,41 @@ static void	bkgd_fill(ucvector *bkgd, const LodePNGInfo *info)
 		ucvector_push_back(bkgd, (unsigned char)(info->background_r & 255));
 }
 
-unsigned	addChunk_bKGD(ucvector *out, const LodePNGInfo *info)
+unsigned int	add_chunk_bkgd(ucvector *out, const t_png_info *info)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	bkgd;
 
 	ucvector_init(&bkgd);
 	bkgd_fill(&bkgd, info);
-	error = addChunk(out, "bKGD", bkgd.data, bkgd.size);
+	error = add_chunk(out, "bKGD", bkgd.data, bkgd.size);
 	ucvector_cleanup(&bkgd);
 	return (error);
 }
 
-unsigned	addChunk_cHRM(ucvector *out, const LodePNGInfo *info)
+unsigned int	add_chunk_chrm(ucvector *out, const t_png_info *info)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	data;
 
 	ucvector_init(&data);
-	lodepng_add32bitInt(&data, info->chrm_white_x);
-	lodepng_add32bitInt(&data, info->chrm_white_y);
-	lodepng_add32bitInt(&data, info->chrm_red_x);
-	lodepng_add32bitInt(&data, info->chrm_red_y);
-	lodepng_add32bitInt(&data, info->chrm_green_x);
-	lodepng_add32bitInt(&data, info->chrm_green_y);
-	lodepng_add32bitInt(&data, info->chrm_blue_x);
-	lodepng_add32bitInt(&data, info->chrm_blue_y);
-	error = addChunk(out, "cHRM", data.data, data.size);
+	lodepng_add_32bit_int(&data, info->chrm_white_x);
+	lodepng_add_32bit_int(&data, info->chrm_white_y);
+	lodepng_add_32bit_int(&data, info->chrm_red_x);
+	lodepng_add_32bit_int(&data, info->chrm_red_y);
+	lodepng_add_32bit_int(&data, info->chrm_green_x);
+	lodepng_add_32bit_int(&data, info->chrm_green_y);
+	lodepng_add_32bit_int(&data, info->chrm_blue_x);
+	lodepng_add_32bit_int(&data, info->chrm_blue_y);
+	error = add_chunk(out, "cHRM", data.data, data.size);
 	ucvector_cleanup(&data);
 	return (error);
 }
 
-unsigned	addChunk_iCCP(ucvector *out, const LodePNGInfo *info,
-			LodePNGCompressSettings *zlibsettings)
+unsigned int	add_chunk_iccp(ucvector *out, const t_png_info *info,
+			t_compress_settings *zlibsettings)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	data;
 	ucvector	compressed;
 	size_t		i;
@@ -125,7 +125,7 @@ unsigned	addChunk_iCCP(ucvector *out, const LodePNGInfo *info,
 		i = 0;
 		while (i != compressed.size)
 			ucvector_push_back(&data, compressed.data[i++]);
-		error = addChunk(out, "iCCP", data.data, data.size);
+		error = add_chunk(out, "iCCP", data.data, data.size);
 	}
 	ucvector_cleanup(&compressed);
 	ucvector_cleanup(&data);

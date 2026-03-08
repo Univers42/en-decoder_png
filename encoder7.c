@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   encoder7.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 01:00:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/30 01:00:00 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 19:58:46 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-static unsigned	enc_run_pipeline(t_enc_ctx *ctx)
+static unsigned int	enc_run_pipeline(t_enc_ctx *ctx)
 {
 	ctx->state->error = enc_auto_convert(ctx);
 	if (ctx->state->error)
@@ -32,9 +32,9 @@ static unsigned	enc_run_pipeline(t_enc_ctx *ctx)
 	return (enc_write_post(ctx));
 }
 
-unsigned	lodepng_encode(unsigned char **out, size_t *outsize,
-		const unsigned char *image, unsigned w, unsigned h,
-		LodePNGState *state)
+unsigned int	lodepng_encode(unsigned char **out, size_t *outsize,
+		const unsigned char *image, unsigned int w, unsigned int h,
+		t_png_state *state)
 {
 	t_enc_ctx	ctx;
 
@@ -59,13 +59,13 @@ unsigned	lodepng_encode(unsigned char **out, size_t *outsize,
 	return (state->error);
 }
 
-unsigned	lodepng_encode_memory(unsigned char **out,
+unsigned int	lodepng_encode_memory(unsigned char **out,
 		size_t *outsize, const unsigned char *image,
-		unsigned w, unsigned h,
-		LodePNGColorType colortype, unsigned bitdepth)
+		unsigned int w, unsigned int h,
+		t_png_color_type colortype, unsigned int bitdepth)
 {
-	unsigned		error;
-	LodePNGState	state;
+	unsigned int		error;
+	t_png_state	state;
 
 	lodepng_state_init(&state);
 	state.info_raw.colortype = colortype;
@@ -78,17 +78,17 @@ unsigned	lodepng_encode_memory(unsigned char **out,
 	return (error);
 }
 
-unsigned	lodepng_encode32(unsigned char **out,
+unsigned int	lodepng_encode32(unsigned char **out,
 		size_t *outsize, const unsigned char *image,
-		unsigned w, unsigned h)
+		unsigned int w, unsigned int h)
 {
 	return (lodepng_encode_memory(out, outsize, image,
 			w, h, LCT_RGBA, 8));
 }
 
-unsigned	lodepng_encode24(unsigned char **out,
+unsigned int	lodepng_encode24(unsigned char **out,
 		size_t *outsize, const unsigned char *image,
-		unsigned w, unsigned h)
+		unsigned int w, unsigned int h)
 {
 	return (lodepng_encode_memory(out, outsize, image,
 			w, h, LCT_RGB, 8));

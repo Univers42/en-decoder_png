@@ -114,7 +114,7 @@ static void	fs_paeth(unsigned char *out, const unsigned char *scanline,
 		}
 		while (i < len)
 		{
-			out[i] = scanline[i] - paethPredictor(
+			out[i] = scanline[i] - paeth_predictor(
 					scanline[i - bw], prevline[i],
 					prevline[i - bw]);
 			++i;
@@ -135,16 +135,16 @@ static void	fs_paeth(unsigned char *out, const unsigned char *scanline,
 	}
 }
 
-void	filterScanline(unsigned char *out, const unsigned char *scanline,
+void	filter_scanline(unsigned char *out, const unsigned char *scanline,
 		const unsigned char *prevline, size_t length,
-		size_t bytewidth, unsigned char filterType)
+		size_t bytewidth, unsigned char filter_type)
 {
-	if (filterType <= 1)
-		fs_none_sub(out, scanline, bytewidth, length, filterType);
-	else if (filterType == 2)
+	if (filter_type <= 1)
+		fs_none_sub(out, scanline, bytewidth, length, filter_type);
+	else if (filter_type == 2)
 		fs_up(out, scanline, prevline, length);
-	else if (filterType == 3)
+	else if (filter_type == 3)
 		fs_avg(out, scanline, prevline, bytewidth, length);
-	else if (filterType == 4)
+	else if (filter_type == 4)
 		fs_paeth(out, scanline, prevline, bytewidth, length);
 }

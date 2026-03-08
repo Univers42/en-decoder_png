@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   encoder8.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 01:05:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/30 01:05:00 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 19:58:47 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 #ifdef LODEPNG_COMPILE_DISK
 
-unsigned	lodepng_encode_file(const char *filename,
-		const unsigned char *image, unsigned w,
-		unsigned h, LodePNGColorType colortype, unsigned bitdepth)
+unsigned int	lodepng_encode_file(const char *filename,
+		const unsigned char *image, unsigned int w,
+		unsigned int h, t_png_color_type colortype, unsigned int bitdepth)
 {
 	unsigned char	*buffer;
 	size_t			buffersize;
-	unsigned		error;
+	unsigned int		error;
 
 	error = lodepng_encode_memory(&buffer, &buffersize,
 			image, w, h, colortype, bitdepth);
@@ -30,15 +30,15 @@ unsigned	lodepng_encode_file(const char *filename,
 	return (error);
 }
 
-unsigned	lodepng_encode32_file(const char *filename,
-		const unsigned char *image, unsigned w, unsigned h)
+unsigned int	lodepng_encode32_file(const char *filename,
+		const unsigned char *image, unsigned int w, unsigned int h)
 {
 	return (lodepng_encode_file(filename, image,
 			w, h, LCT_RGBA, 8));
 }
 
-unsigned	lodepng_encode24_file(const char *filename,
-		const unsigned char *image, unsigned w, unsigned h)
+unsigned int	lodepng_encode24_file(const char *filename,
+		const unsigned char *image, unsigned int w, unsigned int h)
 {
 	return (lodepng_encode_file(filename, image,
 			w, h, LCT_RGB, 8));

@@ -15,8 +15,8 @@
 
 #  include "settings.h"
 
-void	lodepng_state_init(LodePNGState *state);
-void	lodepng_state_cleanup(LodePNGState *state);
-void	lodepng_state_copy(LodePNGState *dest, const LodePNGState *source);
+void	lodepng_state_init(t_png_state *state);
+void	lodepng_state_cleanup(t_png_state *state);
+void	lodepng_state_copy(t_png_state *dest, const t_png_state *source);
 
 # endif

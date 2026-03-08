@@ -56,19 +56,19 @@ static int	lz77_lazy(t_lz77_ctx *ctx)
 
 static void	lz77_advance_match(t_lz77_ctx *ctx)
 {
-	unsigned	i;
+	unsigned int	i;
 
-	addLengthDistance(ctx->out, ctx->length, ctx->offset);
+	add_length_distance(ctx->out, ctx->length, ctx->offset);
 	i = 1;
 	while (i < ctx->length)
 	{
 		++ctx->pos;
 		ctx->wpos = ctx->pos & (ctx->windowsize - 1);
-		ctx->hashval = getHash(ctx->in, ctx->insize, ctx->pos);
+		ctx->hashval = get_hash(ctx->in, ctx->insize, ctx->pos);
 		if (ctx->hashval == 0)
 		{
 			if (ctx->numzeros == 0)
-				ctx->numzeros = countZeros(ctx->in,
+				ctx->numzeros = count_zeros(ctx->in,
 						ctx->insize, ctx->pos);
 			else if (ctx->pos + ctx->numzeros > ctx->insize
 				|| ctx->in[ctx->pos + ctx->numzeros - 1] != 0)
@@ -76,7 +76,7 @@ static void	lz77_advance_match(t_lz77_ctx *ctx)
 		}
 		else
 			ctx->numzeros = 0;
-		updateHashChain(ctx->hash, ctx->wpos, ctx->hashval,
+		update_hash_chain(ctx->hash, ctx->wpos, ctx->hashval,
 			ctx->numzeros);
 		++i;
 	}
@@ -100,11 +100,11 @@ void	lz77_emit(t_lz77_ctx *ctx)
 	lz77_advance_match(ctx);
 }
 
-unsigned	encodeLZ77(uivector *out, Hash *hash,
+unsigned int	encode_lz77(uivector *out, t_hash *hash,
 		const unsigned char *in, size_t inpos,
-		size_t insize, unsigned windowsize,
-		unsigned minmatch, unsigned nicematch,
-		unsigned lazymatching)
+		size_t insize, unsigned int windowsize,
+		unsigned int minmatch, unsigned int nicematch,
+		unsigned int lazymatching)
 {
 	t_lz77_ctx	ctx;
 

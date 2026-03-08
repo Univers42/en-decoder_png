@@ -15,9 +15,9 @@
 void	dd_ctx_init(t_dd_ctx *ctx)
 {
 	uivector_init(&ctx->lz77_encoded);
-	HuffmanTree_init(&ctx->tree_ll);
-	HuffmanTree_init(&ctx->tree_d);
-	HuffmanTree_init(&ctx->tree_cl);
+	huffman_tree_init(&ctx->tree_ll);
+	huffman_tree_init(&ctx->tree_d);
+	huffman_tree_init(&ctx->tree_cl);
 	uivector_init(&ctx->freq_ll);
 	uivector_init(&ctx->freq_d);
 	uivector_init(&ctx->freq_cl);
@@ -29,9 +29,9 @@ void	dd_ctx_init(t_dd_ctx *ctx)
 void	dd_ctx_cleanup(t_dd_ctx *ctx)
 {
 	uivector_cleanup(&ctx->lz77_encoded);
-	HuffmanTree_cleanup(&ctx->tree_ll);
-	HuffmanTree_cleanup(&ctx->tree_d);
-	HuffmanTree_cleanup(&ctx->tree_cl);
+	huffman_tree_cleanup(&ctx->tree_ll);
+	huffman_tree_cleanup(&ctx->tree_d);
+	huffman_tree_cleanup(&ctx->tree_cl);
 	uivector_cleanup(&ctx->freq_ll);
 	uivector_cleanup(&ctx->freq_d);
 	uivector_cleanup(&ctx->freq_cl);
@@ -40,16 +40,16 @@ void	dd_ctx_cleanup(t_dd_ctx *ctx)
 	uivector_cleanup(&ctx->bitlen_cl);
 }
 
-unsigned	dd_lz77_encode(t_dd_ctx *ctx, Hash *hash,
+unsigned int	dd_lz77_encode(t_dd_ctx *ctx, t_hash *hash,
 		const unsigned char *data, size_t datapos,
-		size_t dataend, const LodePNGCompressSettings *s)
+		size_t dataend, const t_compress_settings *s)
 {
 	size_t	datasize;
 	size_t	i;
 
 	datasize = dataend - datapos;
 	if (s->use_lz77)
-		return (encodeLZ77(&ctx->lz77_encoded, hash, data,
+		return (encode_lz77(&ctx->lz77_encoded, hash, data,
 				datapos, dataend, s->windowsize,
 				s->minmatch, s->nicematch, s->lazymatching));
 	if (!uivector_resize(&ctx->lz77_encoded, datasize))
@@ -63,10 +63,10 @@ unsigned	dd_lz77_encode(t_dd_ctx *ctx, Hash *hash,
 	return (0);
 }
 
-unsigned	dd_build_freq(t_dd_ctx *ctx)
+unsigned int	dd_build_freq(t_dd_ctx *ctx)
 {
 	size_t		i;
-	unsigned	symbol;
+	unsigned int	symbol;
 
 	if (!uivector_resizev(&ctx->freq_ll, 286, 0))
 		return (83);
@@ -88,14 +88,14 @@ unsigned	dd_build_freq(t_dd_ctx *ctx)
 	return (0);
 }
 
-unsigned	dd_build_trees(t_dd_ctx *ctx)
+unsigned int	dd_build_trees(t_dd_ctx *ctx)
 {
-	unsigned	error;
+	unsigned int	error;
 
-	error = HuffmanTree_makeFromFrequencies(&ctx->tree_ll,
+	error = huffman_tree_make_from_freq(&ctx->tree_ll,
 			ctx->freq_ll.data, 257, ctx->freq_ll.size, 15);
 	if (error)
 		return (error);
-	return (HuffmanTree_makeFromFrequencies(&ctx->tree_d,
+	return (huffman_tree_make_from_freq(&ctx->tree_d,
 			ctx->freq_d.data, 2, ctx->freq_d.size, 15));
 }

@@ -15,16 +15,16 @@
 
 #  include "str.h"
 
-void			lodepng_clear_icc(LodePNGInfo *info);
-unsigned int	lodepng_assign_icc(LodePNGInfo *info, const char *name,
+void			lodepng_clear_icc(t_png_info *info);
+unsigned int	lodepng_assign_icc(t_png_info *info, const char *name,
 					const unsigned char *profile,
 					unsigned int profile_size);
-unsigned int	lodepng_set_icc(LodePNGInfo *info, const char *name,
+unsigned int	lodepng_set_icc(t_png_info *info, const char *name,
 					const unsigned char *profile,
 					unsigned int profile_size);
-unsigned		isGrayICCProfile(const unsigned char *profile,
-					unsigned size);
-unsigned		isRGBICCProfile(const unsigned char *profile,
-					unsigned size);
+unsigned int		is_gray_icc_profile(const unsigned char *profile,
+					unsigned int size);
+unsigned int		is_rgb_icc_profile(const unsigned char *profile,
+					unsigned int size);
 
 # endif

@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void	lodepng_state_init(LodePNGState *state)
+void	lodepng_state_init(t_png_state *state)
 {
 	lodepng_decoder_settings_init(&state->decoder);
 	lodepng_encoder_settings_init(&state->encoder);
@@ -21,13 +21,13 @@ void	lodepng_state_init(LodePNGState *state)
 	state->error = 0;
 }
 
-void	lodepng_state_cleanup(LodePNGState *state)
+void	lodepng_state_cleanup(t_png_state *state)
 {
 	lodepng_color_mode_cleanup(&state->info_raw);
 	lodepng_info_cleanup(&state->info_png);
 }
 
-void	lodepng_state_copy(LodePNGState *dest, const LodePNGState *source)
+void	lodepng_state_copy(t_png_state *dest, const t_png_state *source)
 {
 	lodepng_state_cleanup(dest);
 	*dest = *source;

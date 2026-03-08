@@ -12,12 +12,12 @@
 
 #include "all.h"
 
-unsigned	dd_build_cl(t_dd_ctx *ctx)
+unsigned int	dd_build_cl(t_dd_ctx *ctx)
 {
-	unsigned	error;
+	unsigned int	error;
 	size_t		i;
 
-	error = HuffmanTree_makeFromFrequencies(&ctx->tree_cl,
+	error = huffman_tree_make_from_freq(&ctx->tree_cl,
 			ctx->freq_cl.data, ctx->freq_cl.size,
 			ctx->freq_cl.size, 7);
 	if (error)
@@ -27,7 +27,7 @@ unsigned	dd_build_cl(t_dd_ctx *ctx)
 	i = 0;
 	while (i != ctx->tree_cl.numcodes)
 	{
-		ctx->bitlen_cl.data[i] = HuffmanTree_getLength(
+		ctx->bitlen_cl.data[i] = huffman_tree_get_length(
 				&ctx->tree_cl, g_clcl_order[i]);
 		++i;
 	}
@@ -42,28 +42,28 @@ unsigned	dd_build_cl(t_dd_ctx *ctx)
 }
 
 void	dd_write_header(ucvector *out, size_t *bp,
-		t_dd_ctx *ctx, unsigned bfinal)
+		t_dd_ctx *ctx, unsigned int bfinal)
 {
-	unsigned	hlit;
-	unsigned	hdist;
-	unsigned	hclen;
+	unsigned int	hlit;
+	unsigned int	hdist;
+	unsigned int	hclen;
 	size_t		i;
 
-	hlit = (unsigned)(ctx->numcodes_ll - 257);
-	hdist = (unsigned)(ctx->numcodes_d - 1);
-	hclen = (unsigned)ctx->bitlen_cl.size - 4;
+	hlit = (unsigned int)(ctx->numcodes_ll - 257);
+	hdist = (unsigned int)(ctx->numcodes_d - 1);
+	hclen = (unsigned int)ctx->bitlen_cl.size - 4;
 	while (!ctx->bitlen_cl.data[hclen + 4 - 1] && hclen > 0)
 		--hclen;
-	addBitToStream(out, bp, bfinal);
-	addBitToStream(out, bp, 0);
-	addBitToStream(out, bp, 1);
-	addBitsToStream(bp, out, hlit, 5);
-	addBitsToStream(bp, out, hdist, 5);
-	addBitsToStream(bp, out, hclen, 4);
+	add_bit_to_stream(out, bp, bfinal);
+	add_bit_to_stream(out, bp, 0);
+	add_bit_to_stream(out, bp, 1);
+	add_bits_to_stream(bp, out, hlit, 5);
+	add_bits_to_stream(bp, out, hdist, 5);
+	add_bits_to_stream(bp, out, hclen, 4);
 	i = 0;
 	while (i != hclen + 4)
 	{
-		addBitsToStream(bp, out, ctx->bitlen_cl.data[i], 3);
+		add_bits_to_stream(bp, out, ctx->bitlen_cl.data[i], 3);
 		++i;
 	}
 }
@@ -75,38 +75,38 @@ void	dd_write_cls(ucvector *out, size_t *bp, t_dd_ctx *ctx)
 	i = 0;
 	while (i != ctx->bitlen_lld_e.size)
 	{
-		addHuffmanSymbol(bp, out,
-			HuffmanTree_getCode(&ctx->tree_cl,
+		add_huffman_symbol(bp, out,
+			huffman_tree_get_code(&ctx->tree_cl,
 				ctx->bitlen_lld_e.data[i]),
-			HuffmanTree_getLength(&ctx->tree_cl,
+			huffman_tree_get_length(&ctx->tree_cl,
 				ctx->bitlen_lld_e.data[i]));
 		if (ctx->bitlen_lld_e.data[i] == 16)
-			addBitsToStream(bp, out,
+			add_bits_to_stream(bp, out,
 				ctx->bitlen_lld_e.data[++i], 2);
 		else if (ctx->bitlen_lld_e.data[i] == 17)
-			addBitsToStream(bp, out,
+			add_bits_to_stream(bp, out,
 				ctx->bitlen_lld_e.data[++i], 3);
 		else if (ctx->bitlen_lld_e.data[i] == 18)
-			addBitsToStream(bp, out,
+			add_bits_to_stream(bp, out,
 				ctx->bitlen_lld_e.data[++i], 7);
 		++i;
 	}
 }
 
-unsigned	dd_write_data(ucvector *out, size_t *bp, t_dd_ctx *ctx)
+unsigned int	dd_write_data(ucvector *out, size_t *bp, t_dd_ctx *ctx)
 {
-	writeLZ77data(bp, out, &ctx->lz77_encoded,
+	write_lz77_data(bp, out, &ctx->lz77_encoded,
 		&ctx->tree_ll, &ctx->tree_d);
-	if (HuffmanTree_getLength(&ctx->tree_ll, 256) == 0)
+	if (huffman_tree_get_length(&ctx->tree_ll, 256) == 0)
 		return (64);
-	addHuffmanSymbol(bp, out,
-		HuffmanTree_getCode(&ctx->tree_ll, 256),
-		HuffmanTree_getLength(&ctx->tree_ll, 256));
+	add_huffman_symbol(bp, out,
+		huffman_tree_get_code(&ctx->tree_ll, 256),
+		huffman_tree_get_length(&ctx->tree_ll, 256));
 	return (0);
 }
 
-unsigned	dd_emit(ucvector *out, size_t *bp, t_dd_ctx *ctx,
-		unsigned bfinal)
+unsigned int	dd_emit(ucvector *out, size_t *bp, t_dd_ctx *ctx,
+		unsigned int bfinal)
 {
 	dd_write_header(out, bp, ctx, bfinal);
 	dd_write_cls(out, bp, ctx);

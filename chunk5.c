@@ -12,9 +12,9 @@
 
 #include "all.h"
 
-void	LodePNGUnknownChunks_init(LodePNGInfo *info)
+void	lodepng_unk_chunks_init(t_png_info *info)
 {
-	unsigned	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i != 3)
@@ -25,9 +25,9 @@ void	LodePNGUnknownChunks_init(LodePNGInfo *info)
 	}
 }
 
-void	LodePNGUnknownChunks_cleanup(LodePNGInfo *info)
+void	lodepng_unk_chunks_cleanup(t_png_info *info)
 {
-	unsigned	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i != 3)
@@ -37,8 +37,8 @@ void	LodePNGUnknownChunks_cleanup(LodePNGInfo *info)
 	}
 }
 
-static unsigned	unk_copy_one(LodePNGInfo *dest,
-				const LodePNGInfo *src, unsigned i)
+static unsigned int	unk_copy_one(t_png_info *dest,
+				const t_png_info *src, unsigned int i)
 {
 	size_t	j;
 
@@ -56,13 +56,13 @@ static unsigned	unk_copy_one(LodePNGInfo *dest,
 	return (0);
 }
 
-unsigned	LodePNGUnknownChunks_copy(LodePNGInfo *dest,
-			const LodePNGInfo *src)
+unsigned int	lodepng_unk_chunks_copy(t_png_info *dest,
+			const t_png_info *src)
 {
-	unsigned	i;
-	unsigned	err;
+	unsigned int	i;
+	unsigned int	err;
 
-	LodePNGUnknownChunks_cleanup(dest);
+	lodepng_unk_chunks_cleanup(dest);
 	i = 0;
 	while (i != 3)
 	{
@@ -74,9 +74,9 @@ unsigned	LodePNGUnknownChunks_copy(LodePNGInfo *dest,
 	return (0);
 }
 
-unsigned	addChunk_PLTE(ucvector *out, const LodePNGColorMode *info)
+unsigned int	add_chunk_plte(ucvector *out, const t_png_color_mode *info)
 {
-	unsigned	error;
+	unsigned int	error;
 	size_t		i;
 	ucvector	plte;
 
@@ -88,7 +88,7 @@ unsigned	addChunk_PLTE(ucvector *out, const LodePNGColorMode *info)
 			ucvector_push_back(&plte, info->palette[i]);
 		++i;
 	}
-	error = addChunk(out, "PLTE", plte.data, plte.size);
+	error = add_chunk(out, "PLTE", plte.data, plte.size);
 	ucvector_cleanup(&plte);
 	return (error);
 }

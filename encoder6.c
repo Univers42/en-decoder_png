@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   encoder6.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:55:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/30 00:55:00 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 19:58:50 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,28 @@
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-static unsigned	enc_write_text_one(t_enc_ctx *ctx, size_t i)
+static unsigned int	enc_write_text_one(t_enc_ctx *ctx, size_t i)
 {
 	if (strlen(ctx->info.text_keys[i]) > 79)
 		return (66);
 	if (strlen(ctx->info.text_keys[i]) < 1)
 		return (67);
 	if (ctx->state->encoder.text_compression)
-		addChunk_zTXt(&ctx->outv, ctx->info.text_keys[i],
+		add_chunk_ztxt(&ctx->outv, ctx->info.text_keys[i],
 			ctx->info.text_strings[i],
 			&ctx->state->encoder.zlibsettings);
 	else
-		addChunk_tEXt(&ctx->outv, ctx->info.text_keys[i],
+		add_chunk_text(&ctx->outv, ctx->info.text_keys[i],
 			ctx->info.text_strings[i]);
 	return (0);
 }
 
-unsigned	enc_write_text(t_enc_ctx *ctx)
+unsigned int	enc_write_text(t_enc_ctx *ctx)
 {
 	size_t	i;
 
 	if (ctx->info.time_defined)
-		addChunk_tIME(&ctx->outv, &ctx->info.time);
+		add_chunk_time(&ctx->outv, &ctx->info.time);
 	i = 0;
 	while (i != ctx->info.text_num)
 	{
@@ -50,7 +50,7 @@ unsigned	enc_write_text(t_enc_ctx *ctx)
 static void	enc_write_id(t_enc_ctx *ctx)
 {
 	size_t		i;
-	unsigned	found;
+	unsigned int	found;
 
 	found = 0;
 	i = 0;
@@ -64,16 +64,16 @@ static void	enc_write_id(t_enc_ctx *ctx)
 		++i;
 	}
 	if (!found)
-		addChunk_tEXt(&ctx->outv, "LodePNG", LODEPNG_VERSION_STRING);
+		add_chunk_text(&ctx->outv, "LodePNG", LODEPNG_VERSION_STRING);
 }
 
-static unsigned	enc_write_itext_one(t_enc_ctx *ctx, size_t i)
+static unsigned int	enc_write_itext_one(t_enc_ctx *ctx, size_t i)
 {
 	if (strlen(ctx->info.itext_keys[i]) > 79)
 		return (66);
 	if (strlen(ctx->info.itext_keys[i]) < 1)
 		return (67);
-	addChunk_iTXt(&ctx->outv,
+	add_chunk_itxt(&ctx->outv,
 		ctx->state->encoder.text_compression,
 		ctx->info.itext_keys[i], ctx->info.itext_langtags[i],
 		ctx->info.itext_transkeys[i], ctx->info.itext_strings[i],
@@ -81,7 +81,7 @@ static unsigned	enc_write_itext_one(t_enc_ctx *ctx, size_t i)
 	return (0);
 }
 
-unsigned	enc_write_itext_end(t_enc_ctx *ctx)
+unsigned int	enc_write_itext_end(t_enc_ctx *ctx)
 {
 	size_t	i;
 
@@ -97,7 +97,7 @@ unsigned	enc_write_itext_end(t_enc_ctx *ctx)
 	}
 	if (ctx->info.unknown_chunks_data[2])
 	{
-		ctx->state->error = addUnknownChunks(&ctx->outv,
+		ctx->state->error = add_unknown_chunks(&ctx->outv,
 				ctx->info.unknown_chunks_data[2],
 				ctx->info.unknown_chunks_size[2]);
 		if (ctx->state->error)

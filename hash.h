@@ -25,16 +25,16 @@ typedef struct s_hash
 	int				*headz;
 	unsigned short	*chainz;
 	unsigned short	*zeros;
-}	Hash;
+}	t_hash;
 
 #  endif
 
-unsigned int	hash_init(Hash *hash, unsigned int windowsize);
-void			hash_cleanup(Hash *hash);
-unsigned int	getHash(const unsigned char *data, size_t size, size_t pos);
-unsigned int	countZeros(const unsigned char *data, size_t size,
+unsigned int	hash_init(t_hash *hash, unsigned int windowsize);
+void			hash_cleanup(t_hash *hash);
+unsigned int	get_hash(const unsigned char *data, size_t size, size_t pos);
+unsigned int	count_zeros(const unsigned char *data, size_t size,
 					size_t pos);
-void			updateHashChain(Hash *hash, size_t wpos,
+void			update_hash_chain(t_hash *hash, size_t wpos,
 					unsigned int hashval, unsigned short numzeros);
 
 # endif

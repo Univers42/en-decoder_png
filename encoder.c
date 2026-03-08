@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-unsigned	lz77_init(t_lz77_ctx *ctx)
+unsigned int	lz77_init(t_lz77_ctx *ctx)
 {
 	if (ctx->windowsize == 0 || ctx->windowsize > 32768)
 		return (60);
@@ -39,11 +39,11 @@ unsigned	lz77_init(t_lz77_ctx *ctx)
 void	lz77_hash_pos(t_lz77_ctx *ctx)
 {
 	ctx->wpos = ctx->pos & (ctx->windowsize - 1);
-	ctx->hashval = getHash(ctx->in, ctx->insize, ctx->pos);
+	ctx->hashval = get_hash(ctx->in, ctx->insize, ctx->pos);
 	if (ctx->hashval == 0)
 	{
 		if (ctx->numzeros == 0)
-			ctx->numzeros = countZeros(ctx->in, ctx->insize,
+			ctx->numzeros = count_zeros(ctx->in, ctx->insize,
 					ctx->pos);
 		else if (ctx->pos + ctx->numzeros > ctx->insize
 			|| ctx->in[ctx->pos + ctx->numzeros - 1] != 0)
@@ -51,16 +51,16 @@ void	lz77_hash_pos(t_lz77_ctx *ctx)
 	}
 	else
 		ctx->numzeros = 0;
-	updateHashChain(ctx->hash, ctx->wpos, ctx->hashval,
+	update_hash_chain(ctx->hash, ctx->wpos, ctx->hashval,
 		ctx->numzeros);
 }
 
-static void	lz77_try_match(t_lz77_ctx *ctx, unsigned cur_off)
+static void	lz77_try_match(t_lz77_ctx *ctx, unsigned int cur_off)
 {
 	const unsigned char	*foreptr;
 	const unsigned char	*backptr;
-	unsigned			skip;
-	unsigned			cur_len;
+	unsigned int			skip;
+	unsigned int			cur_len;
 
 	foreptr = &ctx->in[ctx->pos];
 	backptr = &ctx->in[ctx->pos - cur_off];
@@ -77,7 +77,7 @@ static void	lz77_try_match(t_lz77_ctx *ctx, unsigned cur_off)
 		++backptr;
 		++foreptr;
 	}
-	cur_len = (unsigned)(foreptr - &ctx->in[ctx->pos]);
+	cur_len = (unsigned int)(foreptr - &ctx->in[ctx->pos]);
 	if (cur_len > ctx->length)
 	{
 		ctx->length = cur_len;
@@ -106,9 +106,9 @@ static int	lz77_chain_advance(t_lz77_ctx *ctx)
 
 void	lz77_chain_search(t_lz77_ctx *ctx)
 {
-	unsigned	chainlength;
-	unsigned	cur_off;
-	unsigned	prev_off;
+	unsigned int	chainlength;
+	unsigned int	cur_off;
+	unsigned int	prev_off;
 
 	ctx->length = 0;
 	ctx->offset = 0;
@@ -123,9 +123,9 @@ void	lz77_chain_search(t_lz77_ctx *ctx)
 	{
 		++chainlength;
 		if (ctx->hashpos <= ctx->wpos)
-			cur_off = (unsigned)(ctx->wpos - ctx->hashpos);
+			cur_off = (unsigned int)(ctx->wpos - ctx->hashpos);
 		else
-			cur_off = (unsigned)(ctx->wpos - ctx->hashpos
+			cur_off = (unsigned int)(ctx->wpos - ctx->hashpos
 					+ ctx->windowsize);
 		if (cur_off < prev_off)
 			break ;

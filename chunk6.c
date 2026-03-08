@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-static void	trns_palette(ucvector *trns, const LodePNGColorMode *info)
+static void	trns_palette(ucvector *trns, const t_png_color_mode *info)
 {
 	size_t	amount;
 	size_t	i;
@@ -35,7 +35,7 @@ static void	trns_palette(ucvector *trns, const LodePNGColorMode *info)
 	}
 }
 
-static void	trns_keys(ucvector *trns, const LodePNGColorMode *info)
+static void	trns_keys(ucvector *trns, const t_png_color_mode *info)
 {
 	if (info->colortype == LCT_GREY && info->key_defined)
 	{
@@ -53,9 +53,9 @@ static void	trns_keys(ucvector *trns, const LodePNGColorMode *info)
 	}
 }
 
-unsigned	addChunk_tRNS(ucvector *out, const LodePNGColorMode *info)
+unsigned int	add_chunk_trns(ucvector *out, const t_png_color_mode *info)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	trns;
 
 	ucvector_init(&trns);
@@ -63,22 +63,22 @@ unsigned	addChunk_tRNS(ucvector *out, const LodePNGColorMode *info)
 		trns_palette(&trns, info);
 	else
 		trns_keys(&trns, info);
-	error = addChunk(out, "tRNS", trns.data, trns.size);
+	error = add_chunk(out, "tRNS", trns.data, trns.size);
 	ucvector_cleanup(&trns);
 	return (error);
 }
 
-unsigned	addChunk_IDAT(ucvector *out, const unsigned char *data,
-			size_t datasize, LodePNGCompressSettings *zlibsettings)
+unsigned int	add_chunk_idat(ucvector *out, const unsigned char *data,
+			size_t datasize, t_compress_settings *zlibsettings)
 {
 	ucvector	zlibdata;
-	unsigned	error;
+	unsigned int	error;
 
 	ucvector_init(&zlibdata);
 	error = zlib_compress(&zlibdata.data, &zlibdata.size,
 			data, datasize, zlibsettings);
 	if (!error)
-		error = addChunk(out, "IDAT", zlibdata.data, zlibdata.size);
+		error = add_chunk(out, "IDAT", zlibdata.data, zlibdata.size);
 	ucvector_cleanup(&zlibdata);
 	return (error);
 }

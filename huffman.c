@@ -12,32 +12,32 @@
 
 #include "all.h"
 
-void	HuffmanTree_init(HuffmanTree *tree)
+void	huffman_tree_init(t_huffman_tree *tree)
 {
 	tree->tree2d = 0;
 	tree->tree1d = 0;
 	tree->lengths = 0;
 }
 
-void	HuffmanTree_cleanup(HuffmanTree *tree)
+void	huffman_tree_cleanup(t_huffman_tree *tree)
 {
 	lodepng_free(tree->tree2d);
 	lodepng_free(tree->tree1d);
 	lodepng_free(tree->lengths);
 }
 
-unsigned	HuffmanTree_getCode(const HuffmanTree *tree, unsigned index)
+unsigned int	huffman_tree_get_code(const t_huffman_tree *tree, unsigned int index)
 {
 	return (tree->tree1d[index]);
 }
 
-unsigned	HuffmanTree_getLength(const HuffmanTree *tree, unsigned index)
+unsigned int	huffman_tree_get_length(const t_huffman_tree *tree, unsigned int index)
 {
 	return (tree->lengths[index]);
 }
 
-void	addHuffmanSymbol(size_t *bp, ucvector *compressed,
-		unsigned code, unsigned bitlen)
+void	add_huffman_symbol(size_t *bp, ucvector *compressed,
+		unsigned int code, unsigned int bitlen)
 {
-	addBitsToStreamReversed(bp, compressed, code, bitlen);
+	add_bits_to_stream_rev(bp, compressed, code, bitlen);
 }

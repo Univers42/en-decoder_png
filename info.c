@@ -14,14 +14,14 @@
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-static void	info_init_ancillary(LodePNGInfo *info)
+static void	info_init_ancillary(t_png_info *info)
 {
 	info->background_defined = 0;
 	info->background_r = 0;
 	info->background_g = 0;
 	info->background_b = 0;
-	LodePNGText_init(info);
-	LodePNGIText_init(info);
+	lodepng_text_init(info);
+	lodepng_itext_init(info);
 	info->time_defined = 0;
 	info->phys_defined = 0;
 	info->gama_defined = 0;
@@ -30,12 +30,12 @@ static void	info_init_ancillary(LodePNGInfo *info)
 	info->iccp_defined = 0;
 	info->iccp_name = NULL;
 	info->iccp_profile = NULL;
-	LodePNGUnknownChunks_init(info);
+	lodepng_unk_chunks_init(info);
 }
 
 #endif
 
-void	lodepng_info_init(LodePNGInfo *info)
+void	lodepng_info_init(t_png_info *info)
 {
 	lodepng_color_mode_init(&info->color);
 	info->interlace_method = 0;
@@ -46,19 +46,19 @@ void	lodepng_info_init(LodePNGInfo *info)
 #endif
 }
 
-void	lodepng_info_cleanup(LodePNGInfo *info)
+void	lodepng_info_cleanup(t_png_info *info)
 {
 	lodepng_color_mode_cleanup(&info->color);
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-	LodePNGText_cleanup(info);
-	LodePNGIText_cleanup(info);
+	lodepng_text_cleanup(info);
+	lodepng_itext_cleanup(info);
 	lodepng_clear_icc(info);
-	LodePNGUnknownChunks_cleanup(info);
+	lodepng_unk_chunks_cleanup(info);
 #endif
 }
 
-unsigned int	lodepng_info_copy(LodePNGInfo *dest,
-		const LodePNGInfo *source)
+unsigned int	lodepng_info_copy(t_png_info *dest,
+		const t_png_info *source)
 {
 	lodepng_info_cleanup(dest);
 	*dest = *source;
@@ -66,13 +66,13 @@ unsigned int	lodepng_info_copy(LodePNGInfo *dest,
 	CERROR_TRY_RETURN(lodepng_color_mode_copy(&dest->color,
 			&source->color));
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-	CERROR_TRY_RETURN(LodePNGText_copy(dest, source));
-	CERROR_TRY_RETURN(LodePNGIText_copy(dest, source));
+	CERROR_TRY_RETURN(lodepng_text_copy(dest, source));
+	CERROR_TRY_RETURN(lodepng_itext_copy(dest, source));
 	if (source->iccp_defined)
 		CERROR_TRY_RETURN(lodepng_assign_icc(dest, source->iccp_name,
 				source->iccp_profile, source->iccp_profile_size));
-	LodePNGUnknownChunks_init(dest);
-	CERROR_TRY_RETURN(LodePNGUnknownChunks_copy(dest, source));
+	lodepng_unk_chunks_init(dest);
+	CERROR_TRY_RETURN(lodepng_unk_chunks_copy(dest, source));
 #endif
 	return (0);
 }

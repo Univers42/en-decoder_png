@@ -12,8 +12,8 @@
 
 #include "all.h"
 
-void	dg_postprocess(LodePNGState *state, unsigned char **out,
-		ucvector *scanlines, unsigned w, unsigned h)
+void	dg_postprocess(t_png_state *state, unsigned char **out,
+		ucvector *scanlines, unsigned int w, unsigned int h)
 {
 	size_t	outsize;
 	size_t	i;
@@ -31,12 +31,12 @@ void	dg_postprocess(LodePNGState *state, unsigned char **out,
 		(*out)[i] = 0;
 		++i;
 	}
-	state->error = postProcessScanlines(*out, scanlines->data,
+	state->error = post_process_scanlines(*out, scanlines->data,
 			w, h, &state->info_png);
 }
 
-static void	dg_convert_color(LodePNGState *state,
-		unsigned char **out, unsigned w, unsigned h)
+static void	dg_convert_color(t_png_state *state,
+		unsigned char **out, unsigned int w, unsigned int h)
 {
 	unsigned char	*data;
 	size_t			outsize;
@@ -59,8 +59,8 @@ static void	dg_convert_color(LodePNGState *state,
 	lodepng_free(data);
 }
 
-void	decodeGeneric(unsigned char **out, unsigned *w, unsigned *h,
-		LodePNGState *state, const unsigned char *in, size_t insize)
+void	decode_generic(unsigned char **out, unsigned int *w, unsigned int *h,
+		t_png_state *state, const unsigned char *in, size_t insize)
 {
 	ucvector	idat;
 
@@ -83,12 +83,12 @@ void	decodeGeneric(unsigned char **out, unsigned *w, unsigned *h,
 	ucvector_cleanup(&idat);
 }
 
-unsigned	lodepng_decode(unsigned char **out, unsigned *w,
-		unsigned *h, LodePNGState *state,
+unsigned int	lodepng_decode(unsigned char **out, unsigned int *w,
+		unsigned int *h, t_png_state *state,
 		const unsigned char *in, size_t insize)
 {
 	*out = 0;
-	decodeGeneric(out, w, h, state, in, insize);
+	decode_generic(out, w, h, state, in, insize);
 	if (state->error)
 		return (state->error);
 	if (!state->decoder.color_convert

@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-unsigned	filter_zero(unsigned char *out, const unsigned char *in,
-		unsigned h, size_t lb, size_t bw)
+unsigned int	filter_zero(unsigned char *out, const unsigned char *in,
+		unsigned int h, size_t lb, size_t bw)
 {
-	unsigned			y;
+	unsigned int			y;
 	const unsigned char	*prevline;
 	size_t				outindex;
 	size_t				inindex;
@@ -27,7 +27,7 @@ unsigned	filter_zero(unsigned char *out, const unsigned char *in,
 		outindex = (1 + lb) * y;
 		inindex = lb * y;
 		out[outindex] = 0;
-		filterScanline(&out[outindex + 1], &in[inindex],
+		filter_scanline(&out[outindex + 1], &in[inindex],
 			prevline, lb, bw, 0);
 		prevline = &in[inindex];
 		++y;
@@ -35,11 +35,11 @@ unsigned	filter_zero(unsigned char *out, const unsigned char *in,
 	return (0);
 }
 
-unsigned	filter_predef(unsigned char *out, const unsigned char *in,
-		unsigned h, size_t lb, size_t bw,
-		const LodePNGEncoderSettings *settings)
+unsigned int	filter_predef(unsigned char *out, const unsigned char *in,
+		unsigned int h, size_t lb, size_t bw,
+		const t_encoder_settings *settings)
 {
-	unsigned			y;
+	unsigned int			y;
 	const unsigned char	*prevline;
 	size_t				outindex;
 	size_t				inindex;
@@ -53,7 +53,7 @@ unsigned	filter_predef(unsigned char *out, const unsigned char *in,
 		inindex = lb * y;
 		type = settings->predefined_filters[y];
 		out[outindex] = type;
-		filterScanline(&out[outindex + 1], &in[inindex],
+		filter_scanline(&out[outindex + 1], &in[inindex],
 			prevline, lb, bw, type);
 		prevline = &in[inindex];
 		++y;
@@ -82,7 +82,7 @@ static size_t	filter_ms_score(const unsigned char *data,
 
 static void	filter_ms_row(unsigned char *out, const unsigned char *in,
 		const unsigned char *prevline, unsigned char **attempt,
-		size_t lb, size_t bw, unsigned y)
+		size_t lb, size_t bw, unsigned int y)
 {
 	unsigned char	type;
 	unsigned char	best_type;
@@ -94,7 +94,7 @@ static void	filter_ms_row(unsigned char *out, const unsigned char *in,
 	type = 0;
 	while (type != 5)
 	{
-		filterScanline(attempt[type], &in[y * lb],
+		filter_scanline(attempt[type], &in[y * lb],
 			prevline, lb, bw, type);
 		sum = filter_ms_score(attempt[type], lb, type);
 		if (type == 0 || sum < smallest)
@@ -107,13 +107,13 @@ static void	filter_ms_row(unsigned char *out, const unsigned char *in,
 	filter_copy_best(out, attempt, best_type, lb, y);
 }
 
-unsigned	filter_minsum(unsigned char *out, const unsigned char *in,
-		unsigned h, size_t lb, size_t bw)
+unsigned int	filter_minsum(unsigned char *out, const unsigned char *in,
+		unsigned int h, size_t lb, size_t bw)
 {
 	unsigned char		*attempt[5];
 	const unsigned char	*prevline;
-	unsigned			y;
-	unsigned			error;
+	unsigned int			y;
+	unsigned int			error;
 
 	error = filter_alloc(attempt, lb);
 	if (error)

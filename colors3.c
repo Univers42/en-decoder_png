@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-unsigned int	lodepng_palette_add(LodePNGColorMode *info,
+unsigned int	lodepng_palette_add(t_png_color_mode *info,
 		unsigned char r, unsigned char g,
 		unsigned char b, unsigned char a)
 {
@@ -33,23 +33,23 @@ unsigned int	lodepng_palette_add(LodePNGColorMode *info,
 	return (0);
 }
 
-unsigned int	lodepng_get_bpp(const LodePNGColorMode *info)
+unsigned int	lodepng_get_bpp(const t_png_color_mode *info)
 {
 	return (lodepng_get_bpp_lct(info->colortype, info->bitdepth));
 }
 
-unsigned int	lodepng_get_channels(const LodePNGColorMode *info)
+unsigned int	lodepng_get_channels(const t_png_color_mode *info)
 {
-	return (getNumColorChannels(info->colortype));
+	return (get_num_color_channels(info->colortype));
 }
 
-unsigned int	lodepng_is_greyscale_type(const LodePNGColorMode *info)
+unsigned int	lodepng_is_greyscale_type(const t_png_color_mode *info)
 {
 	return (info->colortype == LCT_GREY
 		|| info->colortype == LCT_GREY_ALPHA);
 }
 
-unsigned int	lodepng_is_alpha_type(const LodePNGColorMode *info)
+unsigned int	lodepng_is_alpha_type(const t_png_color_mode *info)
 {
 	return ((info->colortype & 4) != 0);
 }

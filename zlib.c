@@ -12,12 +12,12 @@
 
 #include "all.h"
 
-unsigned	zlib_decompress(unsigned char **out, size_t *outsize,
+unsigned int	zlib_decompress(unsigned char **out, size_t *outsize,
 			const unsigned char *in, size_t insize,
-			const LodePNGDecompressSettings *settings)
+			const t_decompress_settings *settings)
 {
-	unsigned	cmf;
-	unsigned	flgs;
+	unsigned int	cmf;
+	unsigned int	flgs;
 
 	if (insize < 2)
 		return (53);
@@ -34,11 +34,11 @@ unsigned	zlib_decompress(unsigned char **out, size_t *outsize,
 	return (inflate(out, outsize, in + 2, insize - 2, settings));
 }
 
-static void	zc_build_header(unsigned char header[2], unsigned ws)
+static void	zc_build_header(unsigned char header[2], unsigned int ws)
 {
-	unsigned	cinfo;
-	unsigned	flg;
-	unsigned	fcheck;
+	unsigned int	cinfo;
+	unsigned int	flg;
+	unsigned int	fcheck;
 
 	if (ws < 256)
 		ws = 256;
@@ -55,7 +55,7 @@ static void	zc_build_header(unsigned char header[2], unsigned ws)
 
 static void	zc_assemble(unsigned char **out, size_t *outsize,
 			unsigned char *deflatedata, size_t deflatesize,
-			unsigned char header[2], unsigned adler_val)
+			unsigned char header[2], unsigned int adler_val)
 {
 	ucvector	v;
 	size_t		i;
@@ -74,19 +74,19 @@ static void	zc_assemble(unsigned char **out, size_t *outsize,
 	*outsize = v.size;
 }
 
-unsigned	zlib_compress(unsigned char **out, size_t *outsize,
+unsigned int	zlib_compress(unsigned char **out, size_t *outsize,
 			const unsigned char *in, size_t insize,
-			const LodePNGCompressSettings *settings)
+			const t_compress_settings *settings)
 {
-	unsigned		error;
+	unsigned int		error;
 	unsigned char	*deflatedata;
 	size_t			deflatesize;
 	unsigned char	header[2];
-	unsigned		adler_val;
+	unsigned int		adler_val;
 
 	deflatedata = 0;
 	deflatesize = 0;
-	adler_val = adler32(in, (unsigned)insize);
+	adler_val = adler32(in, (unsigned int)insize);
 	if (settings)
 		zc_build_header(header, settings->windowsize);
 	else

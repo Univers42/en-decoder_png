@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   encoder4.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:45:00 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/30 00:45:00 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 19:58:49 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-static unsigned	enc_auto_bg_setup(t_enc_ctx *ctx,
-		LodePNGColorProfile *prof, unsigned bg[3])
+static unsigned int	enc_auto_bg_setup(t_enc_ctx *ctx,
+		t_png_color_profile *prof, unsigned int bg[3])
 {
-	unsigned			rgb[3];
-	LodePNGColorMode	mode16;
+	unsigned int			rgb[3];
+	t_png_color_mode	mode16;
 
 	rgb[0] = 0;
 	rgb[1] = 0;
@@ -37,10 +37,10 @@ static unsigned	enc_auto_bg_setup(t_enc_ctx *ctx,
 	return (ctx->state->error);
 }
 
-static unsigned	enc_auto_bg(t_enc_ctx *ctx)
+static unsigned int	enc_auto_bg(t_enc_ctx *ctx)
 {
-	unsigned			bg[3];
-	LodePNGColorProfile	prof;
+	unsigned int			bg[3];
+	t_png_color_profile	prof;
 
 	bg[0] = ctx->state->info_png.background_r;
 	bg[1] = ctx->state->info_png.background_g;
@@ -56,7 +56,7 @@ static unsigned	enc_auto_bg(t_enc_ctx *ctx)
 }
 #endif
 
-unsigned	enc_auto_convert(t_enc_ctx *ctx)
+unsigned int	enc_auto_convert(t_enc_ctx *ctx)
 {
 	lodepng_info_copy(&ctx->info, &ctx->state->info_png);
 	if (!ctx->state->encoder.auto_convert)
@@ -70,19 +70,19 @@ unsigned	enc_auto_convert(t_enc_ctx *ctx)
 	return (ctx->state->error);
 }
 
-unsigned	enc_icc_check(t_enc_ctx *ctx)
+unsigned int	enc_icc_check(t_enc_ctx *ctx)
 {
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-	unsigned	gray_icc;
-	unsigned	gray_png;
+	unsigned int	gray_icc;
+	unsigned int	gray_png;
 
 	if (!ctx->state->info_png.iccp_defined)
 		return (0);
-	gray_icc = isGrayICCProfile(ctx->state->info_png.iccp_profile,
+	gray_icc = is_gray_icc_profile(ctx->state->info_png.iccp_profile,
 			ctx->state->info_png.iccp_profile_size);
 	gray_png = (ctx->info.color.colortype == LCT_GREY
 			|| ctx->info.color.colortype == LCT_GREY_ALPHA);
-	if (!gray_icc && !isRGBICCProfile(
+	if (!gray_icc && !is_rgb_icc_profile(
 			ctx->state->info_png.iccp_profile,
 			ctx->state->info_png.iccp_profile_size))
 		return (100);
@@ -105,7 +105,7 @@ unsigned	enc_icc_check(t_enc_ctx *ctx)
 	return (0);
 }
 
-unsigned	enc_convert_data(t_enc_ctx *ctx)
+unsigned int	enc_convert_data(t_enc_ctx *ctx)
 {
 	unsigned char	*converted;
 	size_t			size;
@@ -122,13 +122,13 @@ unsigned	enc_convert_data(t_enc_ctx *ctx)
 				&ctx->info.color, &ctx->state->info_raw,
 				ctx->w, ctx->h);
 		if (!ctx->state->error)
-			preProcessScanlines(&ctx->data, &ctx->datasize,
+			pre_process_scanlines(&ctx->data, &ctx->datasize,
 				converted, ctx->w, ctx->h, &ctx->info,
 				&ctx->state->encoder);
 		lodepng_free(converted);
 		return (ctx->state->error);
 	}
-	preProcessScanlines(&ctx->data, &ctx->datasize, ctx->image,
+	pre_process_scanlines(&ctx->data, &ctx->datasize, ctx->image,
 		ctx->w, ctx->h, &ctx->info, &ctx->state->encoder);
 	return (0);
 }

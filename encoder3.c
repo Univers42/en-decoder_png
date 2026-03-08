@@ -13,41 +13,41 @@
 #include "all.h"
 
 static void	wlz77_emit_extra(size_t *bp, ucvector *out,
-		const uivector *lz77, const HuffmanTree *tree_d,
+		const uivector *lz77, const t_huffman_tree *tree_d,
 		size_t *i)
 {
-	unsigned	li;
-	unsigned	di;
+	unsigned int	li;
+	unsigned int	di;
 
 	li = lz77->data[*i] - FIRST_LENGTH_CODE_INDEX;
-	addBitsToStream(bp, out, lz77->data[++(*i)], LENGTHEXTRA[li]);
+	add_bits_to_stream(bp, out, lz77->data[++(*i)], g_lengthextra[li]);
 	di = lz77->data[++(*i)];
-	addHuffmanSymbol(bp, out, HuffmanTree_getCode(tree_d, di),
-		HuffmanTree_getLength(tree_d, di));
-	addBitsToStream(bp, out, lz77->data[++(*i)],
-		DISTANCEEXTRA[di]);
+	add_huffman_symbol(bp, out, huffman_tree_get_code(tree_d, di),
+		huffman_tree_get_length(tree_d, di));
+	add_bits_to_stream(bp, out, lz77->data[++(*i)],
+		g_distanceextra[di]);
 }
 
-void	writeLZ77data(size_t *bp, ucvector *out,
-		const uivector *lz77_encoded, const HuffmanTree *tree_ll,
-		const HuffmanTree *tree_d)
+void	write_lz77_data(size_t *bp, ucvector *out,
+		const uivector *lz77_encoded, const t_huffman_tree *tree_ll,
+		const t_huffman_tree *tree_d)
 {
 	size_t		i;
-	unsigned	val;
+	unsigned int	val;
 
 	i = 0;
 	while (i != lz77_encoded->size)
 	{
 		val = lz77_encoded->data[i];
-		addHuffmanSymbol(bp, out, HuffmanTree_getCode(tree_ll, val),
-			HuffmanTree_getLength(tree_ll, val));
+		add_huffman_symbol(bp, out, huffman_tree_get_code(tree_ll, val),
+			huffman_tree_get_length(tree_ll, val));
 		if (val > 256)
 			wlz77_emit_extra(bp, out, lz77_encoded, tree_d, &i);
 		++i;
 	}
 }
 
-unsigned	enc_validate(t_enc_ctx *ctx)
+unsigned int	enc_validate(t_enc_ctx *ctx)
 {
 	if ((ctx->state->info_png.color.colortype == LCT_PALETTE
 			|| ctx->state->encoder.force_palette)
@@ -58,12 +58,12 @@ unsigned	enc_validate(t_enc_ctx *ctx)
 		return (61);
 	if (ctx->state->info_png.interlace_method > 1)
 		return (71);
-	ctx->state->error = checkColorValidity(
+	ctx->state->error = check_color_validity(
 			ctx->state->info_png.color.colortype,
 			ctx->state->info_png.color.bitdepth);
 	if (ctx->state->error)
 		return (ctx->state->error);
-	ctx->state->error = checkColorValidity(
+	ctx->state->error = check_color_validity(
 			ctx->state->info_raw.colortype,
 			ctx->state->info_raw.bitdepth);
 	return (ctx->state->error);

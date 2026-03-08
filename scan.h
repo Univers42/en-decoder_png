@@ -19,18 +19,18 @@
 # include "bit.h"
 # include "colors.h"
 
-unsigned	postProcessScanlines(unsigned char *out, unsigned char *in,
-				unsigned w, unsigned h,
-				const LodePNGInfo *info_png);
-unsigned	readChunk_PLTE(LodePNGColorMode *color,
-				const unsigned char *data, size_t chunkLength);
-unsigned	readChunk_tRNS(LodePNGColorMode *color,
-				const unsigned char *data, size_t chunkLength);
-size_t		lodepng_get_raw_size_idat(unsigned w, unsigned h,
-				const LodePNGColorMode *color);
-void		preProcessScanlines(unsigned char **out, size_t *outsize,
-				const unsigned char *in, unsigned w, unsigned h,
-				const LodePNGInfo *info,
-				const LodePNGEncoderSettings *settings);
+unsigned int	post_process_scanlines(unsigned char *out, unsigned char *in,
+				unsigned int w, unsigned int h,
+				const t_png_info *info_png);
+unsigned int	read_chunk_plte(t_png_color_mode *color,
+				const unsigned char *data, size_t chunk_length);
+unsigned int	read_chunk_trns(t_png_color_mode *color,
+				const unsigned char *data, size_t chunk_length);
+size_t		lodepng_get_raw_size_idat(unsigned int w, unsigned int h,
+				const t_png_color_mode *color);
+void		pre_process_scanlines(unsigned char **out, size_t *outsize,
+				const unsigned char *in, unsigned int w, unsigned int h,
+				const t_png_info *info,
+				const t_encoder_settings *settings);
 
 #endif

@@ -12,10 +12,10 @@
 
 #include "all.h"
 
-static unsigned	ihb_dist_error(unsigned code_d, size_t bp,
+static unsigned int	ihb_dist_error(unsigned int code_d, size_t bp,
 				size_t inbitlength)
 {
-	if (code_d == (unsigned)(-1))
+	if (code_d == (unsigned int)(-1))
 	{
 		if (bp > inbitlength)
 			return (10);
@@ -24,8 +24,8 @@ static unsigned	ihb_dist_error(unsigned code_d, size_t bp,
 	return (18);
 }
 
-static unsigned	ihb_copy_back(ucvector *out, size_t *pos,
-				size_t length, unsigned distance)
+static unsigned int	ihb_copy_back(ucvector *out, size_t *pos,
+				size_t length, unsigned int distance)
 {
 	size_t	start;
 	size_t	backward;
@@ -54,38 +54,38 @@ static unsigned	ihb_copy_back(ucvector *out, size_t *pos,
 	return (0);
 }
 
-static unsigned	ihb_length_match(ucvector *out, const unsigned char *in,
-				size_t *bp, size_t *pos, HuffmanTree *tree_d,
-				size_t inbitlength, unsigned code_ll)
+static unsigned int	ihb_length_match(ucvector *out, const unsigned char *in,
+				size_t *bp, size_t *pos, t_huffman_tree *tree_d,
+				size_t inbitlength, unsigned int code_ll)
 {
-	unsigned	code_d;
-	unsigned	distance;
-	unsigned	numextra;
+	unsigned int	code_d;
+	unsigned int	distance;
+	unsigned int	numextra;
 	size_t		length;
 
-	length = LENGTHBASE[code_ll - FIRST_LENGTH_CODE_INDEX];
-	numextra = LENGTHEXTRA[code_ll - FIRST_LENGTH_CODE_INDEX];
+	length = g_lengthbase[code_ll - FIRST_LENGTH_CODE_INDEX];
+	numextra = g_lengthextra[code_ll - FIRST_LENGTH_CODE_INDEX];
 	if ((*bp + numextra) > inbitlength)
 		return (51);
-	length += readBitsFromStream(bp, in, numextra);
-	code_d = huffmanDecodeSymbol(in, bp, tree_d, inbitlength);
+	length += read_bits_from_stream(bp, in, numextra);
+	code_d = huffman_decode_symbol(in, bp, tree_d, inbitlength);
 	if (code_d > 29)
 		return (ihb_dist_error(code_d, *bp, inbitlength));
-	distance = DISTANCEBASE[code_d];
-	numextra = DISTANCEEXTRA[code_d];
+	distance = g_distancebase[code_d];
+	numextra = g_distanceextra[code_d];
 	if ((*bp + numextra) > inbitlength)
 		return (51);
-	distance += readBitsFromStream(bp, in, numextra);
+	distance += read_bits_from_stream(bp, in, numextra);
 	return (ihb_copy_back(out, pos, length, distance));
 }
 
-static unsigned	ihb_decode_one(ucvector *out, const unsigned char *in,
-				size_t *bp, size_t *pos, HuffmanTree *tree_ll,
-				HuffmanTree *tree_d, size_t inbitlength)
+static unsigned int	ihb_decode_one(ucvector *out, const unsigned char *in,
+				size_t *bp, size_t *pos, t_huffman_tree *tree_ll,
+				t_huffman_tree *tree_d, size_t inbitlength)
 {
-	unsigned	code_ll;
+	unsigned int	code_ll;
 
-	code_ll = huffmanDecodeSymbol(in, bp, tree_ll, inbitlength);
+	code_ll = huffman_decode_symbol(in, bp, tree_ll, inbitlength);
 	if (code_ll <= 255)
 	{
 		if (!ucvector_resize(out, (*pos) + 1))
@@ -105,28 +105,28 @@ static unsigned	ihb_decode_one(ucvector *out, const unsigned char *in,
 	return (11);
 }
 
-unsigned	inflateHuffmanBlock(ucvector *out,
+unsigned int	inflate_huffman_block(ucvector *out,
 			const unsigned char *in, size_t *bp,
-			size_t *pos, size_t inlength, unsigned btype)
+			size_t *pos, size_t inlength, unsigned int btype)
 {
-	unsigned	error;
-	HuffmanTree	tree_ll;
-	HuffmanTree	tree_d;
+	unsigned int	error;
+	t_huffman_tree	tree_ll;
+	t_huffman_tree	tree_d;
 
 	error = 0;
-	HuffmanTree_init(&tree_ll);
-	HuffmanTree_init(&tree_d);
+	huffman_tree_init(&tree_ll);
+	huffman_tree_init(&tree_d);
 	if (btype == 1)
-		getTreeInflateFixed(&tree_ll, &tree_d);
+		get_tree_inflate_fixed(&tree_ll, &tree_d);
 	else if (btype == 2)
-		error = getTreeInflateDynamic(&tree_ll, &tree_d,
+		error = get_tree_inflate_dynamic(&tree_ll, &tree_d,
 				in, bp, inlength);
 	while (!error)
 		error = ihb_decode_one(out, in, bp, pos,
 				&tree_ll, &tree_d, inlength * 8);
 	if (error == 256)
 		error = 0;
-	HuffmanTree_cleanup(&tree_ll);
-	HuffmanTree_cleanup(&tree_d);
+	huffman_tree_cleanup(&tree_ll);
+	huffman_tree_cleanup(&tree_d);
 	return (error);
 }

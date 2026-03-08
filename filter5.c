@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-static void	ent_count_init(unsigned *count, unsigned char *data,
+static void	ent_count_init(unsigned int *count, unsigned char *data,
 		size_t lb, unsigned char type)
 {
 	size_t	x;
@@ -32,7 +32,7 @@ static void	ent_count_init(unsigned *count, unsigned char *data,
 	++count[type];
 }
 
-static void	ent_compute_sum(float *sum, unsigned *count, size_t lb)
+static void	ent_compute_sum(float *sum, unsigned int *count, size_t lb)
 {
 	size_t	x;
 	float	p;
@@ -52,20 +52,20 @@ static void	ent_compute_sum(float *sum, unsigned *count, size_t lb)
 
 static void	filter_ent_row(unsigned char *out, const unsigned char *in,
 		const unsigned char *prevline, unsigned char **attempt,
-		size_t lb, size_t bw, unsigned y)
+		size_t lb, size_t bw, unsigned int y)
 {
 	unsigned char	type;
 	unsigned char	best_type;
 	float			smallest;
 	float			sum;
-	unsigned		count[256];
+	unsigned int		count[256];
 
 	best_type = 0;
 	smallest = 0;
 	type = 0;
 	while (type != 5)
 	{
-		filterScanline(attempt[type], &in[y * lb],
+		filter_scanline(attempt[type], &in[y * lb],
 			prevline, lb, bw, type);
 		ent_count_init(count, attempt[type], lb, type);
 		ent_compute_sum(&sum, count, lb);
@@ -79,13 +79,13 @@ static void	filter_ent_row(unsigned char *out, const unsigned char *in,
 	filter_copy_best(out, attempt, best_type, lb, y);
 }
 
-unsigned	filter_entropy(unsigned char *out, const unsigned char *in,
-		unsigned h, size_t lb, size_t bw)
+unsigned int	filter_entropy(unsigned char *out, const unsigned char *in,
+		unsigned int h, size_t lb, size_t bw)
 {
 	unsigned char		*attempt[5];
 	const unsigned char	*prevline;
-	unsigned			y;
-	unsigned			error;
+	unsigned int			y;
+	unsigned int			error;
 
 	error = filter_alloc(attempt, lb);
 	if (error)

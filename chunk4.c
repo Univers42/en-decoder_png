@@ -6,17 +6,17 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:33:01 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:41:27 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 20:04:19 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-unsigned	lodepng_chunk_append(unsigned char **out,
+unsigned int	lodepng_chunk_append(unsigned char **out,
 			size_t *outlength, const unsigned char *chunk)
 {
-	unsigned		i;
-	unsigned		total_chunk_length;
+	unsigned int		i;
+	unsigned int		total_chunk_length;
 	unsigned char	*chunk_start;
 	unsigned char	*new_buffer;
 	size_t			new_length;
@@ -40,11 +40,11 @@ unsigned	lodepng_chunk_append(unsigned char **out,
 	return (0);
 }
 
-unsigned	lodepng_chunk_create(unsigned char **out,
-			size_t *outlength, unsigned length,
+unsigned int	lodepng_chunk_create(unsigned char **out,
+			size_t *outlength, unsigned int length,
 			const char *type, const unsigned char *data)
 {
-	unsigned		i;
+	unsigned int		i;
 	unsigned char	*chunk;
 	unsigned char	*new_buffer;
 	size_t			new_length;
@@ -58,7 +58,7 @@ unsigned	lodepng_chunk_create(unsigned char **out,
 	(*out) = new_buffer;
 	(*outlength) = new_length;
 	chunk = &(*out)[(*outlength) - length - 12];
-	lodepng_set32bitInt(chunk, (unsigned)length);
+	lodepng_set_32bit_int(chunk, (unsigned int)length);
 	chunk[4] = (unsigned char)type[0];
 	chunk[5] = (unsigned char)type[1];
 	chunk[6] = (unsigned char)type[2];
@@ -73,36 +73,36 @@ unsigned	lodepng_chunk_create(unsigned char **out,
 	return (0);
 }
 
-unsigned	addChunk(ucvector *out, const char *chunkName,
+unsigned int	add_chunk(ucvector *out, const char *chunk_name,
 			const unsigned char *data, size_t length)
 {
 	CERROR_TRY_RETURN(lodepng_chunk_create(&out->data,
-			&out->size, (unsigned)length, chunkName, data));
+			&out->size, (unsigned int)length, chunk_name, data));
 	out->allocsize = out->size;
 	return (0);
 }
 
-unsigned	addChunk_IEND(ucvector *out)
+unsigned int	add_chunk_iend(ucvector *out)
 {
-	return (addChunk(out, "IEND", 0, 0));
+	return (add_chunk(out, "IEND", 0, 0));
 }
 
-unsigned	addChunk_IHDR(ucvector *out, unsigned w, unsigned h,
-			LodePNGColorType colortype, unsigned bitdepth,
+unsigned int	add_chunk_ihdr(ucvector *out, unsigned int w, unsigned int h,
+			t_png_color_type colortype, unsigned int bitdepth,
 			unsigned interlace_method)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	header;
 
 	ucvector_init(&header);
-	lodepng_add32bitInt(&header, w);
-	lodepng_add32bitInt(&header, h);
+	lodepng_add_32bit_int(&header, w);
+	lodepng_add_32bit_int(&header, h);
 	ucvector_push_back(&header, (unsigned char)bitdepth);
 	ucvector_push_back(&header, (unsigned char)colortype);
 	ucvector_push_back(&header, 0);
 	ucvector_push_back(&header, 0);
 	ucvector_push_back(&header, interlace_method);
-	error = addChunk(out, "IHDR", header.data, header.size);
+	error = add_chunk(out, "IHDR", header.data, header.size);
 	ucvector_cleanup(&header);
 	return (error);
 }

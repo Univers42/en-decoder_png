@@ -12,11 +12,11 @@
 
 #include "all.h"
 
-static void	make_lengths2_generate(HuffmanTree *tree,
+static void	make_lengths2_generate(t_huffman_tree *tree,
 			uivector *blcount, uivector *nextcode)
 {
-	unsigned	bits;
-	unsigned	n;
+	unsigned int	bits;
+	unsigned int	n;
 
 	bits = 0;
 	while (bits != tree->numcodes)
@@ -40,17 +40,17 @@ static void	make_lengths2_generate(HuffmanTree *tree,
 	}
 }
 
-unsigned	HuffmanTree_makeFromLengths2(HuffmanTree *tree)
+unsigned int	huffman_tree_make_from_len2(t_huffman_tree *tree)
 {
 	uivector	blcount;
 	uivector	nextcode;
-	unsigned	error;
+	unsigned int	error;
 
 	error = 0;
 	uivector_init(&blcount);
 	uivector_init(&nextcode);
-	tree->tree1d = (unsigned *)lodepng_malloc(
-			tree->numcodes * sizeof(unsigned));
+	tree->tree1d = (unsigned int *)lodepng_malloc(
+			tree->numcodes * sizeof(unsigned int));
 	if (!tree->tree1d)
 		error = 83;
 	if (!uivector_resizev(&blcount, tree->max_bit_len + 1, 0)
@@ -61,18 +61,18 @@ unsigned	HuffmanTree_makeFromLengths2(HuffmanTree *tree)
 	uivector_cleanup(&blcount);
 	uivector_cleanup(&nextcode);
 	if (!error)
-		return (HuffmanTree_make2DTree(tree));
+		return (huffman_tree_make_2d_tree(tree));
 	return (error);
 }
 
-unsigned	HuffmanTree_makeFromLengths(HuffmanTree *tree,
-			const unsigned *bitlen, size_t numcodes,
-			unsigned maxbitlen)
+unsigned int	huffman_tree_make_from_len(t_huffman_tree *tree,
+			const unsigned int *bitlen, size_t numcodes,
+			unsigned int maxbitlen)
 {
-	unsigned	i;
+	unsigned int	i;
 
-	tree->lengths = (unsigned *)lodepng_malloc(
-			numcodes * sizeof(unsigned));
+	tree->lengths = (unsigned int *)lodepng_malloc(
+			numcodes * sizeof(unsigned int));
 	if (!tree->lengths)
 		return (83);
 	i = 0;
@@ -81,7 +81,7 @@ unsigned	HuffmanTree_makeFromLengths(HuffmanTree *tree,
 		tree->lengths[i] = bitlen[i];
 		++i;
 	}
-	tree->numcodes = (unsigned)numcodes;
+	tree->numcodes = (unsigned int)numcodes;
 	tree->max_bit_len = maxbitlen;
-	return (HuffmanTree_makeFromLengths2(tree));
+	return (huffman_tree_make_from_len2(tree));
 }

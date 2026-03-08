@@ -12,30 +12,30 @@
 
 #include "all.h"
 
-static unsigned	hcl_init_lists(BPMLists *lists, unsigned maxbitlen)
+static unsigned int	hcl_init_lists(t_bpm_lists *lists, unsigned int maxbitlen)
 {
 	lists->listsize = maxbitlen;
 	lists->memsize = 2 * maxbitlen * (maxbitlen + 1);
 	lists->nextfree = 0;
 	lists->numfree = lists->memsize;
-	lists->memory = (BPMNode *)lodepng_malloc(
+	lists->memory = (t_bpm_node *)lodepng_malloc(
 			lists->memsize * sizeof(*lists->memory));
-	lists->freelist = (BPMNode **)lodepng_malloc(
-			lists->memsize * sizeof(BPMNode *));
-	lists->chains0 = (BPMNode **)lodepng_malloc(
-			lists->listsize * sizeof(BPMNode *));
-	lists->chains1 = (BPMNode **)lodepng_malloc(
-			lists->listsize * sizeof(BPMNode *));
+	lists->freelist = (t_bpm_node **)lodepng_malloc(
+			lists->memsize * sizeof(t_bpm_node *));
+	lists->chains0 = (t_bpm_node **)lodepng_malloc(
+			lists->listsize * sizeof(t_bpm_node *));
+	lists->chains1 = (t_bpm_node **)lodepng_malloc(
+			lists->listsize * sizeof(t_bpm_node *));
 	if (!lists->memory || !lists->freelist
 		|| !lists->chains0 || !lists->chains1)
 		return (83);
 	return (0);
 }
 
-static void	hcl_run_bpm(BPMLists *lists, BPMNode *leaves,
-			size_t numpresent, unsigned maxbitlen)
+static void	hcl_run_bpm(t_bpm_lists *lists, t_bpm_node *leaves,
+			size_t numpresent, unsigned int maxbitlen)
 {
-	unsigned	i;
+	unsigned int	i;
 
 	i = 0;
 	while (i != lists->memsize)
@@ -55,17 +55,17 @@ static void	hcl_run_bpm(BPMLists *lists, BPMNode *leaves,
 	i = 2;
 	while (i != 2 * numpresent - 2)
 	{
-		boundaryPM(lists, leaves, numpresent,
+		boundary_pm(lists, leaves, numpresent,
 			(int)maxbitlen - 1, (int)i);
 		++i;
 	}
 }
 
-static void	hcl_extract_lengths(BPMLists *lists, BPMNode *leaves,
-			unsigned maxbitlen, unsigned *lengths)
+static void	hcl_extract_lengths(t_bpm_lists *lists, t_bpm_node *leaves,
+			unsigned int maxbitlen, unsigned int *lengths)
 {
-	BPMNode		*node;
-	unsigned	i;
+	t_bpm_node		*node;
+	unsigned int	i;
 
 	node = lists->chains1[maxbitlen - 1];
 	while (node)
@@ -80,11 +80,11 @@ static void	hcl_extract_lengths(BPMLists *lists, BPMNode *leaves,
 	}
 }
 
-unsigned	hcl_bpm(unsigned *lengths, BPMNode *leaves,
-			size_t numpresent, unsigned maxbitlen)
+unsigned int	hcl_bpm(unsigned int *lengths, t_bpm_node *leaves,
+			size_t numpresent, unsigned int maxbitlen)
 {
-	unsigned	error;
-	BPMLists	lists;
+	unsigned int	error;
+	t_bpm_lists	lists;
 
 	bpmnode_sort(leaves, numpresent);
 	error = hcl_init_lists(&lists, maxbitlen);

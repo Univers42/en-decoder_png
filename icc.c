@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void	lodepng_clear_icc(LodePNGInfo *info)
+void	lodepng_clear_icc(t_png_info *info)
 {
 	string_cleanup(&info->iccp_name);
 	lodepng_free(info->iccp_profile);
@@ -21,7 +21,7 @@ void	lodepng_clear_icc(LodePNGInfo *info)
 	info->iccp_defined = 0;
 }
 
-unsigned int	lodepng_assign_icc(LodePNGInfo *info, const char *name,
+unsigned int	lodepng_assign_icc(t_png_info *info, const char *name,
 		const unsigned char *profile, unsigned int profile_size)
 {
 	info->iccp_name = alloc_string(name);
@@ -33,7 +33,7 @@ unsigned int	lodepng_assign_icc(LodePNGInfo *info, const char *name,
 	return (0);
 }
 
-unsigned int	lodepng_set_icc(LodePNGInfo *info, const char *name,
+unsigned int	lodepng_set_icc(t_png_info *info, const char *name,
 		const unsigned char *profile, unsigned int profile_size)
 {
 	if (info->iccp_name)

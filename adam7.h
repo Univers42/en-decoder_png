@@ -15,17 +15,17 @@
 
 # include <stddef.h>
 
-static const unsigned	g_adam7_ix[7] = {0, 4, 0, 2, 0, 1, 0};
-static const unsigned	g_adam7_iy[7] = {0, 0, 4, 0, 2, 0, 1};
-static const unsigned	g_adam7_dx[7] = {8, 8, 4, 4, 2, 2, 1};
-static const unsigned	g_adam7_dy[7] = {8, 8, 8, 4, 4, 2, 2};
+static const unsigned int	g_adam7_ix[7] = {0, 4, 0, 2, 0, 1, 0};
+static const unsigned int	g_adam7_iy[7] = {0, 0, 4, 0, 2, 0, 1};
+static const unsigned int	g_adam7_dx[7] = {8, 8, 4, 4, 2, 2, 1};
+static const unsigned int	g_adam7_dy[7] = {8, 8, 8, 4, 4, 2, 2};
 
-void	Adam7_getpassvalues(unsigned passw[7], unsigned passh[7],
+void	adam7_getpassvalues(unsigned int passw[7], unsigned int passh[7],
 			size_t filter_passstart[8], size_t padded_passstart[8],
-			size_t passstart[8], unsigned w, unsigned h, unsigned bpp);
-void	Adam7_deinterlace(unsigned char *out, const unsigned char *in,
-			unsigned w, unsigned h, unsigned bpp);
-void	Adam7_interlace(unsigned char *out, const unsigned char *in,
-			unsigned w, unsigned h, unsigned bpp);
+			size_t passstart[8], unsigned int w, unsigned int h, unsigned int bpp);
+void	adam7_deinterlace(unsigned char *out, const unsigned char *in,
+			unsigned int w, unsigned int h, unsigned int bpp);
+void	adam7_interlace(unsigned char *out, const unsigned char *in,
+			unsigned int w, unsigned int h, unsigned int bpp);
 
 #endif

@@ -12,38 +12,38 @@
 
 #include "all.h"
 
-unsigned	deflateFixed(ucvector *out, size_t *bp, Hash *hash,
+unsigned int	deflate_fixed(ucvector *out, size_t *bp, t_hash *hash,
 		const unsigned char *data, size_t datapos,
-		size_t dataend, const LodePNGCompressSettings *s,
-		unsigned final)
+		size_t dataend, const t_compress_settings *s,
+		unsigned int final)
 {
-	HuffmanTree	tree_ll;
-	HuffmanTree	tree_d;
-	unsigned	error;
+	t_huffman_tree	tree_ll;
+	t_huffman_tree	tree_d;
+	unsigned int	error;
 
 	error = 0;
-	HuffmanTree_init(&tree_ll);
-	HuffmanTree_init(&tree_d);
-	generateFixedLitLenTree(&tree_ll);
-	generateFixedDistanceTree(&tree_d);
-	addBitToStream(out, bp, final);
-	addBitToStream(out, bp, 1);
-	addBitToStream(out, bp, 0);
+	huffman_tree_init(&tree_ll);
+	huffman_tree_init(&tree_d);
+	gen_fixed_litlen_tree(&tree_ll);
+	gen_fixed_dist_tree(&tree_d);
+	add_bit_to_stream(out, bp, final);
+	add_bit_to_stream(out, bp, 1);
+	add_bit_to_stream(out, bp, 0);
 	if (s->use_lz77)
 		error = df_lz77(out, bp, hash, data, datapos,
 				dataend, s, &tree_ll, &tree_d);
 	else
 		df_literal(out, bp, data, datapos, dataend, &tree_ll);
 	if (!error)
-		addHuffmanSymbol(bp, out,
-			HuffmanTree_getCode(&tree_ll, 256),
-			HuffmanTree_getLength(&tree_ll, 256));
-	HuffmanTree_cleanup(&tree_ll);
-	HuffmanTree_cleanup(&tree_d);
+		add_huffman_symbol(bp, out,
+			huffman_tree_get_code(&tree_ll, 256),
+			huffman_tree_get_length(&tree_ll, 256));
+	huffman_tree_cleanup(&tree_ll);
+	huffman_tree_cleanup(&tree_d);
 	return (error);
 }
 
-static size_t	dv_blocksize(size_t insize, unsigned btype)
+static size_t	dv_blocksize(size_t insize, unsigned int btype)
 {
 	size_t	blocksize;
 
@@ -57,15 +57,15 @@ static size_t	dv_blocksize(size_t insize, unsigned btype)
 	return (blocksize);
 }
 
-static unsigned	dv_deflate_blocks(ucvector *out, size_t *bp,
-		Hash *hash, const unsigned char *in, size_t insize,
+static unsigned int	dv_deflate_blocks(ucvector *out, size_t *bp,
+		t_hash *hash, const unsigned char *in, size_t insize,
 		size_t nb, size_t bs,
-		const LodePNGCompressSettings *settings)
+		const t_compress_settings *settings)
 {
 	size_t		i;
 	size_t		start;
 	size_t		end;
-	unsigned	error;
+	unsigned int	error;
 
 	error = 0;
 	i = 0;
@@ -76,30 +76,30 @@ static unsigned	dv_deflate_blocks(ucvector *out, size_t *bp,
 		if (end > insize)
 			end = insize;
 		if (settings->btype == 1)
-			error = deflateFixed(out, bp, hash, in,
+			error = deflate_fixed(out, bp, hash, in,
 					start, end, settings, i == nb - 1);
 		else
-			error = deflateDynamic(out, bp, hash, in,
+			error = deflate_dynamic(out, bp, hash, in,
 					start, end, settings, i == nb - 1);
 		++i;
 	}
 	return (error);
 }
 
-unsigned	lodepng_deflatev(ucvector *out, const unsigned char *in,
-		size_t insize, const LodePNGCompressSettings *settings)
+unsigned int	lodepng_deflatev(ucvector *out, const unsigned char *in,
+		size_t insize, const t_compress_settings *settings)
 {
 	size_t		bs;
 	size_t		nb;
 	size_t		bp;
-	Hash		hash;
-	unsigned	error;
+	t_hash		hash;
+	unsigned int	error;
 
 	bp = 0;
 	if (settings->btype > 2)
 		return (61);
 	if (settings->btype == 0)
-		return (deflateNoCompression(out, in, insize));
+		return (deflate_no_compression(out, in, insize));
 	bs = dv_blocksize(insize, settings->btype);
 	nb = (insize + bs - 1) / bs;
 	if (nb == 0)
@@ -113,11 +113,11 @@ unsigned	lodepng_deflatev(ucvector *out, const unsigned char *in,
 	return (error);
 }
 
-unsigned	lodepng_deflate(unsigned char **out, size_t *outsize,
+unsigned int	lodepng_deflate(unsigned char **out, size_t *outsize,
 		const unsigned char *in, size_t insize,
-		const LodePNGCompressSettings *settings)
+		const t_compress_settings *settings)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	v;
 
 	ucvector_init_buffer(&v, *out, *outsize);

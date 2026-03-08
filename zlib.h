@@ -16,11 +16,11 @@
 # include "inflate.h"
 # include "deflate.h"
 
-unsigned	zlib_decompress(unsigned char **out, size_t *outsize,
+unsigned int	zlib_decompress(unsigned char **out, size_t *outsize,
 				const unsigned char *in, size_t insize,
-				const LodePNGDecompressSettings *settings);
-unsigned	zlib_compress(unsigned char **out, size_t *outsize,
+				const t_decompress_settings *settings);
+unsigned int	zlib_compress(unsigned char **out, size_t *outsize,
 				const unsigned char *in, size_t insize,
-				const LodePNGCompressSettings *settings);
+				const t_compress_settings *settings);
 
 #endif

@@ -12,14 +12,14 @@
 
 #include "all.h"
 
-void	LodePNGText_init(LodePNGInfo *info)
+void	lodepng_text_init(t_png_info *info)
 {
 	info->text_num = 0;
 	info->text_keys = NULL;
 	info->text_strings = NULL;
 }
 
-void	LodePNGText_cleanup(LodePNGInfo *info)
+void	lodepng_text_cleanup(t_png_info *info)
 {
 	size_t	i;
 
@@ -34,8 +34,8 @@ void	LodePNGText_cleanup(LodePNGInfo *info)
 	lodepng_free(info->text_strings);
 }
 
-unsigned int	LodePNGText_copy(LodePNGInfo *dest,
-		const LodePNGInfo *source)
+unsigned int	lodepng_text_copy(t_png_info *dest,
+		const t_png_info *source)
 {
 	size_t	i;
 
@@ -52,12 +52,12 @@ unsigned int	LodePNGText_copy(LodePNGInfo *dest,
 	return (0);
 }
 
-void	lodepng_clear_text(LodePNGInfo *info)
+void	lodepng_clear_text(t_png_info *info)
 {
-	LodePNGText_cleanup(info);
+	lodepng_text_cleanup(info);
 }
 
-unsigned int	lodepng_add_text(LodePNGInfo *info, const char *key,
+unsigned int	lodepng_add_text(t_png_info *info, const char *key,
 		const char *str)
 {
 	char	**new_keys;

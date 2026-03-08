@@ -22,7 +22,7 @@ unsigned char	lodepng_chunk_private(const unsigned char *chunk);
 unsigned char	lodepng_chunk_safetocopy(const unsigned char *chunk);
 unsigned char	*lodepng_chunk_data(unsigned char *chunk);
 const unsigned char	*lodepng_chunk_data_const(const unsigned char *chunk);
-unsigned		lodepng_chunk_check_crc(const unsigned char *chunk);
+unsigned int		lodepng_chunk_check_crc(const unsigned char *chunk);
 void			lodepng_chunk_generate_crc(unsigned char *chunk);
 unsigned char	*lodepng_chunk_next(unsigned char *chunk);
 const unsigned char	*lodepng_chunk_next_const(const unsigned char *chunk);
@@ -30,51 +30,51 @@ unsigned char	*lodepng_chunk_find(unsigned char *chunk,
 					const unsigned char *end, const char type[5]);
 const unsigned char	*lodepng_chunk_find_const(const unsigned char *chunk,
 					const unsigned char *end, const char type[5]);
-unsigned		lodepng_chunk_append(unsigned char **out,
+unsigned int		lodepng_chunk_append(unsigned char **out,
 					size_t *outlength, const unsigned char *chunk);
-unsigned		lodepng_chunk_create(unsigned char **out,
-					size_t *outlength, unsigned length,
+unsigned int		lodepng_chunk_create(unsigned char **out,
+					size_t *outlength, unsigned int length,
 					const char *type, const unsigned char *data);
-void			LodePNGUnknownChunks_init(LodePNGInfo *info);
-void			LodePNGUnknownChunks_cleanup(LodePNGInfo *info);
-unsigned		LodePNGUnknownChunks_copy(LodePNGInfo *dest,
-					const LodePNGInfo *src);
-unsigned		addChunk(ucvector *out, const char *chunkName,
+void			lodepng_unk_chunks_init(t_png_info *info);
+void			lodepng_unk_chunks_cleanup(t_png_info *info);
+unsigned int		lodepng_unk_chunks_copy(t_png_info *dest,
+					const t_png_info *src);
+unsigned int		add_chunk(ucvector *out, const char *chunk_name,
 					const unsigned char *data, size_t length);
-unsigned		addChunk_IHDR(ucvector *out, unsigned w, unsigned h,
-					LodePNGColorType colortype, unsigned bitdepth,
+unsigned int		add_chunk_ihdr(ucvector *out, unsigned int w, unsigned int h,
+					t_png_color_type colortype, unsigned int bitdepth,
 					unsigned interlace_method);
-unsigned		addChunk_PLTE(ucvector *out,
-					const LodePNGColorMode *info);
-unsigned		addChunk_tRNS(ucvector *out,
-					const LodePNGColorMode *info);
-unsigned		addChunk_IDAT(ucvector *out, const unsigned char *data,
+unsigned int		add_chunk_plte(ucvector *out,
+					const t_png_color_mode *info);
+unsigned int		add_chunk_trns(ucvector *out,
+					const t_png_color_mode *info);
+unsigned int		add_chunk_idat(ucvector *out, const unsigned char *data,
 					size_t datasize,
-					LodePNGCompressSettings *zlibsettings);
-unsigned		addChunk_IEND(ucvector *out);
-void			writeSignature(ucvector *out);
-unsigned		addUnknownChunks(ucvector *out, unsigned char *data,
+					t_compress_settings *zlibsettings);
+unsigned int		add_chunk_iend(ucvector *out);
+void			write_signature(ucvector *out);
+unsigned int		add_unknown_chunks(ucvector *out, unsigned char *data,
 					size_t datasize);
 
 # ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-unsigned		addChunk_tEXt(ucvector *out, const char *keyword,
+unsigned int		add_chunk_text(ucvector *out, const char *keyword,
 					const char *textstring);
-unsigned		addChunk_zTXt(ucvector *out, const char *keyword,
+unsigned int		add_chunk_ztxt(ucvector *out, const char *keyword,
 					const char *textstring,
-					LodePNGCompressSettings *zlibsettings);
-unsigned		addChunk_iTXt(ucvector *out, unsigned compressed,
+					t_compress_settings *zlibsettings);
+unsigned int		add_chunk_itxt(ucvector *out, unsigned int compressed,
 					const char *keyword, const char *langtag,
 					const char *transkey, const char *textstring,
-					LodePNGCompressSettings *zlibsettings);
-unsigned		addChunk_bKGD(ucvector *out, const LodePNGInfo *info);
-unsigned		addChunk_tIME(ucvector *out, const LodePNGTime *time);
-unsigned		addChunk_pHYs(ucvector *out, const LodePNGInfo *info);
-unsigned		addChunk_gAMA(ucvector *out, const LodePNGInfo *info);
-unsigned		addChunk_cHRM(ucvector *out, const LodePNGInfo *info);
-unsigned		addChunk_sRGB(ucvector *out, const LodePNGInfo *info);
-unsigned		addChunk_iCCP(ucvector *out, const LodePNGInfo *info,
-					LodePNGCompressSettings *zlibsettings);
+					t_compress_settings *zlibsettings);
+unsigned int		add_chunk_bkgd(ucvector *out, const t_png_info *info);
+unsigned int		add_chunk_time(ucvector *out, const t_png_time *time);
+unsigned int		add_chunk_phys(ucvector *out, const t_png_info *info);
+unsigned int		add_chunk_gama(ucvector *out, const t_png_info *info);
+unsigned int		add_chunk_chrm(ucvector *out, const t_png_info *info);
+unsigned int		add_chunk_srgb(ucvector *out, const t_png_info *info);
+unsigned int		add_chunk_iccp(ucvector *out, const t_png_info *info,
+					t_compress_settings *zlibsettings);
 
 # endif
 #endif

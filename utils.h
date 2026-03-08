@@ -26,7 +26,7 @@ void	*lodepng_realloc(void *ptr, size_t size);
 # define LODEPNG_MIN(a, b) ((a) < (b) ? (a) : (b))
 
 # define CERROR_TRY_RETURN(ec) \
-	do { unsigned _e = ec; if (_e) return (_e); } while (0)
+	do { unsigned int _e = ec; if (_e) return (_e); } while (0)
 
 # define CERROR_RETURN(v, ec) \
 	do { v = ec; return ; } while (0)

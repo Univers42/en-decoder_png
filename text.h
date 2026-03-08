@@ -13,19 +13,19 @@
 # ifndef TEXT_H
 #  define TEXT_H
 
-void			LodePNGText_init(LodePNGInfo *info);
-void			LodePNGText_cleanup(LodePNGInfo *info);
-unsigned int	LodePNGText_copy(LodePNGInfo *dest,
-					const LodePNGInfo *source);
-void			lodepng_clear_text(LodePNGInfo *info);
-unsigned int	lodepng_add_text(LodePNGInfo *info, const char *key,
+void			lodepng_text_init(t_png_info *info);
+void			lodepng_text_cleanup(t_png_info *info);
+unsigned int	lodepng_text_copy(t_png_info *dest,
+					const t_png_info *source);
+void			lodepng_clear_text(t_png_info *info);
+unsigned int	lodepng_add_text(t_png_info *info, const char *key,
 					const char *str);
-void			LodePNGIText_init(LodePNGInfo *info);
-void			LodePNGIText_cleanup(LodePNGInfo *info);
-unsigned int	LodePNGIText_copy(LodePNGInfo *dest,
-					const LodePNGInfo *source);
-void			lodepng_clear_itext(LodePNGInfo *info);
-unsigned int	lodepng_add_itext(LodePNGInfo *info, const char *key,
+void			lodepng_itext_init(t_png_info *info);
+void			lodepng_itext_cleanup(t_png_info *info);
+unsigned int	lodepng_itext_copy(t_png_info *dest,
+					const t_png_info *source);
+void			lodepng_clear_itext(t_png_info *info);
+unsigned int	lodepng_add_itext(t_png_info *info, const char *key,
 					const char *langtag, const char *transkey,
 					const char *str);
 

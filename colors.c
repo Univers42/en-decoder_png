@@ -19,7 +19,7 @@ static unsigned int	check_grey_palette(unsigned int bd)
 	return (0);
 }
 
-unsigned int	checkColorValidity(LodePNGColorType colortype,
+unsigned int	check_color_validity(t_png_color_type colortype,
 		unsigned int bd)
 {
 	if (colortype == 0)
@@ -39,7 +39,7 @@ unsigned int	checkColorValidity(LodePNGColorType colortype,
 	return (31);
 }
 
-unsigned int	getNumColorChannels(LodePNGColorType colortype)
+unsigned int	get_num_color_channels(t_png_color_type colortype)
 {
 	if (colortype == 0 || colortype == 3)
 		return (1);
@@ -52,13 +52,13 @@ unsigned int	getNumColorChannels(LodePNGColorType colortype)
 	return (0);
 }
 
-unsigned int	lodepng_get_bpp_lct(LodePNGColorType colortype,
+unsigned int	lodepng_get_bpp_lct(t_png_color_type colortype,
 		unsigned int bitdepth)
 {
-	return (getNumColorChannels(colortype) * bitdepth);
+	return (get_num_color_channels(colortype) * bitdepth);
 }
 
-void	lodepng_palette_clear(LodePNGColorMode *info)
+void	lodepng_palette_clear(t_png_color_mode *info)
 {
 	if (info->palette)
 		lodepng_free(info->palette);
@@ -66,7 +66,7 @@ void	lodepng_palette_clear(LodePNGColorMode *info)
 	info->palettesize = 0;
 }
 
-void	lodepng_color_mode_init(LodePNGColorMode *info)
+void	lodepng_color_mode_init(t_png_color_mode *info)
 {
 	info->key_defined = 0;
 	info->key_r = 0;

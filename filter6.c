@@ -14,18 +14,18 @@
 
 static size_t	brute_try(unsigned char **attempt,
 		const unsigned char *in, const unsigned char *prevline,
-		size_t lb, size_t bw, unsigned y, unsigned char type,
-		const LodePNGCompressSettings *zs)
+		size_t lb, size_t bw, unsigned int y, unsigned char type,
+		const t_compress_settings *zs)
 {
 	unsigned char	*dummy;
 	size_t			sz;
 
-	filterScanline(attempt[type], &in[y * lb],
+	filter_scanline(attempt[type], &in[y * lb],
 		prevline, lb, bw, type);
 	sz = 0;
 	dummy = 0;
 	zlib_compress(&dummy, &sz, attempt[type],
-		(unsigned)lb, zs);
+		(unsigned int)lb, zs);
 	lodepng_free(dummy);
 	return (sz);
 }
@@ -33,7 +33,7 @@ static size_t	brute_try(unsigned char **attempt,
 static void	filter_brute_row(unsigned char *out,
 		const unsigned char *in, const unsigned char *prevline,
 		unsigned char **attempt, size_t lb, size_t bw,
-		unsigned y, const LodePNGCompressSettings *zs)
+		unsigned int y, const t_compress_settings *zs)
 {
 	unsigned char	type;
 	unsigned char	best_type;
@@ -57,15 +57,15 @@ static void	filter_brute_row(unsigned char *out,
 	filter_copy_best(out, attempt, best_type, lb, y);
 }
 
-static unsigned	filter_brute(unsigned char *out, const unsigned char *in,
-		unsigned h, size_t lb, size_t bw,
-		const LodePNGEncoderSettings *settings)
+static unsigned int	filter_brute(unsigned char *out, const unsigned char *in,
+		unsigned int h, size_t lb, size_t bw,
+		const t_encoder_settings *settings)
 {
 	unsigned char			*attempt[5];
 	const unsigned char		*prevline;
-	unsigned				y;
-	LodePNGCompressSettings	zs;
-	unsigned				error;
+	unsigned int				y;
+	t_compress_settings	zs;
+	unsigned int				error;
 
 	zs = settings->zlibsettings;
 	zs.btype = 1;
@@ -87,14 +87,14 @@ static unsigned	filter_brute(unsigned char *out, const unsigned char *in,
 	return (0);
 }
 
-unsigned	filter(unsigned char *out, const unsigned char *in,
-		unsigned w, unsigned h, const LodePNGColorMode *info,
-		const LodePNGEncoderSettings *settings)
+unsigned int	filter(unsigned char *out, const unsigned char *in,
+		unsigned int w, unsigned int h, const t_png_color_mode *info,
+		const t_encoder_settings *settings)
 {
-	unsigned				bpp;
+	unsigned int				bpp;
 	size_t					lb;
 	size_t					bw;
-	LodePNGFilterStrategy	strat;
+	t_filter_strategy	strat;
 
 	bpp = lodepng_get_bpp(info);
 	if (bpp == 0)

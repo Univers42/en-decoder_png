@@ -26,19 +26,19 @@ void	dd_build_bitlen(t_dd_ctx *ctx)
 	while (i != ctx->numcodes_ll)
 	{
 		uivector_push_back(&ctx->bitlen_lld,
-			HuffmanTree_getLength(&ctx->tree_ll, (unsigned)i));
+			huffman_tree_get_length(&ctx->tree_ll, (unsigned int)i));
 		++i;
 	}
 	i = 0;
 	while (i != ctx->numcodes_d)
 	{
 		uivector_push_back(&ctx->bitlen_lld,
-			HuffmanTree_getLength(&ctx->tree_d, (unsigned)i));
+			huffman_tree_get_length(&ctx->tree_d, (unsigned int)i));
 		++i;
 	}
 }
 
-static size_t	dd_rle_zeros(t_dd_ctx *ctx, size_t i, unsigned j)
+static size_t	dd_rle_zeros(t_dd_ctx *ctx, size_t i, unsigned int j)
 {
 	++j;
 	if (j <= 10)
@@ -56,11 +56,11 @@ static size_t	dd_rle_zeros(t_dd_ctx *ctx, size_t i, unsigned j)
 	return (i + j - 1);
 }
 
-static size_t	dd_rle_repeats(t_dd_ctx *ctx, size_t i, unsigned j)
+static size_t	dd_rle_repeats(t_dd_ctx *ctx, size_t i, unsigned int j)
 {
-	unsigned	num;
-	unsigned	rest;
-	unsigned	k;
+	unsigned int	num;
+	unsigned int	rest;
+	unsigned int	k;
 
 	num = j / 6;
 	rest = j % 6;
@@ -85,13 +85,13 @@ static size_t	dd_rle_repeats(t_dd_ctx *ctx, size_t i, unsigned j)
 void	dd_rle_encode(t_dd_ctx *ctx)
 {
 	size_t		i;
-	unsigned	j;
+	unsigned int	j;
 
 	i = 0;
-	while (i != (unsigned)ctx->bitlen_lld.size)
+	while (i != (unsigned int)ctx->bitlen_lld.size)
 	{
 		j = 0;
-		while (i + j + 1 < (unsigned)ctx->bitlen_lld.size
+		while (i + j + 1 < (unsigned int)ctx->bitlen_lld.size
 			&& ctx->bitlen_lld.data[i + j + 1]
 				== ctx->bitlen_lld.data[i])
 			++j;
@@ -106,7 +106,7 @@ void	dd_rle_encode(t_dd_ctx *ctx)
 	}
 }
 
-unsigned	dd_freq_cl(t_dd_ctx *ctx)
+unsigned int	dd_freq_cl(t_dd_ctx *ctx)
 {
 	size_t	i;
 

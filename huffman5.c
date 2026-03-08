@@ -12,11 +12,11 @@
 
 #include "all.h"
 
-static size_t	hcl_fill_leaves(BPMNode *leaves,
-				const unsigned *frequencies, size_t numcodes)
+static size_t	hcl_fill_leaves(t_bpm_node *leaves,
+				const unsigned int *frequencies, size_t numcodes)
 {
 	size_t		numpresent;
-	unsigned	i;
+	unsigned int	i;
 
 	numpresent = 0;
 	i = 0;
@@ -33,8 +33,8 @@ static size_t	hcl_fill_leaves(BPMNode *leaves,
 	return (numpresent);
 }
 
-static void	hcl_handle_trivial(unsigned *lengths,
-			BPMNode *leaves, size_t numpresent)
+static void	hcl_handle_trivial(unsigned int *lengths,
+			t_bpm_node *leaves, size_t numpresent)
 {
 	if (numpresent == 0)
 	{
@@ -51,17 +51,17 @@ static void	hcl_handle_trivial(unsigned *lengths,
 	}
 }
 
-unsigned	lodepng_huffman_code_lengths(unsigned *lengths,
-			const unsigned *frequencies, size_t numcodes,
-			unsigned maxbitlen)
+unsigned int	lodepng_huffman_code_lengths(unsigned int *lengths,
+			const unsigned int *frequencies, size_t numcodes,
+			unsigned int maxbitlen)
 {
-	unsigned	i;
+	unsigned int	i;
 	size_t		numpresent;
-	BPMNode		*leaves;
+	t_bpm_node		*leaves;
 
-	if (numcodes == 0 || (1u << maxbitlen) < (unsigned)numcodes)
+	if (numcodes == 0 || (1u << maxbitlen) < (unsigned int)numcodes)
 		return (80);
-	leaves = (BPMNode *)lodepng_malloc(numcodes * sizeof(*leaves));
+	leaves = (t_bpm_node *)lodepng_malloc(numcodes * sizeof(*leaves));
 	if (!leaves)
 		return (83);
 	numpresent = hcl_fill_leaves(leaves, frequencies, numcodes);
@@ -80,45 +80,45 @@ unsigned	lodepng_huffman_code_lengths(unsigned *lengths,
 	return (0);
 }
 
-unsigned	HuffmanTree_makeFromFrequencies(HuffmanTree *tree,
-			const unsigned *frequencies, size_t mincodes,
-			size_t numcodes, unsigned maxbitlen)
+unsigned int	huffman_tree_make_from_freq(t_huffman_tree *tree,
+			const unsigned int *frequencies, size_t mincodes,
+			size_t numcodes, unsigned int maxbitlen)
 {
-	unsigned	error;
+	unsigned int	error;
 
 	while (!frequencies[numcodes - 1] && numcodes > mincodes)
 		--numcodes;
 	tree->max_bit_len = maxbitlen;
-	tree->numcodes = (unsigned)numcodes;
-	tree->lengths = (unsigned *)lodepng_realloc(tree->lengths,
-			numcodes * sizeof(unsigned));
+	tree->numcodes = (unsigned int)numcodes;
+	tree->lengths = (unsigned int *)lodepng_realloc(tree->lengths,
+			numcodes * sizeof(unsigned int));
 	if (!tree->lengths)
 		return (83);
-	memset(tree->lengths, 0, numcodes * sizeof(unsigned));
+	memset(tree->lengths, 0, numcodes * sizeof(unsigned int));
 	error = lodepng_huffman_code_lengths(tree->lengths,
 			frequencies, numcodes, maxbitlen);
 	if (!error)
-		error = HuffmanTree_makeFromLengths2(tree);
+		error = huffman_tree_make_from_len2(tree);
 	return (error);
 }
 
-unsigned	huffmanDecodeSymbol(const unsigned char *in, size_t *bp,
-			const HuffmanTree *codetree, size_t inbitlength)
+unsigned int	huffman_decode_symbol(const unsigned char *in, size_t *bp,
+			const t_huffman_tree *codetree, size_t inbitlength)
 {
-	unsigned	treepos;
-	unsigned	ct;
+	unsigned int	treepos;
+	unsigned int	ct;
 
 	treepos = 0;
 	while (1)
 	{
 		if (*bp >= inbitlength)
-			return ((unsigned)(-1));
+			return ((unsigned int)(-1));
 		ct = codetree->tree2d[(treepos << 1) + READBIT(*bp, in)];
 		++(*bp);
 		if (ct < codetree->numcodes)
 			return (ct);
 		treepos = ct - codetree->numcodes;
 		if (treepos >= codetree->numcodes)
-			return ((unsigned)(-1));
+			return ((unsigned int)(-1));
 	}
 }

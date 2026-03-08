@@ -12,13 +12,13 @@
 
 #include "all.h"
 
-void	lodepng_color_mode_cleanup(LodePNGColorMode *info)
+void	lodepng_color_mode_cleanup(t_png_color_mode *info)
 {
 	lodepng_palette_clear(info);
 }
 
-unsigned int	lodepng_color_mode_copy(LodePNGColorMode *dest,
-		const LodePNGColorMode *source)
+unsigned int	lodepng_color_mode_copy(t_png_color_mode *dest,
+		const t_png_color_mode *source)
 {
 	size_t	i;
 
@@ -39,10 +39,10 @@ unsigned int	lodepng_color_mode_copy(LodePNGColorMode *dest,
 	return (0);
 }
 
-LodePNGColorMode	lodepng_color_mode_make(LodePNGColorType colortype,
+t_png_color_mode	lodepng_color_mode_make(t_png_color_type colortype,
 		unsigned int bitdepth)
 {
-	LodePNGColorMode	result;
+	t_png_color_mode	result;
 
 	lodepng_color_mode_init(&result);
 	result.colortype = colortype;
@@ -50,8 +50,8 @@ LodePNGColorMode	lodepng_color_mode_make(LodePNGColorType colortype,
 	return (result);
 }
 
-static int	color_mode_keys_equal(const LodePNGColorMode *a,
-		const LodePNGColorMode *b)
+static int	color_mode_keys_equal(const t_png_color_mode *a,
+		const t_png_color_mode *b)
 {
 	if (a->key_r != b->key_r)
 		return (0);
@@ -62,8 +62,8 @@ static int	color_mode_keys_equal(const LodePNGColorMode *a,
 	return (1);
 }
 
-int	lodepng_color_mode_equal(const LodePNGColorMode *a,
-		const LodePNGColorMode *b)
+int	lodepng_color_mode_equal(const t_png_color_mode *a,
+		const t_png_color_mode *b)
 {
 	size_t	i;
 

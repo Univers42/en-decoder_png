@@ -13,8 +13,8 @@
 #include "colors.h"
 #include "bit.h"
 
-static unsigned rgba8ToPixel(unsigned char *out, size_t i,
-							 const LodePNGColorMode *mode, ColorTree *tree,
+static unsigned int rgba8_to_pixel(unsigned char *out, size_t i,
+							 const t_png_color_mode *mode, t_color_tree *tree,
 							 unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	if (mode->colortype == LCT_GREY)
@@ -28,7 +28,7 @@ static unsigned rgba8ToPixel(unsigned char *out, size_t i,
 		{
 
 			gray = (gray >> (8 - mode->bitdepth)) & ((1 << mode->bitdepth) - 1);
-			addColorBits(out, i, mode->bitdepth, gray);
+			add_color_bits(out, i, mode->bitdepth, gray);
 		}
 	}
 	else if (mode->colortype == LCT_RGB)
@@ -54,7 +54,7 @@ static unsigned rgba8ToPixel(unsigned char *out, size_t i,
 		if (mode->bitdepth == 8)
 			out[i] = index;
 		else
-			addColorBits(out, i, mode->bitdepth, (unsigned)index);
+			add_color_bits(out, i, mode->bitdepth, (unsigned int)index);
 	}
 	else if (mode->colortype == LCT_GREY_ALPHA)
 	{
@@ -91,8 +91,8 @@ static unsigned rgba8ToPixel(unsigned char *out, size_t i,
 	return 0;
 }
 
-static void rgba16ToPixel(unsigned char *out, size_t i,
-						  const LodePNGColorMode *mode,
+static void rgba16_to_pixel(unsigned char *out, size_t i,
+						  const t_png_color_mode *mode,
 						  unsigned short r, unsigned short g, unsigned short b, unsigned short a)
 {
 	if (mode->colortype == LCT_GREY)
@@ -131,8 +131,8 @@ static void rgba16ToPixel(unsigned char *out, size_t i,
 	}
 }
 
-void getPixelColorRGBA16(unsigned short *r, unsigned short *g, unsigned short *b, unsigned short *a,
-						 const unsigned char *in, size_t i, const LodePNGColorMode *mode)
+void get_pixel_color_rgba16(unsigned short *r, unsigned short *g, unsigned short *b, unsigned short *a,
+						 const unsigned char *in, size_t i, const t_png_color_mode *mode)
 {
 	if (mode->colortype == LCT_GREY)
 	{
@@ -160,10 +160,10 @@ void getPixelColorRGBA16(unsigned short *r, unsigned short *g, unsigned short *b
 	}
 }
 
-void getPixelColorRGBA8(unsigned char *r, unsigned char *g,
+void get_pixel_color_rgba8(unsigned char *r, unsigned char *g,
 						unsigned char *b, unsigned char *a,
 						const unsigned char *in, size_t i,
-						const LodePNGColorMode *mode)
+						const t_png_color_mode *mode)
 {
 	if (mode->colortype == LCT_GREY)
 	{
@@ -185,9 +185,9 @@ void getPixelColorRGBA8(unsigned char *r, unsigned char *g,
 		}
 		else
 		{
-			unsigned highest = ((1U << mode->bitdepth) - 1U);
+			unsigned int highest = ((1U << mode->bitdepth) - 1U);
 			size_t j = i * mode->bitdepth;
-			unsigned value = readBitsFromReversedStream(&j, in, mode->bitdepth);
+			unsigned int value = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 			*r = *g = *b = (value * 255) / highest;
 			if (mode->key_defined && value == mode->key_r)
 				*a = 0;
@@ -220,13 +220,13 @@ void getPixelColorRGBA8(unsigned char *r, unsigned char *g,
 	}
 	else if (mode->colortype == LCT_PALETTE)
 	{
-		unsigned index;
+		unsigned int index;
 		if (mode->bitdepth == 8)
 			index = in[i];
 		else
 		{
 			size_t j = i * mode->bitdepth;
-			index = readBitsFromReversedStream(&j, in, mode->bitdepth);
+			index = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 		}
 
 		if (index >= mode->palettesize)
@@ -276,16 +276,16 @@ void getPixelColorRGBA8(unsigned char *r, unsigned char *g,
 	}
 }
 
-/*Similar to getPixelColorRGBA8, but with all the for loops inside of the color
+/*Similar to get_pixel_color_rgba8, but with all the for loops inside of the color
 mode test cases, optimized to convert the colors much faster, when converting
 to RGBA or RGB with 8 bit per cannel. buffer must be RGBA or RGB output with
 enough memory, if has_alpha is true the output is RGBA. mode has the color mode
 of the input buffer.*/
-static void getPixelColorsRGBA8(unsigned char *buffer, size_t numpixels,
-								unsigned has_alpha, const unsigned char *in,
-								const LodePNGColorMode *mode)
+static void get_pixel_colors_rgba8(unsigned char *buffer, size_t numpixels,
+								unsigned int has_alpha, const unsigned char *in,
+								const t_png_color_mode *mode)
 {
-	unsigned num_channels = has_alpha ? 4 : 3;
+	unsigned int num_channels = has_alpha ? 4 : 3;
 	size_t i;
 	if (mode->colortype == LCT_GREY)
 	{
@@ -309,11 +309,11 @@ static void getPixelColorsRGBA8(unsigned char *buffer, size_t numpixels,
 		}
 		else
 		{
-			unsigned highest = ((1U << mode->bitdepth) - 1U);
+			unsigned int highest = ((1U << mode->bitdepth) - 1U);
 			size_t j = 0;
 			for (i = 0; i != numpixels; ++i, buffer += num_channels)
 			{
-				unsigned value = readBitsFromReversedStream(&j, in, mode->bitdepth);
+				unsigned int value = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 				buffer[0] = buffer[1] = buffer[2] = (value * 255) / highest;
 				if (has_alpha)
 					buffer[3] = mode->key_defined && value == mode->key_r ? 0 : 255;
@@ -347,14 +347,14 @@ static void getPixelColorsRGBA8(unsigned char *buffer, size_t numpixels,
 	}
 	else if (mode->colortype == LCT_PALETTE)
 	{
-		unsigned index;
+		unsigned int index;
 		size_t j = 0;
 		for (i = 0; i != numpixels; ++i, buffer += num_channels)
 		{
 			if (mode->bitdepth == 8)
 				index = in[i];
 			else
-				index = readBitsFromReversedStream(&j, in, mode->bitdepth);
+				index = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 
 			if (index >= mode->palettesize)
 			{
@@ -422,14 +422,14 @@ static void getPixelColorsRGBA8(unsigned char *buffer, size_t numpixels,
 	}
 }
 
-unsigned lodepng_convert(unsigned char *out, const unsigned char *in,
-						 const LodePNGColorMode *mode_out, const LodePNGColorMode *mode_in,
-						 unsigned w, unsigned h)
+unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
+						 const t_png_color_mode *mode_out, const t_png_color_mode *mode_in,
+						 unsigned int w, unsigned int h)
 {
 	size_t i;
-	ColorTree tree;
+	t_color_tree tree;
 	size_t numpixels = (size_t)w * (size_t)h;
-	unsigned error = 0;
+	unsigned int error = 0;
 
 	if (lodepng_color_mode_equal(mode_out, mode_in))
 	{
@@ -468,7 +468,7 @@ unsigned lodepng_convert(unsigned char *out, const unsigned char *in,
 		for (i = 0; i != palsize; ++i)
 		{
 			const unsigned char *p = &palette[i * 4];
-			color_tree_add(&tree, p[0], p[1], p[2], p[3], (unsigned)i);
+			color_tree_add(&tree, p[0], p[1], p[2], p[3], (unsigned int)i);
 		}
 	}
 
@@ -477,25 +477,25 @@ unsigned lodepng_convert(unsigned char *out, const unsigned char *in,
 		for (i = 0; i != numpixels; ++i)
 		{
 			unsigned short r = 0, g = 0, b = 0, a = 0;
-			getPixelColorRGBA16(&r, &g, &b, &a, in, i, mode_in);
-			rgba16ToPixel(out, i, mode_out, r, g, b, a);
+			get_pixel_color_rgba16(&r, &g, &b, &a, in, i, mode_in);
+			rgba16_to_pixel(out, i, mode_out, r, g, b, a);
 		}
 	}
 	else if (mode_out->bitdepth == 8 && mode_out->colortype == LCT_RGBA)
 	{
-		getPixelColorsRGBA8(out, numpixels, 1, in, mode_in);
+		get_pixel_colors_rgba8(out, numpixels, 1, in, mode_in);
 	}
 	else if (mode_out->bitdepth == 8 && mode_out->colortype == LCT_RGB)
 	{
-		getPixelColorsRGBA8(out, numpixels, 0, in, mode_in);
+		get_pixel_colors_rgba8(out, numpixels, 0, in, mode_in);
 	}
 	else
 	{
 		unsigned char r = 0, g = 0, b = 0, a = 0;
 		for (i = 0; i != numpixels; ++i)
 		{
-			getPixelColorRGBA8(&r, &g, &b, &a, in, i, mode_in);
-			error = rgba8ToPixel(out, i, mode_out, &tree, r, g, b, a);
+			get_pixel_color_rgba8(&r, &g, &b, &a, in, i, mode_in);
+			error = rgba8_to_pixel(out, i, mode_out, &tree, r, g, b, a);
 			if (error)
 				break;
 		}
@@ -515,14 +515,14 @@ function, do not use to process all pixels of an image. Alpha channel not suppor
 this is for bKGD, supporting alpha may prevent it from finding a color in the palette, from the
 specification it looks like bKGD should ignore the alpha values of the palette since it can use
 any palette index but doesn't have an alpha channel. Idem with ignoring color key. */
-unsigned lodepng_convert_rgb(
-	unsigned *r_out, unsigned *g_out, unsigned *b_out,
-	unsigned r_in, unsigned g_in, unsigned b_in,
-	const LodePNGColorMode *mode_out, const LodePNGColorMode *mode_in)
+unsigned int lodepng_convert_rgb(
+	unsigned int *r_out, unsigned int *g_out, unsigned int *b_out,
+	unsigned int r_in, unsigned int g_in, unsigned int b_in,
+	const t_png_color_mode *mode_out, const t_png_color_mode *mode_in)
 {
-	unsigned r = 0, g = 0, b = 0;
-	unsigned mul = 65535 / ((1u << mode_in->bitdepth) - 1u);
-	unsigned shift = 16 - mode_out->bitdepth;
+	unsigned int r = 0, g = 0, b = 0;
+	unsigned int mul = 65535 / ((1u << mode_in->bitdepth) - 1u);
+	unsigned int shift = 16 - mode_out->bitdepth;
 
 	if (mode_in->colortype == LCT_GREY || mode_in->colortype == LCT_GREY_ALPHA)
 	{
@@ -559,13 +559,13 @@ unsigned lodepng_convert_rgb(
 	}
 	else if (mode_out->colortype == LCT_PALETTE)
 	{
-		unsigned i;
+		unsigned int i;
 
 		if ((r >> 8) != (r & 255) || (g >> 8) != (g & 255) || (b >> 8) != (b & 255))
 			return 82;
 		for (i = 0; i < mode_out->palettesize; i++)
 		{
-			unsigned j = i * 4;
+			unsigned int j = i * 4;
 			if ((r >> 8) == mode_out->palette[j + 0] && (g >> 8) == mode_out->palette[j + 1] &&
 				(b >> 8) == mode_out->palette[j + 2])
 			{

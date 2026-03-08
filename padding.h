@@ -13,9 +13,9 @@
 #ifndef PADDING_H
 # define PADDING_H
 
-void	removePaddingBits(unsigned char *out, const unsigned char *in,
-			size_t olinebits, size_t ilinebits, unsigned h);
-void	addPaddingBits(unsigned char *out, const unsigned char *in,
-			size_t olinebits, size_t ilinebits, unsigned h);
+void	remove_padding_bits(unsigned char *out, const unsigned char *in,
+			size_t olinebits, size_t ilinebits, unsigned int h);
+void	add_padding_bits(unsigned char *out, const unsigned char *in,
+			size_t olinebits, size_t ilinebits, unsigned int h);
 
 #endif

@@ -14,10 +14,10 @@
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-unsigned	addChunk_tEXt(ucvector *out, const char *keyword,
+unsigned int	add_chunk_text(ucvector *out, const char *keyword,
 			const char *textstring)
 {
-	unsigned	error;
+	unsigned int	error;
 	size_t		i;
 	ucvector	text;
 
@@ -31,48 +31,48 @@ unsigned	addChunk_tEXt(ucvector *out, const char *keyword,
 	i = 0;
 	while (textstring[i] != 0)
 		ucvector_push_back(&text, (unsigned char)textstring[i++]);
-	error = addChunk(out, "tEXt", text.data, text.size);
+	error = add_chunk(out, "tEXt", text.data, text.size);
 	ucvector_cleanup(&text);
 	return (error);
 }
 
-unsigned	addChunk_sRGB(ucvector *out, const LodePNGInfo *info)
+unsigned int	add_chunk_srgb(ucvector *out, const t_png_info *info)
 {
 	unsigned char	data;
 
 	data = info->srgb_intent;
-	return (addChunk(out, "sRGB", &data, 1));
+	return (add_chunk(out, "sRGB", &data, 1));
 }
 
-unsigned	addChunk_gAMA(ucvector *out, const LodePNGInfo *info)
+unsigned int	add_chunk_gama(ucvector *out, const t_png_info *info)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	data;
 
 	ucvector_init(&data);
-	lodepng_add32bitInt(&data, info->gama_gamma);
-	error = addChunk(out, "gAMA", data.data, data.size);
+	lodepng_add_32bit_int(&data, info->gama_gamma);
+	error = add_chunk(out, "gAMA", data.data, data.size);
 	ucvector_cleanup(&data);
 	return (error);
 }
 
-unsigned	addChunk_pHYs(ucvector *out, const LodePNGInfo *info)
+unsigned int	add_chunk_phys(ucvector *out, const t_png_info *info)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	data;
 
 	ucvector_init(&data);
-	lodepng_add32bitInt(&data, info->phys_x);
-	lodepng_add32bitInt(&data, info->phys_y);
+	lodepng_add_32bit_int(&data, info->phys_x);
+	lodepng_add_32bit_int(&data, info->phys_y);
 	ucvector_push_back(&data, info->phys_unit);
-	error = addChunk(out, "pHYs", data.data, data.size);
+	error = add_chunk(out, "pHYs", data.data, data.size);
 	ucvector_cleanup(&data);
 	return (error);
 }
 
-unsigned	addChunk_tIME(ucvector *out, const LodePNGTime *time)
+unsigned int	add_chunk_time(ucvector *out, const t_png_time *time)
 {
-	unsigned		error;
+	unsigned int		error;
 	unsigned char	*data;
 
 	data = (unsigned char *)lodepng_malloc(7);
@@ -85,7 +85,7 @@ unsigned	addChunk_tIME(ucvector *out, const LodePNGTime *time)
 	data[4] = (unsigned char)time->hour;
 	data[5] = (unsigned char)time->minute;
 	data[6] = (unsigned char)time->second;
-	error = addChunk(out, "tIME", data, 7);
+	error = add_chunk(out, "tIME", data, 7);
 	lodepng_free(data);
 	return (error);
 }

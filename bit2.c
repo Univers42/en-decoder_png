@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void	addBitsToStreamReversed(size_t *bitpointer, ucvector *bitstream,
+void	add_bits_to_stream_rev(size_t *bitpointer, ucvector *bitstream,
 		unsigned int value, size_t nbits)
 {
 	size_t	i;
@@ -20,19 +20,19 @@ void	addBitsToStreamReversed(size_t *bitpointer, ucvector *bitstream,
 	i = 0;
 	while (i != nbits)
 	{
-		addBitToStream(bitstream, bitpointer,
+		add_bit_to_stream(bitstream, bitpointer,
 			(unsigned char)((value >> (nbits - 1 - i)) & 1));
 		i++;
 	}
 }
 
-unsigned char	readBit(size_t bitpointer, const unsigned char *bitstream)
+unsigned char	read_bit(size_t bitpointer, const unsigned char *bitstream)
 {
 	return ((bitstream[bitpointer >> 3] >> (bitpointer & 0x7))
 		& (unsigned char)1);
 }
 
-unsigned char	readBitFromStream(size_t *bitpointer,
+unsigned char	read_bit_from_stream(size_t *bitpointer,
 		const unsigned char *bitstream)
 {
 	unsigned char	result;
@@ -42,7 +42,7 @@ unsigned char	readBitFromStream(size_t *bitpointer,
 	return (result);
 }
 
-unsigned int	readBitsFromStream(size_t *bitpointer,
+unsigned int	read_bits_from_stream(size_t *bitpointer,
 		const unsigned char *bitstream, size_t nbits)
 {
 	unsigned int	result;
@@ -59,7 +59,7 @@ unsigned int	readBitsFromStream(size_t *bitpointer,
 	return (result);
 }
 
-unsigned char	readBitFromReversedStream(size_t *bitpointer,
+unsigned char	read_bit_from_rev_stream(size_t *bitpointer,
 		const unsigned char *bitstream)
 {
 	unsigned char	result;

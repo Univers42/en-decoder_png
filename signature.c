@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void writeSignature(ucvector *out)
+void write_signature(ucvector *out)
 {
 
 	ucvector_push_back(out, 137);

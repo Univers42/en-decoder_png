@@ -14,8 +14,8 @@
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-static unsigned	itxt_fill_header(ucvector *data, const char *keyword,
-				unsigned compressed, const char *langtag,
+static unsigned int	itxt_fill_header(ucvector *data, const char *keyword,
+				unsigned int compressed, const char *langtag,
 				const char *transkey)
 {
 	size_t	i;
@@ -42,12 +42,12 @@ static unsigned	itxt_fill_header(ucvector *data, const char *keyword,
 	return (0);
 }
 
-static unsigned	itxt_write_body(ucvector *data, unsigned compressed,
+static unsigned int	itxt_write_body(ucvector *data, unsigned int compressed,
 				const char *textstring,
-				LodePNGCompressSettings *zlibsettings)
+				t_compress_settings *zlibsettings)
 {
 	ucvector	comp;
-	unsigned	error;
+	unsigned int	error;
 	size_t		i;
 
 	if (!compressed)
@@ -70,12 +70,12 @@ static unsigned	itxt_write_body(ucvector *data, unsigned compressed,
 	return (error);
 }
 
-unsigned	addChunk_iTXt(ucvector *out, unsigned compressed,
+unsigned int	add_chunk_itxt(ucvector *out, unsigned int compressed,
 			const char *keyword, const char *langtag,
 			const char *transkey, const char *textstring,
-			LodePNGCompressSettings *zlibsettings)
+			t_compress_settings *zlibsettings)
 {
-	unsigned	error;
+	unsigned int	error;
 	ucvector	data;
 
 	ucvector_init(&data);
@@ -84,7 +84,7 @@ unsigned	addChunk_iTXt(ucvector *out, unsigned compressed,
 		return (error);
 	error = itxt_write_body(&data, compressed, textstring, zlibsettings);
 	if (!error)
-		error = addChunk(out, "iTXt", data.data, data.size);
+		error = add_chunk(out, "iTXt", data.data, data.size);
 	ucvector_cleanup(&data);
 	return (error);
 }
