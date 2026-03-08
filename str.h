@@ -10,29 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STR_H
-#define STR_H
-#include <stdlib.h>
-#include <string.h>
+# ifndef STR_H
+#  define STR_H
 
-static inline void string_cleanup(char **out)
-{
-	if (out && *out)
-	{
-		free(*out);
-		*out = NULL;
-	}
-}
+#  include <stdlib.h>
+#  include <string.h>
 
-static inline char *alloc_string(const char *in)
-{
-	if (!in)
-		return NULL;
-	size_t len = strlen(in) + 1;
-	char *s = (char *)malloc(len);
-	if (!s)
-		return NULL;
-	memcpy(s, in, len);
-	return s;
-}
-#endif
+void	string_cleanup(char **out);
+char	*alloc_string(const char *in);
+
+# endif

@@ -19,11 +19,6 @@ void getPixelColorRGBA16(unsigned short *r, unsigned short *g, unsigned short *b
 void getPixelColorRGBA8(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char *a,
 						const unsigned char *in, size_t i, const LodePNGColorMode *mode);
 
-static int color_tree_has(ColorTree *tree, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
-{
-	return color_tree_get(tree, r, g, b, a) >= 0;
-}
-
 unsigned lodepng_get_color_profile(LodePNGColorProfile *profile,
 								   const unsigned char *in, unsigned w, unsigned h,
 								   const LodePNGColorMode *mode_in)

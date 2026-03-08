@@ -1,0 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   text.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
+/*   Updated: 2026/03/08 18:22:56 by dlesieur         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "all.h"
+
+void	LodePNGText_init(LodePNGInfo *info)
+{
+	info->text_num = 0;
+	info->text_keys = NULL;
+	info->text_strings = NULL;
+}
+
+void	LodePNGText_cleanup(LodePNGInfo *info)
+{
+	size_t	i;
+
+	i = 0;
+	while (i != info->text_num)
+	{
+		string_cleanup(&info->text_keys[i]);
+		string_cleanup(&info->text_strings[i]);
+		i++;
+	}
+	lodepng_free(info->text_keys);
+	lodepng_free(info->text_strings);
+}
+
+unsigned int	LodePNGText_copy(LodePNGInfo *dest,
+		const LodePNGInfo *source)
+{
+	size_t	i;
+
+	dest->text_keys = 0;
+	dest->text_strings = 0;
+	dest->text_num = 0;
+	i = 0;
+	while (i != source->text_num)
+	{
+		CERROR_TRY_RETURN(lodepng_add_text(dest,
+				source->text_keys[i], source->text_strings[i]));
+		i++;
+	}
+	return (0);
+}
+
+void	lodepng_clear_text(LodePNGInfo *info)
+{
+	LodePNGText_cleanup(info);
+}
+
+unsigned int	lodepng_add_text(LodePNGInfo *info, const char *key,
+		const char *str)
+{
+	char	**new_keys;
+	char	**new_strings;
+
+	new_keys = (char **)(lodepng_realloc(info->text_keys,
+				sizeof(char *) * (info->text_num + 1)));
+	new_strings = (char **)(lodepng_realloc(info->text_strings,
+				sizeof(char *) * (info->text_num + 1)));
+	if (!new_keys || !new_strings)
+	{
+		lodepng_free(new_keys);
+		lodepng_free(new_strings);
+		return (83);
+	}
+	++info->text_num;
+	info->text_keys = new_keys;
+	info->text_strings = new_strings;
+	info->text_keys[info->text_num - 1] = alloc_string(key);
+	info->text_strings[info->text_num - 1] = alloc_string(str);
+	return (0);
+}
