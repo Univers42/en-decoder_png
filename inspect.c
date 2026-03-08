@@ -15,8 +15,8 @@
 unsigned int lodepng_inspect(unsigned int *w, unsigned int *h, t_png_state *state,
 						 const unsigned char *in, size_t insize)
 {
-	unsigned int width, height;
-	t_png_info *info = &state->info_png;
+	unsigned int	width, height;
+	t_png_info		*info = &state->info_png;
 	if (insize == 0 || in == 0)
 	{
 		CERROR_RETURN_ERROR(state->error, 48);
@@ -62,8 +62,8 @@ unsigned int lodepng_inspect(unsigned int *w, unsigned int *h, t_png_state *stat
 
 	if (!state->decoder.ignore_crc)
 	{
-		unsigned int crc = lodepng_read_32bit_int(&in[29]);
-		unsigned int checksum = lodepng_crc32(&in[12], 17);
+		unsigned int	crc = lodepng_read_32bit_int(&in[29]);
+		unsigned int	checksum = lodepng_crc32(&in[12], 17);
 		if (crc != checksum)
 		{
 			CERROR_RETURN_ERROR(state->error, 57);

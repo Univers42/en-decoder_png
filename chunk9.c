@@ -46,9 +46,9 @@ static unsigned int	itxt_write_body(ucvector *data, unsigned int compressed,
 				const char *textstring,
 				t_compress_settings *zlibsettings)
 {
-	ucvector	comp;
+	ucvector		comp;
 	unsigned int	error;
-	size_t		i;
+	size_t			i;
 
 	if (!compressed)
 	{
@@ -76,7 +76,7 @@ unsigned int	add_chunk_itxt(ucvector *out, unsigned int compressed,
 			t_compress_settings *zlibsettings)
 {
 	unsigned int	error;
-	ucvector	data;
+	ucvector		data;
 
 	ucvector_init(&data);
 	error = itxt_fill_header(&data, keyword, compressed, langtag, transkey);

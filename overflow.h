@@ -17,6 +17,6 @@ int		lodepng_mulofl(size_t a, size_t b, size_t *result);
 int		lodepng_addofl(size_t a, size_t b, size_t *result);
 int		lodepng_pixel_overflow(unsigned int w, unsigned int h,
 			const t_png_color_mode *pngcolor,
-			const t_png_color_mode *rawcolor);
+			const t_png_color_mode	*rawcolor);
 
 # endif

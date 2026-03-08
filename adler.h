@@ -14,7 +14,7 @@
 #  define ADLER_H
 
 unsigned int	update_adler32(unsigned int adler,
-					const unsigned char *data, unsigned int len);
+					const unsigned char	*data, unsigned int len);
 unsigned int	adler32(const unsigned char *data, unsigned int len);
 
 # endif

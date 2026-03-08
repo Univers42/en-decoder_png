@@ -61,11 +61,11 @@ static unsigned int	filter_brute(unsigned char *out, const unsigned char *in,
 		unsigned int h, size_t lb, size_t bw,
 		const t_encoder_settings *settings)
 {
-	unsigned char			*attempt[5];
-	const unsigned char		*prevline;
-	unsigned int				y;
+	unsigned char		*attempt[5];
+	const unsigned char	*prevline;
+	unsigned int		y;
 	t_compress_settings	zs;
-	unsigned int				error;
+	unsigned int		error;
 
 	zs = settings->zlibsettings;
 	zs.btype = 1;
@@ -91,9 +91,9 @@ unsigned int	filter(unsigned char *out, const unsigned char *in,
 		unsigned int w, unsigned int h, const t_png_color_mode *info,
 		const t_encoder_settings *settings)
 {
-	unsigned int				bpp;
-	size_t					lb;
-	size_t					bw;
+	unsigned int		bpp;
+	size_t				lb;
+	size_t				bw;
 	t_filter_strategy	strat;
 
 	bpp = lodepng_get_bpp(info);

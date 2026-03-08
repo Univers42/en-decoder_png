@@ -21,7 +21,7 @@
 /* forward declaration from color_profile.c */
 unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 								   const unsigned char *in, unsigned int w, unsigned int h,
-								   const t_png_color_mode *mode_in);
+								const t_png_color_mode	*mode_in);
 
 /*Autochoose color model given the computed profile. mode_in is to copy palette order from
 when relevant.*/
@@ -29,14 +29,14 @@ static unsigned int auto_choose_color_from_profile(t_png_color_mode *mode_out,
 											   const t_png_color_mode *mode_in,
 											   const t_png_color_profile *prof)
 {
-	unsigned int error = 0;
-	unsigned int palettebits, palette_ok;
-	size_t i, n;
-	size_t numpixels = prof->numpixels;
+	unsigned int	error = 0;
+	unsigned int	palettebits, palette_ok;
+	size_t			i, n;
+	size_t			numpixels = prof->numpixels;
 
-	unsigned int alpha = prof->alpha;
-	unsigned int key = prof->key;
-	unsigned int bits = prof->bits;
+	unsigned int	alpha = prof->alpha;
+	unsigned int	key = prof->key;
+	unsigned int	bits = prof->bits;
 
 	mode_out->key_defined = 0;
 
@@ -57,7 +57,7 @@ static unsigned int auto_choose_color_from_profile(t_png_color_mode *mode_out,
 
 	if (palette_ok)
 	{
-		const unsigned char *p = prof->palette;
+		const unsigned char	*p = prof->palette;
 		lodepng_palette_clear(mode_out);
 		for (i = 0; i != prof->numcolors; ++i)
 		{
@@ -84,7 +84,7 @@ static unsigned int auto_choose_color_from_profile(t_png_color_mode *mode_out,
 
 		if (key)
 		{
-			unsigned int mask = (1u << mode_out->bitdepth) - 1u;
+			unsigned int	mask = (1u << mode_out->bitdepth) - 1u;
 			mode_out->key_r = prof->key_r & mask;
 			mode_out->key_g = prof->key_g & mask;
 			mode_out->key_b = prof->key_b & mask;
@@ -104,8 +104,8 @@ unsigned int lodepng_auto_choose_color(t_png_color_mode *mode_out,
 								   const unsigned char *image, unsigned int w, unsigned int h,
 								   const t_png_color_mode *mode_in)
 {
-	unsigned int error = 0;
-	t_png_color_profile prof;
+	unsigned int		error = 0;
+	t_png_color_profile	prof;
 	lodepng_color_profile_init(&prof);
 	error = lodepng_get_color_profile(&prof, image, w, h, mode_in);
 	if (error)

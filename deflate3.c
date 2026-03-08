@@ -15,7 +15,7 @@
 unsigned int	dd_build_cl(t_dd_ctx *ctx)
 {
 	unsigned int	error;
-	size_t		i;
+	size_t			i;
 
 	error = huffman_tree_make_from_freq(&ctx->tree_cl,
 			ctx->freq_cl.data, ctx->freq_cl.size,
@@ -47,7 +47,7 @@ void	dd_write_header(ucvector *out, size_t *bp,
 	unsigned int	hlit;
 	unsigned int	hdist;
 	unsigned int	hclen;
-	size_t		i;
+	size_t			i;
 
 	hlit = (unsigned int)(ctx->numcodes_ll - 257);
 	hdist = (unsigned int)(ctx->numcodes_d - 1);

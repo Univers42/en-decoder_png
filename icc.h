@@ -18,13 +18,13 @@
 void			lodepng_clear_icc(t_png_info *info);
 unsigned int	lodepng_assign_icc(t_png_info *info, const char *name,
 					const unsigned char *profile,
-					unsigned int profile_size);
+					unsigned int	profile_size);
 unsigned int	lodepng_set_icc(t_png_info *info, const char *name,
 					const unsigned char *profile,
-					unsigned int profile_size);
+					unsigned int	profile_size);
 unsigned int		is_gray_icc_profile(const unsigned char *profile,
-					unsigned int size);
+					unsigned int	size);
 unsigned int		is_rgb_icc_profile(const unsigned char *profile,
-					unsigned int size);
+					unsigned int	size);
 
 # endif

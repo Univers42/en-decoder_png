@@ -64,8 +64,8 @@ unsigned int	lodepng_encode_memory(unsigned char **out,
 		unsigned int w, unsigned int h,
 		t_png_color_type colortype, unsigned int bitdepth)
 {
-	unsigned int		error;
-	t_png_state	state;
+	unsigned int	error;
+	t_png_state		state;
 
 	lodepng_state_init(&state);
 	state.info_raw.colortype = colortype;

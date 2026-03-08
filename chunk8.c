@@ -19,10 +19,10 @@ unsigned int	add_chunk_ztxt(ucvector *out, const char *keyword,
 			t_compress_settings *zlibsettings)
 {
 	unsigned int	error;
-	ucvector	data;
-	ucvector	compressed;
-	size_t		i;
-	size_t		textsize;
+	ucvector		data;
+	ucvector		compressed;
+	size_t			i;
+	size_t			textsize;
 
 	textsize = strlen(textstring);
 	ucvector_init(&data);
@@ -73,7 +73,7 @@ static void	bkgd_fill(ucvector *bkgd, const t_png_info *info)
 unsigned int	add_chunk_bkgd(ucvector *out, const t_png_info *info)
 {
 	unsigned int	error;
-	ucvector	bkgd;
+	ucvector		bkgd;
 
 	ucvector_init(&bkgd);
 	bkgd_fill(&bkgd, info);
@@ -85,7 +85,7 @@ unsigned int	add_chunk_bkgd(ucvector *out, const t_png_info *info)
 unsigned int	add_chunk_chrm(ucvector *out, const t_png_info *info)
 {
 	unsigned int	error;
-	ucvector	data;
+	ucvector		data;
 
 	ucvector_init(&data);
 	lodepng_add_32bit_int(&data, info->chrm_white_x);
@@ -105,9 +105,9 @@ unsigned int	add_chunk_iccp(ucvector *out, const t_png_info *info,
 			t_compress_settings *zlibsettings)
 {
 	unsigned int	error;
-	ucvector	data;
-	ucvector	compressed;
-	size_t		i;
+	ucvector		data;
+	ucvector		compressed;
+	size_t			i;
 
 	ucvector_init(&data);
 	ucvector_init(&compressed);

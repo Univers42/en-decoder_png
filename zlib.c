@@ -78,11 +78,11 @@ unsigned int	zlib_compress(unsigned char **out, size_t *outsize,
 			const unsigned char *in, size_t insize,
 			const t_compress_settings *settings)
 {
-	unsigned int		error;
+	unsigned int	error;
 	unsigned char	*deflatedata;
 	size_t			deflatesize;
 	unsigned char	header[2];
-	unsigned int		adler_val;
+	unsigned int	adler_val;
 
 	deflatedata = 0;
 	deflatesize = 0;

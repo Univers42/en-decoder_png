@@ -15,7 +15,7 @@
 unsigned int	unfilter(unsigned char *out, const unsigned char *in,
 		unsigned int w, unsigned int h, unsigned int bpp)
 {
-	unsigned int		y;
+	unsigned int	y;
 	unsigned char	*prevline;
 	size_t			bytewidth;
 	size_t			linebytes;

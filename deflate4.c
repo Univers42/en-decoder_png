@@ -17,7 +17,7 @@ unsigned int	deflate_dynamic(ucvector *out, size_t *bp, t_hash *hash,
 		size_t dataend, const t_compress_settings *s,
 		unsigned int final)
 {
-	t_dd_ctx	ctx;
+	t_dd_ctx		ctx;
 	unsigned int	error;
 
 	dd_ctx_init(&ctx);
@@ -45,7 +45,7 @@ static void	dnc_write_block(ucvector *out, const unsigned char *data,
 {
 	unsigned int	len;
 	unsigned int	nlen;
-	size_t		j;
+	size_t			j;
 
 	ucvector_push_back(out, (unsigned char)(bfinal));
 	len = 65535;
@@ -67,8 +67,8 @@ static void	dnc_write_block(ucvector *out, const unsigned char *data,
 unsigned int	deflate_no_compression(ucvector *out,
 		const unsigned char *data, size_t datasize)
 {
-	size_t		i;
-	size_t		numblocks;
+	size_t			i;
+	size_t			numblocks;
 	unsigned int	datapos;
 
 	numblocks = (datasize + 65534) / 65535;
@@ -88,7 +88,7 @@ unsigned int	df_lz77(ucvector *out, size_t *bp, t_hash *hash,
 		size_t dataend, const t_compress_settings *s,
 		t_huffman_tree *tree_ll, t_huffman_tree *tree_d)
 {
-	uivector	lz77_encoded;
+	uivector		lz77_encoded;
 	unsigned int	error;
 
 	uivector_init(&lz77_encoded);

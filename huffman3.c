@@ -42,8 +42,8 @@ static void	make_lengths2_generate(t_huffman_tree *tree,
 
 unsigned int	huffman_tree_make_from_len2(t_huffman_tree *tree)
 {
-	uivector	blcount;
-	uivector	nextcode;
+	uivector		blcount;
+	uivector		nextcode;
 	unsigned int	error;
 
 	error = 0;

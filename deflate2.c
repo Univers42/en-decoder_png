@@ -84,7 +84,7 @@ static size_t	dd_rle_repeats(t_dd_ctx *ctx, size_t i, unsigned int j)
 
 void	dd_rle_encode(t_dd_ctx *ctx)
 {
-	size_t		i;
+	size_t			i;
 	unsigned int	j;
 
 	i = 0;

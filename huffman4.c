@@ -84,7 +84,7 @@ unsigned int	hcl_bpm(unsigned int *lengths, t_bpm_node *leaves,
 			size_t numpresent, unsigned int maxbitlen)
 {
 	unsigned int	error;
-	t_bpm_lists	lists;
+	t_bpm_lists		lists;
 
 	bpmnode_sort(leaves, numpresent);
 	error = hcl_init_lists(&lists, maxbitlen);

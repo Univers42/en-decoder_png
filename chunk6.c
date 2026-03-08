@@ -56,7 +56,7 @@ static void	trns_keys(ucvector *trns, const t_png_color_mode *info)
 unsigned int	add_chunk_trns(ucvector *out, const t_png_color_mode *info)
 {
 	unsigned int	error;
-	ucvector	trns;
+	ucvector		trns;
 
 	ucvector_init(&trns);
 	if (info->colortype == LCT_PALETTE)
@@ -71,7 +71,7 @@ unsigned int	add_chunk_trns(ucvector *out, const t_png_color_mode *info)
 unsigned int	add_chunk_idat(ucvector *out, const unsigned char *data,
 			size_t datasize, t_compress_settings *zlibsettings)
 {
-	ucvector	zlibdata;
+	ucvector		zlibdata;
 	unsigned int	error;
 
 	ucvector_init(&zlibdata);

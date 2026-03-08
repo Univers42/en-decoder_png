@@ -22,10 +22,10 @@ static const unsigned int	g_adam7_dy[7] = {8, 8, 8, 4, 4, 2, 2};
 
 void	adam7_getpassvalues(unsigned int passw[7], unsigned int passh[7],
 			size_t filter_passstart[8], size_t padded_passstart[8],
-			size_t passstart[8], unsigned int w, unsigned int h, unsigned int bpp);
+			size_t	passstart[8], unsigned int w, unsigned int h, unsigned int bpp);
 void	adam7_deinterlace(unsigned char *out, const unsigned char *in,
-			unsigned int w, unsigned int h, unsigned int bpp);
+			unsigned int	w, unsigned int h, unsigned int bpp);
 void	adam7_interlace(unsigned char *out, const unsigned char *in,
-			unsigned int w, unsigned int h, unsigned int bpp);
+			unsigned int	w, unsigned int h, unsigned int bpp);
 
 #endif

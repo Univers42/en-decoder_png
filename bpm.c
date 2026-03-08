@@ -78,7 +78,7 @@ void	boundary_pm(t_bpm_lists *lists, t_bpm_node *leaves,
 		size_t numpresent, int c, int num)
 {
 	unsigned int	lastindex;
-	int			sum;
+	int				sum;
 
 	lastindex = lists->chains1[c]->index;
 	if (c == 0)

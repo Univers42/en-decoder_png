@@ -20,7 +20,7 @@ unsigned int	lodepng_encode_file(const char *filename,
 {
 	unsigned char	*buffer;
 	size_t			buffersize;
-	unsigned int		error;
+	unsigned int	error;
 
 	error = lodepng_encode_memory(&buffer, &buffersize,
 			image, w, h, colortype, bitdepth);

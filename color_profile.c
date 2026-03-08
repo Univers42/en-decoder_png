@@ -15,26 +15,26 @@
 
 /* Forward declarations */
 void get_pixel_color_rgba16(unsigned short *r, unsigned short *g, unsigned short *b, unsigned short *a,
-						 const unsigned char *in, size_t i, const t_png_color_mode *mode);
+						const unsigned char	*in, size_t i, const t_png_color_mode *mode);
 void get_pixel_color_rgba8(unsigned char *r, unsigned char *g, unsigned char *b, unsigned char *a,
-						const unsigned char *in, size_t i, const t_png_color_mode *mode);
+						const unsigned char	*in, size_t i, const t_png_color_mode *mode);
 
 unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 								   const unsigned char *in, unsigned int w, unsigned int h,
 								   const t_png_color_mode *mode_in)
 {
-	unsigned int error = 0;
-	size_t i;
-	t_color_tree tree;
-	size_t numpixels = (size_t)w * (size_t)h;
+	unsigned int	error = 0;
+	size_t			i;
+	t_color_tree	tree;
+	size_t			numpixels = (size_t)w * (size_t)h;
 
-	unsigned int colored_done = lodepng_is_greyscale_type(mode_in) ? 1 : 0;
-	unsigned int alpha_done = lodepng_can_have_alpha(mode_in) ? 0 : 1;
-	unsigned int numcolors_done = 0;
-	unsigned int bpp = lodepng_get_bpp(mode_in);
-	unsigned int bits_done = (profile->bits == 1 && bpp == 1) ? 1 : 0;
-	unsigned int sixteen = 0;
-	unsigned int maxnumcolors = 257;
+	unsigned int	colored_done = lodepng_is_greyscale_type(mode_in) ? 1 : 0;
+	unsigned int	alpha_done = lodepng_can_have_alpha(mode_in) ? 0 : 1;
+	unsigned int	numcolors_done = 0;
+	unsigned int	bpp = lodepng_get_bpp(mode_in);
+	unsigned int	bits_done = (profile->bits == 1 && bpp == 1) ? 1 : 0;
+	unsigned int	sixteen = 0;
+	unsigned int	maxnumcolors = 257;
 	if (bpp <= 8)
 		maxnumcolors = LODEPNG_MIN(257, profile->numcolors + (1u << bpp));
 
@@ -59,14 +59,14 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 	{
 		for (i = 0; i < profile->numcolors; i++)
 		{
-			const unsigned char *color = &profile->palette[i * 4];
+			const unsigned char	*color = &profile->palette[i * 4];
 			color_tree_add(&tree, color[0], color[1], color[2], color[3], i);
 		}
 	}
 
 	if (mode_in->bitdepth == 16 && !sixteen)
 	{
-		unsigned short r, g, b, a;
+		unsigned short	r, g, b, a;
 		for (i = 0; i != numpixels; ++i)
 		{
 			get_pixel_color_rgba16(&r, &g, &b, &a, in, i, mode_in);
@@ -84,7 +84,7 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 
 	if (sixteen)
 	{
-		unsigned short r = 0, g = 0, b = 0, a = 0;
+		unsigned short	r = 0, g = 0, b = 0, a = 0;
 
 		for (i = 0; i != numpixels; ++i)
 		{
@@ -98,7 +98,7 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 
 			if (!alpha_done)
 			{
-				unsigned int matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
+				unsigned int	matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
 				if (a != 65535 && (a != 0 || (profile->key && !matchkey)))
 				{
 					profile->alpha = 1;
@@ -141,7 +141,7 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 	}
 	else
 	{
-		unsigned char r = 0, g = 0, b = 0, a = 0;
+		unsigned char	r = 0, g = 0, b = 0, a = 0;
 		for (i = 0; i != numpixels; ++i)
 		{
 			get_pixel_color_rgba8(&r, &g, &b, &a, in, i, mode_in);
@@ -149,7 +149,7 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 			if (!bits_done && profile->bits < 8)
 			{
 
-				unsigned int bits = get_value_required_bits(r);
+				unsigned int	bits = get_value_required_bits(r);
 				if (bits > profile->bits)
 					profile->bits = bits;
 			}
@@ -165,7 +165,7 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 
 			if (!alpha_done)
 			{
-				unsigned int matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
+				unsigned int	matchkey = (r == profile->key_r && g == profile->key_g && b == profile->key_b);
 				if (a != 255 && (a != 0 || (profile->key && !matchkey)))
 				{
 					profile->alpha = 1;
@@ -199,8 +199,8 @@ unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
 					color_tree_add(&tree, r, g, b, a, profile->numcolors);
 					if (profile->numcolors < 256)
 					{
-						unsigned char *p = profile->palette;
-						unsigned int n = profile->numcolors;
+						unsigned char	*p = profile->palette;
+						unsigned int	n = profile->numcolors;
 						p[n * 4 + 0] = r;
 						p[n * 4 + 1] = g;
 						p[n * 4 + 2] = b;
@@ -247,9 +247,9 @@ all pixels of an image but only for a few additional values. */
 unsigned int lodepng_color_profile_add(t_png_color_profile *profile,
 										  unsigned int r, unsigned int g, unsigned int b, unsigned int a)
 {
-	unsigned int error = 0;
-	unsigned char image[8];
-	t_png_color_mode mode;
+	unsigned int		error = 0;
+	unsigned char		image[8];
+	t_png_color_mode	mode;
 	lodepng_color_mode_init(&mode);
 	image[0] = r >> 8;
 	image[1] = r;

@@ -58,7 +58,7 @@ static void	filter_ent_row(unsigned char *out, const unsigned char *in,
 	unsigned char	best_type;
 	float			smallest;
 	float			sum;
-	unsigned int		count[256];
+	unsigned int	count[256];
 
 	best_type = 0;
 	smallest = 0;
@@ -84,8 +84,8 @@ unsigned int	filter_entropy(unsigned char *out, const unsigned char *in,
 {
 	unsigned char		*attempt[5];
 	const unsigned char	*prevline;
-	unsigned int			y;
-	unsigned int			error;
+	unsigned int		y;
+	unsigned int		error;
 
 	error = filter_alloc(attempt, lb);
 	if (error)

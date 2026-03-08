@@ -78,10 +78,10 @@ static unsigned int	gtid_decode_all(unsigned int *bitlen_ll, unsigned int *bitle
 				const unsigned char *in, size_t *bp,
 				size_t inlength, unsigned int hlit, unsigned int hdist)
 {
-	unsigned int		bitlen_cl[NUM_CODE_LENGTH_CODES];
-	unsigned int		temp[286 + 30];
-	unsigned int		error;
-	t_huffman_tree		tree_cl;
+	unsigned int	bitlen_cl[NUM_CODE_LENGTH_CODES];
+	unsigned int	temp[286 + 30];
+	unsigned int	error;
+	t_huffman_tree	tree_cl;
 
 	gtid_read_cl(bitlen_cl, in, bp,
 		read_bits_from_stream(bp, in, 4) + 4);

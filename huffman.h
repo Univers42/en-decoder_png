@@ -36,31 +36,31 @@ static const unsigned int	g_distanceextra[30] = {0, 0, 0, 0, 1, 1, 2, 2, 3, 3,
 void		huffman_tree_init(t_huffman_tree *tree);
 void		huffman_tree_cleanup(t_huffman_tree *tree);
 unsigned int	huffman_tree_get_code(const t_huffman_tree *tree,
-				unsigned int index);
+				unsigned int	index);
 unsigned int	huffman_tree_get_length(const t_huffman_tree *tree,
-				unsigned int index);
+				unsigned int	index);
 void		add_huffman_symbol(size_t *bp, ucvector *compressed,
-				unsigned int code, unsigned int bitlen);
+				unsigned int	code, unsigned int bitlen);
 unsigned int	huffman_tree_make_2d_tree(t_huffman_tree *tree);
 unsigned int	huffman_tree_make_from_len2(t_huffman_tree *tree);
 unsigned int	huffman_tree_make_from_len(t_huffman_tree *tree,
 				const unsigned int *bitlen, size_t numcodes,
-				unsigned int maxbitlen);
+				unsigned int	maxbitlen);
 unsigned int	hcl_bpm(unsigned int *lengths, t_bpm_node *leaves,
-				size_t numpresent, unsigned int maxbitlen);
+				size_t	numpresent, unsigned int maxbitlen);
 unsigned int	lodepng_huffman_code_lengths(unsigned int *lengths,
 				const unsigned int *frequencies, size_t numcodes,
-				unsigned int maxbitlen);
+				unsigned int	maxbitlen);
 unsigned int	huffman_tree_make_from_freq(t_huffman_tree *tree,
 				const unsigned int *frequencies, size_t mincodes,
-				size_t numcodes, unsigned int maxbitlen);
+				size_t	numcodes, unsigned int maxbitlen);
 unsigned int	huffman_decode_symbol(const unsigned char *in, size_t *bp,
-				const t_huffman_tree *codetree, size_t inbitlength);
+				const t_huffman_tree	*codetree, size_t inbitlength);
 unsigned int	get_tree_inflate_dynamic(t_huffman_tree *tree_ll,
 				t_huffman_tree *tree_d, const unsigned char *in,
-				size_t *bp, size_t inlength);
+				size_t	*bp, size_t inlength);
 unsigned int	inflate_huffman_block(ucvector *out,
 				const unsigned char *in, size_t *bp,
-				size_t *pos, size_t inlength, unsigned int btype);
+				size_t	*pos, size_t inlength, unsigned int btype);
 
 #endif

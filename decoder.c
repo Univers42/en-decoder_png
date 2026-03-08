@@ -110,7 +110,7 @@ void	dg_handle_chunk(t_png_state *st, ucvector *idat,
 		unsigned int *unk, unsigned int *cpos)
 {
 	const unsigned char	*d;
-	unsigned int			len;
+	unsigned int		len;
 
 	len = lodepng_chunk_length(ch);
 	d = lodepng_chunk_data_const(ch);

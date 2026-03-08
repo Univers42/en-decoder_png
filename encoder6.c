@@ -49,7 +49,7 @@ unsigned int	enc_write_text(t_enc_ctx *ctx)
 
 static void	enc_write_id(t_enc_ctx *ctx)
 {
-	size_t		i;
+	size_t			i;
 	unsigned int	found;
 
 	found = 0;

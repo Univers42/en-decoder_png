@@ -62,9 +62,9 @@ static unsigned int	dv_deflate_blocks(ucvector *out, size_t *bp,
 		size_t nb, size_t bs,
 		const t_compress_settings *settings)
 {
-	size_t		i;
-	size_t		start;
-	size_t		end;
+	size_t			i;
+	size_t			start;
+	size_t			end;
 	unsigned int	error;
 
 	error = 0;
@@ -89,10 +89,10 @@ static unsigned int	dv_deflate_blocks(ucvector *out, size_t *bp,
 unsigned int	lodepng_deflatev(ucvector *out, const unsigned char *in,
 		size_t insize, const t_compress_settings *settings)
 {
-	size_t		bs;
-	size_t		nb;
-	size_t		bp;
-	t_hash		hash;
+	size_t			bs;
+	size_t			nb;
+	size_t			bp;
+	t_hash			hash;
 	unsigned int	error;
 
 	bp = 0;
@@ -118,7 +118,7 @@ unsigned int	lodepng_deflate(unsigned char **out, size_t *outsize,
 		const t_compress_settings *settings)
 {
 	unsigned int	error;
-	ucvector	v;
+	ucvector		v;
 
 	ucvector_init_buffer(&v, *out, *outsize);
 	error = lodepng_deflatev(&v, in, insize, settings);

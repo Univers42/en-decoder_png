@@ -36,7 +36,7 @@ static void	a7_compute_starts(unsigned int passw[7], unsigned int passh[7],
 		size_t fp[8], size_t pp[8], size_t ps[8], unsigned int bpp)
 {
 	unsigned int	i;
-	size_t		fval;
+	size_t			fval;
 
 	fp[0] = 0;
 	pp[0] = 0;

@@ -65,7 +65,7 @@ unsigned int	dd_lz77_encode(t_dd_ctx *ctx, t_hash *hash,
 
 unsigned int	dd_build_freq(t_dd_ctx *ctx)
 {
-	size_t		i;
+	size_t			i;
 	unsigned int	symbol;
 
 	if (!uivector_resizev(&ctx->freq_ll, 286, 0))

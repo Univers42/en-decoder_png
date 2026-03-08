@@ -16,8 +16,8 @@ unsigned int	lodepng_decode_memory(unsigned char **out, unsigned int *w,
 		unsigned int *h, const unsigned char *in, size_t insize,
 		t_png_color_type colortype, unsigned int bitdepth)
 {
-	unsigned int		error;
-	t_png_state	state;
+	unsigned int	error;
+	t_png_state		state;
 
 	lodepng_state_init(&state);
 	state.info_raw.colortype = colortype;
@@ -52,7 +52,7 @@ unsigned int	lodepng_decode_file(unsigned char **out, unsigned int *w,
 {
 	unsigned char	*buffer;
 	size_t			buffersize;
-	unsigned int		error;
+	unsigned int	error;
 
 	buffer = 0;
 	*out = 0;

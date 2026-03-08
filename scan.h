@@ -21,16 +21,16 @@
 
 unsigned int	post_process_scanlines(unsigned char *out, unsigned char *in,
 				unsigned int w, unsigned int h,
-				const t_png_info *info_png);
+				const t_png_info	*info_png);
 unsigned int	read_chunk_plte(t_png_color_mode *color,
-				const unsigned char *data, size_t chunk_length);
+				const unsigned char	*data, size_t chunk_length);
 unsigned int	read_chunk_trns(t_png_color_mode *color,
-				const unsigned char *data, size_t chunk_length);
+				const unsigned char	*data, size_t chunk_length);
 size_t		lodepng_get_raw_size_idat(unsigned int w, unsigned int h,
-				const t_png_color_mode *color);
+				const t_png_color_mode	*color);
 void		pre_process_scanlines(unsigned char **out, size_t *outsize,
 				const unsigned char *in, unsigned int w, unsigned int h,
 				const t_png_info *info,
-				const t_encoder_settings *settings);
+				const t_encoder_settings	*settings);
 
 #endif

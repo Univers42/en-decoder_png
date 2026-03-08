@@ -59,8 +59,8 @@ static void	lz77_try_match(t_lz77_ctx *ctx, unsigned int cur_off)
 {
 	const unsigned char	*foreptr;
 	const unsigned char	*backptr;
-	unsigned int			skip;
-	unsigned int			cur_len;
+	unsigned int		skip;
+	unsigned int		cur_len;
 
 	foreptr = &ctx->in[ctx->pos];
 	backptr = &ctx->in[ctx->pos - cur_off];

@@ -14,8 +14,8 @@
 # define PADDING_H
 
 void	remove_padding_bits(unsigned char *out, const unsigned char *in,
-			size_t olinebits, size_t ilinebits, unsigned int h);
+			size_t	olinebits, size_t ilinebits, unsigned int h);
 void	add_padding_bits(unsigned char *out, const unsigned char *in,
-			size_t olinebits, size_t ilinebits, unsigned int h);
+			size_t	olinebits, size_t ilinebits, unsigned int h);
 
 #endif

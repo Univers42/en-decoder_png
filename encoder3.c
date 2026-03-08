@@ -32,7 +32,7 @@ void	write_lz77_data(size_t *bp, ucvector *out,
 		const uivector *lz77_encoded, const t_huffman_tree *tree_ll,
 		const t_huffman_tree *tree_d)
 {
-	size_t		i;
+	size_t			i;
 	unsigned int	val;
 
 	i = 0;

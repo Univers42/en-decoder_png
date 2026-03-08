@@ -16,10 +16,10 @@ void	remove_padding_bits(unsigned char *out, const unsigned char *in,
 		size_t olinebits, size_t ilinebits, unsigned int h)
 {
 	unsigned int	y;
-	size_t		diff;
-	size_t		ibp;
-	size_t		obp;
-	size_t		x;
+	size_t			diff;
+	size_t			ibp;
+	size_t			obp;
+	size_t			x;
 
 	diff = ilinebits - olinebits;
 	ibp = 0;
@@ -43,10 +43,10 @@ void	add_padding_bits(unsigned char *out, const unsigned char *in,
 		size_t olinebits, size_t ilinebits, unsigned int h)
 {
 	unsigned int	y;
-	size_t		diff;
-	size_t		obp;
-	size_t		ibp;
-	size_t		x;
+	size_t			diff;
+	size_t			obp;
+	size_t			ibp;
+	size_t			x;
 
 	diff = olinebits - ilinebits;
 	obp = 0;

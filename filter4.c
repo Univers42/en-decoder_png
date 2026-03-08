@@ -15,7 +15,7 @@
 unsigned int	filter_zero(unsigned char *out, const unsigned char *in,
 		unsigned int h, size_t lb, size_t bw)
 {
-	unsigned int			y;
+	unsigned int		y;
 	const unsigned char	*prevline;
 	size_t				outindex;
 	size_t				inindex;
@@ -39,7 +39,7 @@ unsigned int	filter_predef(unsigned char *out, const unsigned char *in,
 		unsigned int h, size_t lb, size_t bw,
 		const t_encoder_settings *settings)
 {
-	unsigned int			y;
+	unsigned int		y;
 	const unsigned char	*prevline;
 	size_t				outindex;
 	size_t				inindex;
@@ -112,8 +112,8 @@ unsigned int	filter_minsum(unsigned char *out, const unsigned char *in,
 {
 	unsigned char		*attempt[5];
 	const unsigned char	*prevline;
-	unsigned int			y;
-	unsigned int			error;
+	unsigned int		y;
+	unsigned int		error;
 
 	error = filter_alloc(attempt, lb);
 	if (error)

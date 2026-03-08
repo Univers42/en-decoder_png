@@ -28,7 +28,7 @@ static void	make2d_clear_uninit(t_huffman_tree *tree)
 static unsigned int	make2d_inner(t_huffman_tree *tree, unsigned int n,
 				unsigned int *nodefilled, unsigned int *treepos)
 {
-	unsigned int		i;
+	unsigned int	i;
 	unsigned char	bit;
 
 	i = 0;

@@ -15,7 +15,7 @@
 unsigned int	inflate_no_compression(ucvector *out, const unsigned char *in,
 			size_t *bp, size_t *pos, size_t inlength)
 {
-	size_t		p;
+	size_t			p;
 	unsigned int	len;
 	unsigned int	nlen;
 	unsigned int	n;
@@ -48,9 +48,9 @@ unsigned int	inflate_no_compression(ucvector *out, const unsigned char *in,
 unsigned int	lodepng_inflatev(ucvector *out, const unsigned char *in,
 			size_t insize, const t_decompress_settings *settings)
 {
-	size_t		bp;
+	size_t			bp;
 	unsigned int	bfinal;
-	size_t		pos;
+	size_t			pos;
 	unsigned int	error;
 	unsigned int	btype;
 
@@ -84,7 +84,7 @@ unsigned int	lodepng_inflate(unsigned char **out, size_t *outsize,
 			const t_decompress_settings *settings)
 {
 	unsigned int	error;
-	ucvector	v;
+	ucvector		v;
 
 	ucvector_init_buffer(&v, *out, *outsize);
 	error = lodepng_inflatev(&v, in, insize, settings);

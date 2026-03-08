@@ -14,9 +14,9 @@
 
 unsigned int get_palette_translucency(const unsigned char *palette, size_t palettesize)
 {
-	size_t i;
-	unsigned int key = 0;
-	unsigned int r = 0, g = 0, b = 0;
+	size_t			i;
+	unsigned int	key = 0;
+	unsigned int	r = 0, g = 0, b = 0;
 	for (i = 0; i != palettesize; ++i)
 	{
 		if (!key && palette[4 * i + 3] == 0)
@@ -61,7 +61,7 @@ void	add_length_distance(uivector *out, unsigned int length, unsigned int distan
 unsigned int	add_unknown_chunks(ucvector *out, unsigned char *data,
 		size_t datasize)
 {
-	unsigned char *inchunk = data;
+	unsigned char	*inchunk = data;
 	while ((size_t)(inchunk - data) < datasize)
 	{
 		CERROR_TRY_RETURN(lodepng_chunk_append(&out->data, &out->size, inchunk));

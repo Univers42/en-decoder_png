@@ -15,7 +15,7 @@
 static size_t	hcl_fill_leaves(t_bpm_node *leaves,
 				const unsigned int *frequencies, size_t numcodes)
 {
-	size_t		numpresent;
+	size_t			numpresent;
 	unsigned int	i;
 
 	numpresent = 0;
@@ -56,7 +56,7 @@ unsigned int	lodepng_huffman_code_lengths(unsigned int *lengths,
 			unsigned int maxbitlen)
 {
 	unsigned int	i;
-	size_t		numpresent;
+	size_t			numpresent;
 	t_bpm_node		*leaves;
 
 	if (numcodes == 0 || (1u << maxbitlen) < (unsigned int)numcodes)

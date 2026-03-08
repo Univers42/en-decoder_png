@@ -33,8 +33,8 @@ static void	a7_int_byte_pass(unsigned char *out,
 	unsigned int	x;
 	unsigned int	y;
 	unsigned int	b;
-	size_t		pis;
-	size_t		pos;
+	size_t			pis;
+	size_t			pos;
 
 	y = 0;
 	while (y < ph)
@@ -63,8 +63,8 @@ static void	a7_int_bit_pass(unsigned char *out,
 {
 	unsigned int	x;
 	unsigned int	y;
-	size_t		ibp;
-	size_t		obp;
+	size_t			ibp;
+	size_t			obp;
 
 	y = 0;
 	while (y < ph)
@@ -88,9 +88,9 @@ void	adam7_interlace(unsigned char *out, const unsigned char *in,
 {
 	unsigned int	passw[7];
 	unsigned int	passh[7];
-	size_t		filter_passstart[8];
-	size_t		padded_passstart[8];
-	size_t		passstart[8];
+	size_t			filter_passstart[8];
+	size_t			padded_passstart[8];
+	size_t			passstart[8];
 	unsigned int	i;
 
 	adam7_getpassvalues(passw, passh, filter_passstart,

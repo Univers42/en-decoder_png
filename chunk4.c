@@ -15,8 +15,8 @@
 unsigned int	lodepng_chunk_append(unsigned char **out,
 			size_t *outlength, const unsigned char *chunk)
 {
-	unsigned int		i;
-	unsigned int		total_chunk_length;
+	unsigned int	i;
+	unsigned int	total_chunk_length;
 	unsigned char	*chunk_start;
 	unsigned char	*new_buffer;
 	size_t			new_length;
@@ -44,7 +44,7 @@ unsigned int	lodepng_chunk_create(unsigned char **out,
 			size_t *outlength, unsigned int length,
 			const char *type, const unsigned char *data)
 {
-	unsigned int		i;
+	unsigned int	i;
 	unsigned char	*chunk;
 	unsigned char	*new_buffer;
 	size_t			new_length;
@@ -92,7 +92,7 @@ unsigned int	add_chunk_ihdr(ucvector *out, unsigned int w, unsigned int h,
 			unsigned interlace_method)
 {
 	unsigned int	error;
-	ucvector	header;
+	ucvector		header;
 
 	ucvector_init(&header);
 	lodepng_add_32bit_int(&header, w);

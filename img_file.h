@@ -22,10 +22,10 @@
 
 long		lodepng_filesize(const char *filename);
 unsigned int	lodepng_buffer_file(unsigned char *out,
-				size_t size, const char *filename);
+				size_t	size, const char *filename);
 unsigned int	lodepng_load_file(unsigned char **out,
-				size_t *outsize, const char *filename);
+				size_t	*outsize, const char *filename);
 unsigned int	lodepng_save_file(const unsigned char *buffer,
-				size_t buffersize, const char *filename);
+				size_t	buffersize, const char *filename);
 
 #endif

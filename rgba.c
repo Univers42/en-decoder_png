@@ -19,7 +19,7 @@ static unsigned int rgba8_to_pixel(unsigned char *out, size_t i,
 {
 	if (mode->colortype == LCT_GREY)
 	{
-		unsigned char gray = r;
+		unsigned char	gray = r;
 		if (mode->bitdepth == 8)
 			out[i] = gray;
 		else if (mode->bitdepth == 16)
@@ -48,7 +48,7 @@ static unsigned int rgba8_to_pixel(unsigned char *out, size_t i,
 	}
 	else if (mode->colortype == LCT_PALETTE)
 	{
-		int index = color_tree_get(tree, r, g, b, a);
+		int	index = color_tree_get(tree, r, g, b, a);
 		if (index < 0)
 			return 82;
 		if (mode->bitdepth == 8)
@@ -58,7 +58,7 @@ static unsigned int rgba8_to_pixel(unsigned char *out, size_t i,
 	}
 	else if (mode->colortype == LCT_GREY_ALPHA)
 	{
-		unsigned char gray = r;
+		unsigned char	gray = r;
 		if (mode->bitdepth == 8)
 		{
 			out[i * 2 + 0] = gray;
@@ -97,7 +97,7 @@ static void rgba16_to_pixel(unsigned char *out, size_t i,
 {
 	if (mode->colortype == LCT_GREY)
 	{
-		unsigned short gray = r;
+		unsigned short	gray = r;
 		out[i * 2 + 0] = (gray >> 8) & 255;
 		out[i * 2 + 1] = gray & 255;
 	}
@@ -112,7 +112,7 @@ static void rgba16_to_pixel(unsigned char *out, size_t i,
 	}
 	else if (mode->colortype == LCT_GREY_ALPHA)
 	{
-		unsigned short gray = r;
+		unsigned short	gray = r;
 		out[i * 4 + 0] = (gray >> 8) & 255;
 		out[i * 4 + 1] = gray & 255;
 		out[i * 4 + 2] = (a >> 8) & 255;
@@ -185,9 +185,9 @@ void get_pixel_color_rgba8(unsigned char *r, unsigned char *g,
 		}
 		else
 		{
-			unsigned int highest = ((1U << mode->bitdepth) - 1U);
-			size_t j = i * mode->bitdepth;
-			unsigned int value = read_bits_from_rev_stream(&j, in, mode->bitdepth);
+			unsigned int	highest = ((1U << mode->bitdepth) - 1U);
+			size_t			j = i * mode->bitdepth;
+			unsigned int	value = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 			*r = *g = *b = (value * 255) / highest;
 			if (mode->key_defined && value == mode->key_r)
 				*a = 0;
@@ -220,12 +220,12 @@ void get_pixel_color_rgba8(unsigned char *r, unsigned char *g,
 	}
 	else if (mode->colortype == LCT_PALETTE)
 	{
-		unsigned int index;
+		unsigned int	index;
 		if (mode->bitdepth == 8)
 			index = in[i];
 		else
 		{
-			size_t j = i * mode->bitdepth;
+			size_t	j = i * mode->bitdepth;
 			index = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 		}
 
@@ -285,8 +285,8 @@ static void get_pixel_colors_rgba8(unsigned char *buffer, size_t numpixels,
 								unsigned int has_alpha, const unsigned char *in,
 								const t_png_color_mode *mode)
 {
-	unsigned int num_channels = has_alpha ? 4 : 3;
-	size_t i;
+	unsigned int	num_channels = has_alpha ? 4 : 3;
+	size_t			i;
 	if (mode->colortype == LCT_GREY)
 	{
 		if (mode->bitdepth == 8)
@@ -309,11 +309,11 @@ static void get_pixel_colors_rgba8(unsigned char *buffer, size_t numpixels,
 		}
 		else
 		{
-			unsigned int highest = ((1U << mode->bitdepth) - 1U);
-			size_t j = 0;
+			unsigned int	highest = ((1U << mode->bitdepth) - 1U);
+			size_t			j = 0;
 			for (i = 0; i != numpixels; ++i, buffer += num_channels)
 			{
-				unsigned int value = read_bits_from_rev_stream(&j, in, mode->bitdepth);
+				unsigned int	value = read_bits_from_rev_stream(&j, in, mode->bitdepth);
 				buffer[0] = buffer[1] = buffer[2] = (value * 255) / highest;
 				if (has_alpha)
 					buffer[3] = mode->key_defined && value == mode->key_r ? 0 : 255;
@@ -347,8 +347,8 @@ static void get_pixel_colors_rgba8(unsigned char *buffer, size_t numpixels,
 	}
 	else if (mode->colortype == LCT_PALETTE)
 	{
-		unsigned int index;
-		size_t j = 0;
+		unsigned int	index;
+		size_t			j = 0;
 		for (i = 0; i != numpixels; ++i, buffer += num_channels)
 		{
 			if (mode->bitdepth == 8)
@@ -426,14 +426,14 @@ unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
 						 const t_png_color_mode *mode_out, const t_png_color_mode *mode_in,
 						 unsigned int w, unsigned int h)
 {
-	size_t i;
-	t_color_tree tree;
-	size_t numpixels = (size_t)w * (size_t)h;
-	unsigned int error = 0;
+	size_t			i;
+	t_color_tree	tree;
+	size_t			numpixels = (size_t)w * (size_t)h;
+	unsigned int	error = 0;
 
 	if (lodepng_color_mode_equal(mode_out, mode_in))
 	{
-		size_t numbytes = lodepng_get_raw_size(w, h, mode_in);
+		size_t	numbytes = lodepng_get_raw_size(w, h, mode_in);
 		for (i = 0; i != numbytes; ++i)
 			out[i] = in[i];
 		return 0;
@@ -441,9 +441,9 @@ unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
 
 	if (mode_out->colortype == LCT_PALETTE)
 	{
-		size_t palettesize = mode_out->palettesize;
-		const unsigned char *palette = mode_out->palette;
-		size_t palsize = (size_t)1u << mode_out->bitdepth;
+		size_t				palettesize = mode_out->palettesize;
+		const unsigned char	*palette = mode_out->palette;
+		size_t				palsize = (size_t)1u << mode_out->bitdepth;
 		/*if the user specified output palette but did not give the values, assume
 		they want the values of the input color type (assuming that one is palette).
 		Note that we never create a new palette ourselves.*/
@@ -456,7 +456,7 @@ unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
 			even in case there are duplicate colors in the palette.*/
 			if (mode_in->colortype == LCT_PALETTE && mode_in->bitdepth == mode_out->bitdepth)
 			{
-				size_t numbytes = lodepng_get_raw_size(w, h, mode_in);
+				size_t	numbytes = lodepng_get_raw_size(w, h, mode_in);
 				for (i = 0; i != numbytes; ++i)
 					out[i] = in[i];
 				return 0;
@@ -467,7 +467,7 @@ unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
 		color_tree_init(&tree);
 		for (i = 0; i != palsize; ++i)
 		{
-			const unsigned char *p = &palette[i * 4];
+			const unsigned char	*p = &palette[i * 4];
 			color_tree_add(&tree, p[0], p[1], p[2], p[3], (unsigned int)i);
 		}
 	}
@@ -476,7 +476,7 @@ unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
 	{
 		for (i = 0; i != numpixels; ++i)
 		{
-			unsigned short r = 0, g = 0, b = 0, a = 0;
+			unsigned short	r = 0, g = 0, b = 0, a = 0;
 			get_pixel_color_rgba16(&r, &g, &b, &a, in, i, mode_in);
 			rgba16_to_pixel(out, i, mode_out, r, g, b, a);
 		}
@@ -491,7 +491,7 @@ unsigned int lodepng_convert(unsigned char *out, const unsigned char *in,
 	}
 	else
 	{
-		unsigned char r = 0, g = 0, b = 0, a = 0;
+		unsigned char	r = 0, g = 0, b = 0, a = 0;
 		for (i = 0; i != numpixels; ++i)
 		{
 			get_pixel_color_rgba8(&r, &g, &b, &a, in, i, mode_in);
@@ -520,9 +520,9 @@ unsigned int lodepng_convert_rgb(
 	unsigned int r_in, unsigned int g_in, unsigned int b_in,
 	const t_png_color_mode *mode_out, const t_png_color_mode *mode_in)
 {
-	unsigned int r = 0, g = 0, b = 0;
-	unsigned int mul = 65535 / ((1u << mode_in->bitdepth) - 1u);
-	unsigned int shift = 16 - mode_out->bitdepth;
+	unsigned int	r = 0, g = 0, b = 0;
+	unsigned int	mul = 65535 / ((1u << mode_in->bitdepth) - 1u);
+	unsigned int	shift = 16 - mode_out->bitdepth;
 
 	if (mode_in->colortype == LCT_GREY || mode_in->colortype == LCT_GREY_ALPHA)
 	{
@@ -559,13 +559,13 @@ unsigned int lodepng_convert_rgb(
 	}
 	else if (mode_out->colortype == LCT_PALETTE)
 	{
-		unsigned int i;
+		unsigned int	i;
 
 		if ((r >> 8) != (r & 255) || (g >> 8) != (g & 255) || (b >> 8) != (b & 255))
 			return 82;
 		for (i = 0; i < mode_out->palettesize; i++)
 		{
-			unsigned int j = i * 4;
+			unsigned int	j = i * 4;
 			if ((r >> 8) == mode_out->palette[j + 0] && (g >> 8) == mode_out->palette[j + 1] &&
 				(b >> 8) == mode_out->palette[j + 2])
 			{

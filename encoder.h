@@ -19,21 +19,21 @@ typedef struct s_lz77_ctx
 	t_hash				*hash;
 	const unsigned char	*in;
 	size_t				insize;
-	unsigned int			windowsize;
-	unsigned int			minmatch;
-	unsigned int			nicematch;
-	unsigned int			lazymatching;
-	unsigned int			maxchainlength;
-	unsigned int			maxlazymatch;
-	unsigned int			numzeros;
-	unsigned int			length;
-	unsigned int			offset;
-	unsigned int			lazy;
-	unsigned int			lazylength;
-	unsigned int			lazyoffset;
-	unsigned int			hashval;
-	unsigned int			hashpos;
-	unsigned int			error;
+	unsigned int		windowsize;
+	unsigned int		minmatch;
+	unsigned int		nicematch;
+	unsigned int		lazymatching;
+	unsigned int		maxchainlength;
+	unsigned int		maxlazymatch;
+	unsigned int		numzeros;
+	unsigned int		length;
+	unsigned int		offset;
+	unsigned int		lazy;
+	unsigned int		lazylength;
+	unsigned int		lazyoffset;
+	unsigned int		hashval;
+	unsigned int		hashpos;
+	unsigned int		error;
 	size_t				pos;
 	size_t				wpos;
 	const unsigned char	*lastptr;
@@ -41,11 +41,11 @@ typedef struct s_lz77_ctx
 
 typedef struct s_enc_ctx
 {
-	t_png_state		*state;
+	t_png_state			*state;
 	t_png_info			info;
 	const unsigned char	*image;
-	unsigned int			w;
-	unsigned int			h;
+	unsigned int		w;
+	unsigned int		h;
 	unsigned char		*data;
 	size_t				datasize;
 	ucvector			outv;
@@ -62,18 +62,18 @@ unsigned int		encode_lz77(uivector *out, t_hash *hash,
 					const unsigned char *in, size_t inpos,
 					size_t insize, unsigned int windowsize,
 					unsigned int minmatch, unsigned int nicematch,
-					unsigned int lazymatching);
+					unsigned int	lazymatching);
 
 /* encoder3.c - write_lz77_data + encode validation */
 void			write_lz77_data(size_t *bp, ucvector *out,
 					const uivector *lz77_encoded,
 					const t_huffman_tree *tree_ll,
-					const t_huffman_tree *tree_d);
+					const t_huffman_tree	*tree_d);
 unsigned int		enc_validate(t_enc_ctx *ctx);
 
 /* palette.c */
 void			add_length_distance(uivector *out, unsigned int length,
-					unsigned int distance);
+					unsigned int	distance);
 
 /* encoder4.c - encode color setup */
 unsigned int		enc_auto_convert(t_enc_ctx *ctx);
@@ -92,29 +92,29 @@ unsigned int		enc_write_itext_end(t_enc_ctx *ctx);
 /* encoder7.c - encode main + wrappers */
 unsigned int		lodepng_encode(unsigned char **out, size_t *outsize,
 					const unsigned char *image, unsigned int w,
-					unsigned int h, t_png_state *state);
+					unsigned int	h, t_png_state *state);
 unsigned int		lodepng_encode_memory(unsigned char **out,
 					size_t *outsize, const unsigned char *image,
 					unsigned int w, unsigned int h,
-					t_png_color_type colortype, unsigned int bitdepth);
+					t_png_color_type	colortype, unsigned int bitdepth);
 unsigned int		lodepng_encode32(unsigned char **out,
 					size_t *outsize, const unsigned char *image,
-					unsigned int w, unsigned int h);
+					unsigned int	w, unsigned int h);
 unsigned int		lodepng_encode24(unsigned char **out,
 					size_t *outsize, const unsigned char *image,
-					unsigned int w, unsigned int h);
+					unsigned int	w, unsigned int h);
 
 /* encoder8.c - disk operations */
 # ifdef LODEPNG_COMPILE_DISK
 unsigned int		lodepng_encode_file(const char *filename,
 					const unsigned char *image, unsigned int w,
-					unsigned int h, t_png_color_type ct, unsigned int bd);
+					unsigned int	h, t_png_color_type ct, unsigned int bd);
 unsigned int		lodepng_encode32_file(const char *filename,
 					const unsigned char *image, unsigned int w,
-					unsigned int h);
+					unsigned int	h);
 unsigned int		lodepng_encode24_file(const char *filename,
 					const unsigned char *image, unsigned int w,
-					unsigned int h);
+					unsigned int	h);
 # endif
 
 #endif

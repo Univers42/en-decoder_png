@@ -31,13 +31,13 @@
 
 typedef struct s_ctx
 {
-	unsigned char **out;
-	size_t *outsize;
-	const unsigned char *image;
-	unsigned int w;
-	unsigned int h;
-	t_png_color_type color_type;
-	unsigned int bit_depth;
+	unsigned char		**out;
+	size_t				*outsize;
+	const unsigned char	*image;
+	unsigned int		w;
+	unsigned int		h;
+	t_png_color_type	color_type;
+	unsigned int		bit_depth;
 } t_ctx;
 
 #endif

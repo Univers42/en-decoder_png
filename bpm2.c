@@ -69,8 +69,8 @@ static void	sort_copy(t_bpm_node *dst, t_bpm_node *src, size_t num)
 void	bpmnode_sort(t_bpm_node *leaves, size_t num)
 {
 	t_bpm_node	*mem;
-	size_t	width;
-	int		toggle;
+	size_t		width;
+	int			toggle;
 
 	if (num <= 1)
 		return ;

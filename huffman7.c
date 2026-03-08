@@ -61,7 +61,7 @@ static unsigned int	ihb_length_match(ucvector *out, const unsigned char *in,
 	unsigned int	code_d;
 	unsigned int	distance;
 	unsigned int	numextra;
-	size_t		length;
+	size_t			length;
 
 	length = g_lengthbase[code_ll - FIRST_LENGTH_CODE_INDEX];
 	numextra = g_lengthextra[code_ll - FIRST_LENGTH_CODE_INDEX];

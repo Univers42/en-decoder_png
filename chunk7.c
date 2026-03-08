@@ -18,8 +18,8 @@ unsigned int	add_chunk_text(ucvector *out, const char *keyword,
 			const char *textstring)
 {
 	unsigned int	error;
-	size_t		i;
-	ucvector	text;
+	size_t			i;
+	ucvector		text;
 
 	ucvector_init(&text);
 	i = 0;
@@ -47,7 +47,7 @@ unsigned int	add_chunk_srgb(ucvector *out, const t_png_info *info)
 unsigned int	add_chunk_gama(ucvector *out, const t_png_info *info)
 {
 	unsigned int	error;
-	ucvector	data;
+	ucvector		data;
 
 	ucvector_init(&data);
 	lodepng_add_32bit_int(&data, info->gama_gamma);
@@ -59,7 +59,7 @@ unsigned int	add_chunk_gama(ucvector *out, const t_png_info *info)
 unsigned int	add_chunk_phys(ucvector *out, const t_png_info *info)
 {
 	unsigned int	error;
-	ucvector	data;
+	ucvector		data;
 
 	ucvector_init(&data);
 	lodepng_add_32bit_int(&data, info->phys_x);
@@ -72,7 +72,7 @@ unsigned int	add_chunk_phys(ucvector *out, const t_png_info *info)
 
 unsigned int	add_chunk_time(ucvector *out, const t_png_time *time)
 {
-	unsigned int		error;
+	unsigned int	error;
 	unsigned char	*data;
 
 	data = (unsigned char *)lodepng_malloc(7);

@@ -91,9 +91,9 @@ static size_t	dg_predict_interlaced(unsigned int w, unsigned int h,
 void	dg_chunk_loop(t_png_state *state, ucvector *idat,
 		const unsigned char *in, size_t insize)
 {
-	unsigned int			iend;
-	unsigned int			unknown;
-	unsigned int			cpos;
+	unsigned int		iend;
+	unsigned int		unknown;
+	unsigned int		cpos;
 	const unsigned char	*chunk;
 
 	iend = 0;

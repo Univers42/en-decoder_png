@@ -16,7 +16,7 @@
 static unsigned int	enc_auto_bg_setup(t_enc_ctx *ctx,
 		t_png_color_profile *prof, unsigned int bg[3])
 {
-	unsigned int			rgb[3];
+	unsigned int		rgb[3];
 	t_png_color_mode	mode16;
 
 	rgb[0] = 0;
@@ -39,7 +39,7 @@ static unsigned int	enc_auto_bg_setup(t_enc_ctx *ctx,
 
 static unsigned int	enc_auto_bg(t_enc_ctx *ctx)
 {
-	unsigned int			bg[3];
+	unsigned int		bg[3];
 	t_png_color_profile	prof;
 
 	bg[0] = ctx->state->info_png.background_r;
