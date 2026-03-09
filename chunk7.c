@@ -14,12 +14,12 @@
 
 #ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 
-unsigned int	add_chunk_text(ucvector *out, const char *keyword,
+unsigned int	add_chunk_text(t_ucvector *out, const char *keyword,
 			const char *textstring)
 {
 	unsigned int	error;
 	size_t			i;
-	ucvector		text;
+	t_ucvector		text;
 
 	ucvector_init(&text);
 	i = 0;
@@ -36,7 +36,7 @@ unsigned int	add_chunk_text(ucvector *out, const char *keyword,
 	return (error);
 }
 
-unsigned int	add_chunk_srgb(ucvector *out, const t_png_info *info)
+unsigned int	add_chunk_srgb(t_ucvector *out, const t_png_info *info)
 {
 	unsigned char	data;
 
@@ -44,10 +44,10 @@ unsigned int	add_chunk_srgb(ucvector *out, const t_png_info *info)
 	return (add_chunk(out, "sRGB", &data, 1));
 }
 
-unsigned int	add_chunk_gama(ucvector *out, const t_png_info *info)
+unsigned int	add_chunk_gama(t_ucvector *out, const t_png_info *info)
 {
 	unsigned int	error;
-	ucvector		data;
+	t_ucvector		data;
 
 	ucvector_init(&data);
 	lodepng_add_32bit_int(&data, info->gama_gamma);
@@ -56,10 +56,10 @@ unsigned int	add_chunk_gama(ucvector *out, const t_png_info *info)
 	return (error);
 }
 
-unsigned int	add_chunk_phys(ucvector *out, const t_png_info *info)
+unsigned int	add_chunk_phys(t_ucvector *out, const t_png_info *info)
 {
 	unsigned int	error;
-	ucvector		data;
+	t_ucvector		data;
 
 	ucvector_init(&data);
 	lodepng_add_32bit_int(&data, info->phys_x);
@@ -70,7 +70,7 @@ unsigned int	add_chunk_phys(ucvector *out, const t_png_info *info)
 	return (error);
 }
 
-unsigned int	add_chunk_time(ucvector *out, const t_png_time *time)
+unsigned int	add_chunk_time(t_ucvector *out, const t_png_time *time)
 {
 	unsigned int	error;
 	unsigned char	*data;

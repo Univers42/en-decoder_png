@@ -6,145 +6,119 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:56:08 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:12:59 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 03:12:50 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-static void	fs_none_sub(unsigned char *out,
-		const unsigned char *scanline, size_t bw, size_t len,
-		unsigned char type)
+static void	fs_sub(unsigned char *out,
+		const unsigned char *scanline, const t_filter_dim *d)
 {
 	size_t	i;
 
 	i = 0;
-	if (type == 0)
-	{
-		while (i != len)
-		{
-			out[i] = scanline[i];
-			++i;
-		}
-		return ;
-	}
-	while (i != bw)
+	while (i != d->bw)
 	{
 		out[i] = scanline[i];
 		++i;
 	}
-	while (i < len)
+	while (i < d->len)
 	{
-		out[i] = scanline[i] - scanline[i - bw];
+		out[i] = scanline[i] - scanline[i - d->bw];
 		++i;
 	}
 }
 
 static void	fs_up(unsigned char *out, const unsigned char *scanline,
-		const unsigned char *prevline, size_t len)
+		const unsigned char *prevline, const t_filter_dim *d)
 {
 	size_t	i;
 
 	i = 0;
 	if (prevline)
 	{
-		while (i != len)
+		while (i != d->len)
 		{
 			out[i] = scanline[i] - prevline[i];
 			++i;
 		}
 	}
 	else
-	{
-		while (i != len)
-		{
-			out[i] = scanline[i];
-			++i;
-		}
-	}
+		memcpy(out, scanline, d->len);
 }
 
 static void	fs_avg(unsigned char *out, const unsigned char *scanline,
-		const unsigned char *prevline, size_t bw, size_t len)
+		const unsigned char *prevline, const t_filter_dim *d)
 {
 	size_t	i;
 
 	i = 0;
-	if (prevline)
+	if (!prevline)
 	{
-		while (i != bw)
+		memcpy(out, scanline, d->bw);
+		i = d->bw;
+		while (i < d->len)
 		{
-			out[i] = scanline[i] - (prevline[i] >> 1);
+			out[i] = scanline[i] - (scanline[i - d->bw] >> 1);
 			++i;
 		}
-		while (i < len)
-		{
-			out[i] = scanline[i]
-				- ((scanline[i - bw] + prevline[i]) >> 1);
-			++i;
-		}
+		return ;
 	}
-	else
+	while (i != d->bw)
 	{
-		while (i != bw)
-		{
-			out[i] = scanline[i];
-			++i;
-		}
-		while (i < len)
-		{
-			out[i] = scanline[i] - (scanline[i - bw] >> 1);
-			++i;
-		}
+		out[i] = scanline[i] - (prevline[i] >> 1);
+		++i;
+	}
+	while (i < d->len)
+	{
+		out[i] = scanline[i]
+			- ((scanline[i - d->bw] + prevline[i]) >> 1);
+		++i;
 	}
 }
 
 static void	fs_paeth(unsigned char *out, const unsigned char *scanline,
-		const unsigned char *prevline, size_t bw, size_t len)
+		const unsigned char *prevline, const t_filter_dim *d)
 {
 	size_t	i;
 
 	i = 0;
-	if (prevline)
+	if (!prevline)
 	{
-		while (i != bw)
+		memcpy(out, scanline, d->bw);
+		i = d->bw;
+		while (i < d->len)
 		{
-			out[i] = scanline[i] - prevline[i];
+			out[i] = scanline[i] - scanline[i - d->bw];
 			++i;
 		}
-		while (i < len)
-		{
-			out[i] = scanline[i] - paeth_predictor(
-					scanline[i - bw], prevline[i],
-					prevline[i - bw]);
-			++i;
-		}
+		return ;
 	}
-	else
+	while (i != d->bw)
 	{
-		while (i != bw)
-		{
-			out[i] = scanline[i];
-			++i;
-		}
-		while (i < len)
-		{
-			out[i] = scanline[i] - scanline[i - bw];
-			++i;
-		}
+		out[i] = scanline[i] - prevline[i];
+		++i;
+	}
+	while (i < d->len)
+	{
+		out[i] = scanline[i] - paeth_predictor(scanline[i - d->bw],
+				prevline[i], prevline[i - d->bw]);
+		++i;
 	}
 }
 
 void	filter_scanline(unsigned char *out, const unsigned char *scanline,
-		const unsigned char *prevline, size_t length,
-		size_t bytewidth, unsigned char filter_type)
+		const unsigned char *prevline, const t_filter_dim *d)
 {
-	if (filter_type <= 1)
-		fs_none_sub(out, scanline, bytewidth, length, filter_type);
-	else if (filter_type == 2)
-		fs_up(out, scanline, prevline, length);
-	else if (filter_type == 3)
-		fs_avg(out, scanline, prevline, bytewidth, length);
-	else if (filter_type == 4)
-		fs_paeth(out, scanline, prevline, bytewidth, length);
+	if (d->type == 0)
+		memcpy(out, scanline, d->len);
+	else if (d->type == 1)
+		fs_sub(out, scanline, d);
+	else if (d->type == 2)
+		fs_up(out, scanline, prevline, d);
+	else if (d->type == 3)
+		fs_avg(out, scanline, prevline, d);
+	else if (d->type == 4)
+		fs_paeth(out, scanline, prevline, d);
 }

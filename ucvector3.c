@@ -12,7 +12,7 @@
 
 #include "all.h"
 
-void	ucvector_cleanup(ucvector *v)
+void	ucvector_cleanup(t_ucvector *v)
 {
 	lodepng_free(v->data);
 	v->data = NULL;

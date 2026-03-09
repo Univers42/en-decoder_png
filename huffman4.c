@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:02:18 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:49:05 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:35:45 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static unsigned int	hcl_init_lists(t_bpm_lists *lists, unsigned int maxbitlen)
 	return (0);
 }
 
-static void	hcl_run_bpm(t_bpm_lists *lists, t_bpm_node *leaves,
-			size_t numpresent, unsigned int maxbitlen)
+static void	hcl_run_bpm(t_bpm_lists *lists,
+			unsigned int maxbitlen)
 {
 	unsigned int	i;
 
@@ -43,8 +43,8 @@ static void	hcl_run_bpm(t_bpm_lists *lists, t_bpm_node *leaves,
 		lists->freelist[i] = &lists->memory[i];
 		++i;
 	}
-	bpmnode_create(lists, leaves[0].weight, 1, 0);
-	bpmnode_create(lists, leaves[1].weight, 2, 0);
+	bpmnode_create(lists, lists->leaves[0].weight, 1, 0);
+	bpmnode_create(lists, lists->leaves[1].weight, 2, 0);
 	i = 0;
 	while (i != lists->listsize)
 	{
@@ -53,15 +53,14 @@ static void	hcl_run_bpm(t_bpm_lists *lists, t_bpm_node *leaves,
 		++i;
 	}
 	i = 2;
-	while (i != 2 * numpresent - 2)
+	while (i != 2 * lists->numpresent - 2)
 	{
-		boundary_pm(lists, leaves, numpresent,
-			(int)maxbitlen - 1, (int)i);
+		boundary_pm(lists, (int)maxbitlen - 1, (int)i);
 		++i;
 	}
 }
 
-static void	hcl_extract_lengths(t_bpm_lists *lists, t_bpm_node *leaves,
+static void	hcl_extract_lengths(t_bpm_lists *lists,
 			unsigned int maxbitlen, unsigned int *lengths)
 {
 	t_bpm_node		*node;
@@ -73,7 +72,7 @@ static void	hcl_extract_lengths(t_bpm_lists *lists, t_bpm_node *leaves,
 		i = 0;
 		while (i != node->index)
 		{
-			++lengths[leaves[i].index];
+			++lengths[lists->leaves[i].index];
 			++i;
 		}
 		node = node->tail;
@@ -90,8 +89,10 @@ unsigned int	hcl_bpm(unsigned int *lengths, t_bpm_node *leaves,
 	error = hcl_init_lists(&lists, maxbitlen);
 	if (!error)
 	{
-		hcl_run_bpm(&lists, leaves, numpresent, maxbitlen);
-		hcl_extract_lengths(&lists, leaves, maxbitlen, lengths);
+		lists.leaves = leaves;
+		lists.numpresent = numpresent;
+		hcl_run_bpm(&lists, maxbitlen);
+		hcl_extract_lengths(&lists, maxbitlen, lengths);
 	}
 	lodepng_free(lists.memory);
 	lodepng_free(lists.freelist);

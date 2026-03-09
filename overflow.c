@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:16:52 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 23:03:10 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	lodepng_pixel_overflow(unsigned int w, unsigned int h,
 	size_t	total;
 	size_t	line;
 
-	bpp = LODEPNG_MAX(lodepng_get_bpp(pngcolor), lodepng_get_bpp(rawcolor));
+	bpp = lodepng_max_uint(lodepng_get_bpp(pngcolor),
+			lodepng_get_bpp(rawcolor));
 	if (lodepng_mulofl((size_t)w, (size_t)h, &numpixels))
 		return (1);
 	if (lodepng_mulofl(numpixels, 8, &total))

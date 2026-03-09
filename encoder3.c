@@ -6,43 +6,46 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:40:00 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:48:22 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 04:01:28 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-static void	wlz77_emit_extra(size_t *bp, ucvector *out,
-		const uivector *lz77, const t_huffman_tree *tree_d,
-		size_t *i)
+static void	wlz77_emit_extra(t_deflate_work *w,
+		const unsigned int *d, const t_huffman_tree *tree_d)
 {
 	unsigned int	li;
 	unsigned int	di;
 
-	li = lz77->data[*i] - FIRST_LENGTH_CODE_INDEX;
-	add_bits_to_stream(bp, out, lz77->data[++(*i)], g_lengthextra[li]);
-	di = lz77->data[++(*i)];
-	add_huffman_symbol(bp, out, huffman_tree_get_code(tree_d, di),
+	li = d[0] - FIRST_LENGTH_CODE_INDEX;
+	add_bits_to_stream(w->bp, w->out, d[1], hft()->lengthextra[li]);
+	di = d[2];
+	add_huffman_symbol(w->bp, w->out, huffman_tree_get_code(tree_d, di),
 		huffman_tree_get_length(tree_d, di));
-	add_bits_to_stream(bp, out, lz77->data[++(*i)],
-		g_distanceextra[di]);
+	add_bits_to_stream(w->bp, w->out, d[3],
+		hft()->distanceextra[di]);
 }
 
-void	write_lz77_data(size_t *bp, ucvector *out,
-		const uivector *lz77_encoded, const t_huffman_tree *tree_ll,
+void	write_lz77_data(t_deflate_work *w,
+		const t_uivector *lz77, const t_huffman_tree *tree_ll,
 		const t_huffman_tree *tree_d)
 {
 	size_t			i;
 	unsigned int	val;
 
 	i = 0;
-	while (i != lz77_encoded->size)
+	while (i != lz77->size)
 	{
-		val = lz77_encoded->data[i];
-		add_huffman_symbol(bp, out, huffman_tree_get_code(tree_ll, val),
+		val = lz77->data[i];
+		add_huffman_symbol(w->bp, w->out,
+			huffman_tree_get_code(tree_ll, val),
 			huffman_tree_get_length(tree_ll, val));
 		if (val > 256)
-			wlz77_emit_extra(bp, out, lz77_encoded, tree_d, &i);
+		{
+			wlz77_emit_extra(w, &lz77->data[i], tree_d);
+			i += 3;
+		}
 		++i;
 	}
 }

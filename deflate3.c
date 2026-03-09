@@ -6,31 +6,14 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:19:44 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:34:00 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-unsigned int	dd_build_cl(t_dd_ctx *ctx)
+static unsigned int	dd_trim_bitlen_cl(t_dd_ctx *ctx)
 {
-	unsigned int	error;
-	size_t			i;
-
-	error = huffman_tree_make_from_freq(&ctx->tree_cl,
-			ctx->freq_cl.data, ctx->freq_cl.size,
-			ctx->freq_cl.size, 7);
-	if (error)
-		return (error);
-	if (!uivector_resize(&ctx->bitlen_cl, ctx->tree_cl.numcodes))
-		return (83);
-	i = 0;
-	while (i != ctx->tree_cl.numcodes)
-	{
-		ctx->bitlen_cl.data[i] = huffman_tree_get_length(
-				&ctx->tree_cl, g_clcl_order[i]);
-		++i;
-	}
 	while (ctx->bitlen_cl.data[ctx->bitlen_cl.size - 1] == 0
 		&& ctx->bitlen_cl.size > 4)
 	{
@@ -41,7 +24,30 @@ unsigned int	dd_build_cl(t_dd_ctx *ctx)
 	return (0);
 }
 
-void	dd_write_header(ucvector *out, size_t *bp,
+unsigned int	dd_build_cl(t_dd_ctx *ctx)
+{
+	unsigned int	error;
+	size_t			i;
+
+	ctx->tree_cl.max_bit_len = 7;
+	error = huffman_tree_make_from_freq(&ctx->tree_cl,
+			ctx->freq_cl.data, ctx->freq_cl.size,
+			ctx->freq_cl.size);
+	if (error)
+		return (error);
+	if (!uivector_resize(&ctx->bitlen_cl, ctx->tree_cl.numcodes))
+		return (83);
+	i = 0;
+	while (i != ctx->tree_cl.numcodes)
+	{
+		ctx->bitlen_cl.data[i] = huffman_tree_get_length(
+				&ctx->tree_cl, clcl_order()[i]);
+		++i;
+	}
+	return (dd_trim_bitlen_cl(ctx));
+}
+
+void	dd_write_header(t_ucvector *out, size_t *bp,
 		t_dd_ctx *ctx, unsigned int bfinal)
 {
 	unsigned int	hlit;
@@ -68,7 +74,7 @@ void	dd_write_header(ucvector *out, size_t *bp,
 	}
 }
 
-void	dd_write_cls(ucvector *out, size_t *bp, t_dd_ctx *ctx)
+void	dd_write_cls(t_ucvector *out, size_t *bp, t_dd_ctx *ctx)
 {
 	size_t	i;
 
@@ -93,22 +99,14 @@ void	dd_write_cls(ucvector *out, size_t *bp, t_dd_ctx *ctx)
 	}
 }
 
-unsigned int	dd_write_data(ucvector *out, size_t *bp, t_dd_ctx *ctx)
+unsigned int	dd_write_data(t_deflate_work *w, t_dd_ctx *ctx)
 {
-	write_lz77_data(bp, out, &ctx->lz77_encoded,
+	write_lz77_data(w, &ctx->lz77_encoded,
 		&ctx->tree_ll, &ctx->tree_d);
 	if (huffman_tree_get_length(&ctx->tree_ll, 256) == 0)
 		return (64);
-	add_huffman_symbol(bp, out,
+	add_huffman_symbol(w->bp, w->out,
 		huffman_tree_get_code(&ctx->tree_ll, 256),
 		huffman_tree_get_length(&ctx->tree_ll, 256));
 	return (0);
-}
-
-unsigned int	dd_emit(ucvector *out, size_t *bp, t_dd_ctx *ctx,
-		unsigned int bfinal)
-{
-	dd_write_header(out, bp, ctx, bfinal);
-	dd_write_cls(out, bp, ctx);
-	return (dd_write_data(out, bp, ctx));
 }

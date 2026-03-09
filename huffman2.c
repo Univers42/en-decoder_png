@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:02:18 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:49:07 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:12:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,35 +29,43 @@ static unsigned int	make2d_inner(t_huffman_tree *tree, unsigned int n,
 				unsigned int *nodefilled, unsigned int *treepos)
 {
 	unsigned int	i;
-	unsigned char	bit;
+	unsigned int	idx;
 
 	i = 0;
 	while (i != tree->lengths[n])
 	{
-		bit = (unsigned char)((tree->tree1d[n]
-					>> (tree->lengths[n] - i - 1)) & 1);
 		if (*treepos > 2147483647 || *treepos + 2 > tree->numcodes)
 			return (55);
-		if (tree->tree2d[2 * (*treepos) + bit] == 32767)
+		idx = 2 * (*treepos) + ((tree->tree1d[n]
+					>> (tree->lengths[n] - i - 1)) & 1);
+		if (tree->tree2d[idx] != 32767)
+			*treepos = tree->tree2d[idx] - tree->numcodes;
+		else if (i + 1 == tree->lengths[n])
 		{
-			if (i + 1 == tree->lengths[n])
-			{
-				tree->tree2d[2 * (*treepos) + bit] = n;
-				*treepos = 0;
-			}
-			else
-			{
-				++(*nodefilled);
-				tree->tree2d[2 * (*treepos) + bit]
-					= *nodefilled + tree->numcodes;
-				*treepos = *nodefilled;
-			}
+			tree->tree2d[idx] = n;
+			*treepos = 0;
 		}
 		else
-			*treepos = tree->tree2d[2 * (*treepos) + bit]
-				- tree->numcodes;
+		{
+			tree->tree2d[idx] = ++(*nodefilled) + tree->numcodes;
+			*treepos = *nodefilled;
+		}
 		++i;
 	}
+	return (0);
+}
+
+static unsigned int	make2d_alloc(t_huffman_tree *tree)
+{
+	unsigned int	n;
+
+	tree->tree2d = (unsigned int *)lodepng_malloc(
+			tree->numcodes * 2 * sizeof(unsigned int));
+	if (!tree->tree2d)
+		return (83);
+	n = 0;
+	while (n < tree->numcodes * 2)
+		tree->tree2d[n++] = 32767;
 	return (0);
 }
 
@@ -70,13 +78,9 @@ unsigned int	huffman_tree_make_2d_tree(t_huffman_tree *tree)
 
 	nodefilled = 0;
 	treepos = 0;
-	tree->tree2d = (unsigned int *)lodepng_malloc(
-			tree->numcodes * 2 * sizeof(unsigned int));
-	if (!tree->tree2d)
-		return (83);
-	n = 0;
-	while (n < tree->numcodes * 2)
-		tree->tree2d[n++] = 32767;
+	error = make2d_alloc(tree);
+	if (error)
+		return (error);
 	n = 0;
 	while (n < tree->numcodes)
 	{

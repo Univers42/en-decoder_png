@@ -6,15 +6,14 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:19:59 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:35:45 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
 unsigned int	lodepng_palette_add(t_png_color_mode *info,
-		unsigned char r, unsigned char g,
-		unsigned char b, unsigned char a)
+		const unsigned char *rgba)
 {
 	unsigned char	*data;
 
@@ -25,10 +24,10 @@ unsigned int	lodepng_palette_add(t_png_color_mode *info,
 			return (83);
 		info->palette = data;
 	}
-	info->palette[4 * info->palettesize + 0] = r;
-	info->palette[4 * info->palettesize + 1] = g;
-	info->palette[4 * info->palettesize + 2] = b;
-	info->palette[4 * info->palettesize + 3] = a;
+	info->palette[4 * info->palettesize + 0] = rgba[0];
+	info->palette[4 * info->palettesize + 1] = rgba[1];
+	info->palette[4 * info->palettesize + 2] = rgba[2];
+	info->palette[4 * info->palettesize + 3] = rgba[3];
 	++info->palettesize;
 	return (0);
 }

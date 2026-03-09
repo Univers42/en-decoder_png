@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:23:09 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:12:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,6 @@ void	lodepng_itext_cleanup(t_png_info *info)
 	lodepng_free(info->itext_strings);
 }
 
-unsigned int	lodepng_itext_copy(t_png_info *dest,
-		const t_png_info *source)
-{
-	size_t	i;
-
-	dest->itext_keys = 0;
-	dest->itext_langtags = 0;
-	dest->itext_transkeys = 0;
-	dest->itext_strings = 0;
-	dest->itext_num = 0;
-	i = 0;
-	while (i != source->itext_num)
-	{
-		CERROR_TRY_RETURN(lodepng_add_itext(dest,
-				source->itext_keys[i], source->itext_langtags[i],
-				source->itext_transkeys[i], source->itext_strings[i]));
-		i++;
-	}
-	return (0);
-}
-
-void	lodepng_clear_itext(t_png_info *info)
-{
-	lodepng_itext_cleanup(info);
-}
-
 static int	itext_alloc_fail(char **nk, char **nl,
 		char **nt, char **ns)
 {
@@ -80,32 +54,54 @@ static int	itext_alloc_fail(char **nk, char **nl,
 	return (0);
 }
 
-unsigned int	lodepng_add_itext(t_png_info *info, const char *key,
-		const char *langtag, const char *transkey, const char *str)
+static unsigned int	itext_copy_entry(t_png_info *dest,
+		const t_png_info *src, size_t i)
 {
 	char	**nk;
 	char	**nl;
 	char	**nt;
 	char	**ns;
 
-	nk = (char **)lodepng_realloc(info->itext_keys,
-			sizeof(char *) * (info->itext_num + 1));
-	nl = (char **)lodepng_realloc(info->itext_langtags,
-			sizeof(char *) * (info->itext_num + 1));
-	nt = (char **)lodepng_realloc(info->itext_transkeys,
-			sizeof(char *) * (info->itext_num + 1));
-	ns = (char **)lodepng_realloc(info->itext_strings,
-			sizeof(char *) * (info->itext_num + 1));
+	nk = (char **)lodepng_realloc(dest->itext_keys,
+			sizeof(char *) * (dest->itext_num + 1));
+	nl = (char **)lodepng_realloc(dest->itext_langtags,
+			sizeof(char *) * (dest->itext_num + 1));
+	nt = (char **)lodepng_realloc(dest->itext_transkeys,
+			sizeof(char *) * (dest->itext_num + 1));
+	ns = (char **)lodepng_realloc(dest->itext_strings,
+			sizeof(char *) * (dest->itext_num + 1));
 	if (itext_alloc_fail(nk, nl, nt, ns))
 		return (83);
-	++info->itext_num;
-	info->itext_keys = nk;
-	info->itext_langtags = nl;
-	info->itext_transkeys = nt;
-	info->itext_strings = ns;
-	info->itext_keys[info->itext_num - 1] = alloc_string(key);
-	info->itext_langtags[info->itext_num - 1] = alloc_string(langtag);
-	info->itext_transkeys[info->itext_num - 1] = alloc_string(transkey);
-	info->itext_strings[info->itext_num - 1] = alloc_string(str);
+	dest->itext_keys = nk;
+	dest->itext_langtags = nl;
+	dest->itext_transkeys = nt;
+	dest->itext_strings = ns;
+	nk[dest->itext_num] = alloc_string(src->itext_keys[i]);
+	nl[dest->itext_num] = alloc_string(src->itext_langtags[i]);
+	nt[dest->itext_num] = alloc_string(src->itext_transkeys[i]);
+	ns[dest->itext_num] = alloc_string(src->itext_strings[i]);
+	++dest->itext_num;
+	return (0);
+}
+
+unsigned int	lodepng_itext_copy(t_png_info *dest,
+		const t_png_info *source)
+{
+	size_t			i;
+	unsigned int	error;
+
+	dest->itext_keys = 0;
+	dest->itext_langtags = 0;
+	dest->itext_transkeys = 0;
+	dest->itext_strings = 0;
+	dest->itext_num = 0;
+	i = 0;
+	while (i != source->itext_num)
+	{
+		error = itext_copy_entry(dest, source, i);
+		if (error)
+			return (error);
+		i++;
+	}
 	return (0);
 }

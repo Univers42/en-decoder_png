@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:16:01 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 22:37:44 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 unsigned int	lodepng_read_32bit_int(const unsigned char *buffer)
 {
 	return ((unsigned int)((buffer[0] << 24) | (buffer[1] << 16)
-			| (buffer[2] << 8) | buffer[3]));
+		| (buffer[2] << 8) | buffer[3]));
 }
 
 void	lodepng_set_32bit_int(unsigned char *buffer, unsigned int value)
@@ -26,13 +26,13 @@ void	lodepng_set_32bit_int(unsigned char *buffer, unsigned int value)
 	buffer[3] = (unsigned char)((value) & 0xff);
 }
 
-void	lodepng_add_32bit_int(ucvector *buffer, unsigned int value)
+void	lodepng_add_32bit_int(t_ucvector *buffer, unsigned int value)
 {
 	ucvector_resize(buffer, buffer->size + 4);
 	lodepng_set_32bit_int(&buffer->data[buffer->size - 4], value);
 }
 
-void	add_bit_to_stream(ucvector *bitstream, size_t *bitpointer,
+void	add_bit_to_stream(t_ucvector *bitstream, size_t *bitpointer,
 		unsigned int bit)
 {
 	if (((*bitpointer) & 7) == 0)
@@ -41,7 +41,7 @@ void	add_bit_to_stream(ucvector *bitstream, size_t *bitpointer,
 	++(*bitpointer);
 }
 
-void	add_bits_to_stream(size_t *bitpointer, ucvector *bitstream,
+void	add_bits_to_stream(size_t *bitpointer, t_ucvector *bitstream,
 		unsigned int value, size_t nbits)
 {
 	size_t	i;

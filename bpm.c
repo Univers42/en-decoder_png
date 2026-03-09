@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:05:28 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:56:47 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:35:45 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ static void	bpmnode_gc_mark(t_bpm_lists *lists)
 
 	i = 0;
 	while (i != lists->memsize)
-	{
-		lists->memory[i].in_use = 0;
-		++i;
-	}
+		lists->memory[i++].in_use = 0;
 	i = 0;
 	while (i != lists->listsize)
 	{
@@ -74,36 +71,42 @@ t_bpm_node	*bpmnode_create(t_bpm_lists *lists, int weight,
 	return (result);
 }
 
-void	boundary_pm(t_bpm_lists *lists, t_bpm_node *leaves,
-		size_t numpresent, int c, int num)
+static int	boundary_pm_base(t_bpm_lists *lists, int c)
+{
+	unsigned int	lastindex;
+
+	lastindex = lists->chains1[c]->index;
+	if (lastindex >= lists->numpresent)
+		return (1);
+	lists->chains0[c] = lists->chains1[c];
+	lists->chains1[c] = bpmnode_create(lists,
+			lists->leaves[lastindex].weight, lastindex + 1, 0);
+	return (1);
+}
+
+void	boundary_pm(t_bpm_lists *lists, int c, int num)
 {
 	unsigned int	lastindex;
 	int				sum;
 
-	lastindex = lists->chains1[c]->index;
-	if (c == 0)
-	{
-		if (lastindex >= numpresent)
-			return ;
-		lists->chains0[c] = lists->chains1[c];
-		lists->chains1[c] = bpmnode_create(lists,
-				leaves[lastindex].weight, lastindex + 1, 0);
+	if (c == 0 && boundary_pm_base(lists, c))
 		return ;
-	}
+	lastindex = lists->chains1[c]->index;
 	sum = lists->chains0[c - 1]->weight + lists->chains1[c - 1]->weight;
 	lists->chains0[c] = lists->chains1[c];
-	if (lastindex < numpresent && sum > leaves[lastindex].weight)
+	if (lastindex < lists->numpresent
+		&& sum > lists->leaves[lastindex].weight)
 	{
 		lists->chains1[c] = bpmnode_create(lists,
-				leaves[lastindex].weight, lastindex + 1,
+				lists->leaves[lastindex].weight, lastindex + 1,
 				lists->chains1[c]->tail);
 		return ;
 	}
 	lists->chains1[c] = bpmnode_create(lists, sum, lastindex,
 			lists->chains1[c - 1]);
-	if (num + 1 < (int)(2 * numpresent - 2))
+	if (num + 1 < (int)(2 * lists->numpresent - 2))
 	{
-		boundary_pm(lists, leaves, numpresent, c - 1, num);
-		boundary_pm(lists, leaves, numpresent, c - 1, num);
+		boundary_pm(lists, c - 1, num);
+		boundary_pm(lists, c - 1, num);
 	}
 }

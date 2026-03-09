@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:19:43 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:12:41 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,6 @@ void	lodepng_palette_clear(t_png_color_mode *info)
 {
 	if (info->palette)
 		lodepng_free(info->palette);
-	info->palette = 0;
-	info->palettesize = 0;
-}
-
-void	lodepng_color_mode_init(t_png_color_mode *info)
-{
-	info->key_defined = 0;
-	info->key_r = 0;
-	info->key_g = 0;
-	info->colortype = LCT_RGBA;
-	info->bitdepth = 8;
 	info->palette = 0;
 	info->palettesize = 0;
 }

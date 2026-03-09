@@ -6,22 +6,11 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:57:40 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:56:17 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:23:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
-
-unsigned int	post_process_scanlines(unsigned char *out, unsigned char *in,
-			unsigned int w, unsigned int h, const t_png_info *info_png)
-{
-	unsigned int	bpp;
-
-	if (info_png->interlace_method != 0)
-		return (34);
-	bpp = lodepng_get_bpp(&info_png->color);
-	return (unfilter(out, in, w, h, bpp));
-}
 
 unsigned int	read_chunk_plte(t_png_color_mode *color,
 			const unsigned char *data, size_t chunk_length)
@@ -65,13 +54,11 @@ size_t	lodepng_get_raw_size_idat(unsigned int w, unsigned int h,
 	return (h * (linebytes + 1));
 }
 
-void	pre_process_scanlines(unsigned char **out, size_t *outsize,
-		const unsigned char *in, unsigned int w, unsigned int h,
-		const t_png_info *info, const t_encoder_settings *settings)
+void	pre_process_scanlines(t_enc_ctx *ctx, const unsigned char *in)
 {
-	(void)settings;
-	*outsize = lodepng_get_raw_size(w, h, &info->color);
-	*out = (unsigned char *)lodepng_malloc(*outsize);
-	if (*out && *outsize)
-		memcpy(*out, in, *outsize);
+	ctx->datasize = lodepng_get_raw_size(ctx->w, ctx->h,
+			&ctx->info.color);
+	ctx->data = (unsigned char *)lodepng_malloc(ctx->datasize);
+	if (ctx->data && ctx->datasize)
+		memcpy(ctx->data, in, ctx->datasize);
 }

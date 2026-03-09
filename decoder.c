@@ -6,13 +6,13 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:11:19 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:20:56 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 01:08:08 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-static void	dg_copy_idat(t_png_state *st, ucvector *idat,
+static void	dg_copy_idat(t_png_state *st, t_ucvector *idat,
 		const unsigned char *d, unsigned int len)
 {
 	size_t	oldsize;
@@ -38,97 +38,37 @@ static void	dg_copy_idat(t_png_state *st, ucvector *idat,
 	}
 }
 
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-static int	dg_anc_text(t_png_state *st, const unsigned char *ch,
-		const unsigned char *d, unsigned int len)
+static void	dg_handle_extra(t_png_state *st,
+		const unsigned char *ch, unsigned int *unk)
 {
-	if (!st->decoder.read_text_chunks)
-		return (lodepng_chunk_type_equals(ch, "tEXt")
-			|| lodepng_chunk_type_equals(ch, "zTXt")
-			|| lodepng_chunk_type_equals(ch, "iTXt"));
-	if (lodepng_chunk_type_equals(ch, "tEXt"))
-		st->error = read_chunk_text(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "zTXt"))
-		st->error = read_chunk_ztxt(&st->info_png,
-				&st->decoder.zlibsettings, d, len);
-	else if (lodepng_chunk_type_equals(ch, "iTXt"))
-		st->error = read_chunk_itxt(&st->info_png,
-				&st->decoder.zlibsettings, d, len);
-	else
-		return (0);
-	return (1);
-}
-
-static int	dg_anc_other(t_png_state *st, const unsigned char *ch,
-		const unsigned char *d, unsigned int len)
-{
-	if (lodepng_chunk_type_equals(ch, "bKGD"))
-		st->error = read_chunk_bkgd(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "tIME"))
-		st->error = read_chunk_time(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "pHYs"))
-		st->error = read_chunk_phys(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "gAMA"))
-		st->error = read_chunk_gama(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "cHRM"))
-		st->error = read_chunk_chrm(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "sRGB"))
-		st->error = read_chunk_srgb(&st->info_png, d, len);
-	else if (lodepng_chunk_type_equals(ch, "iCCP"))
-		st->error = read_chunk_iccp(&st->info_png,
-				&st->decoder.zlibsettings, d, len);
-	else
-		return (0);
-	return (1);
-}
-
-static void	dg_handle_extra(t_png_state *st, const unsigned char *ch,
-		const unsigned char *d, unsigned int len, unsigned int *unk)
-{
-	if (dg_anc_text(st, ch, d, len))
-		return ;
-	if (dg_anc_other(st, ch, d, len))
-		return ;
 	if (!st->decoder.ignore_critical && !lodepng_chunk_ancillary(ch))
 		st->error = 69;
 	*unk = 1;
 }
-#else
-static void	dg_handle_extra(t_png_state *st, const unsigned char *ch,
-		const unsigned char *d, unsigned int len, unsigned int *unk)
-{
-	(void)d;
-	(void)len;
-	if (!st->decoder.ignore_critical && !lodepng_chunk_ancillary(ch))
-		st->error = 69;
-	*unk = 1;
-}
-#endif
 
-void	dg_handle_chunk(t_png_state *st, ucvector *idat,
-		const unsigned char *ch, unsigned int *iend,
-		unsigned int *unk, unsigned int *cpos)
+void	dg_handle_chunk(t_png_state *st, t_ucvector *idat,
+		const unsigned char *ch, unsigned int *out)
 {
 	const unsigned char	*d;
 	unsigned int		len;
 
 	len = lodepng_chunk_length(ch);
 	d = lodepng_chunk_data_const(ch);
-	*unk = 0;
+	out[1] = 0;
 	if (lodepng_chunk_type_equals(ch, "IDAT"))
 	{
 		dg_copy_idat(st, idat, d, len);
-		*cpos = 3;
+		out[2] = 3;
 	}
 	else if (lodepng_chunk_type_equals(ch, "IEND"))
-		*iend = 1;
+		out[0] = 1;
 	else if (lodepng_chunk_type_equals(ch, "PLTE"))
 	{
 		st->error = read_chunk_plte(&st->info_png.color, d, len);
-		*cpos = 2;
+		out[2] = 2;
 	}
 	else if (lodepng_chunk_type_equals(ch, "tRNS"))
 		st->error = read_chunk_trns(&st->info_png.color, d, len);
 	else
-		dg_handle_extra(st, ch, d, len, unk);
+		dg_handle_extra(st, ch, &out[1]);
 }

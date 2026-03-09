@@ -3,112 +3,129 @@
 /*                                                        :::      ::::::::   */
 /*   auto_choose_color.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:45:34 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 23:45:34 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/09 00:35:45 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "types.h"
 #include "colors.h"
 #include "settings.h"
 
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-
-#endif
-
-/* forward declaration from color_profile.c */
-unsigned int lodepng_get_color_profile(t_png_color_profile *profile,
-								   const unsigned char *in, unsigned int w, unsigned int h,
-								const t_png_color_mode	*mode_in);
-
-/*Autochoose color model given the computed profile. mode_in is to copy palette order from
-when relevant.*/
-static unsigned int auto_choose_color_from_profile(t_png_color_mode *mode_out,
-											   const t_png_color_mode *mode_in,
-											   const t_png_color_profile *prof)
+static unsigned int	get_palette_bits(size_t n)
 {
-	unsigned int	error = 0;
-	unsigned int	palettebits, palette_ok;
-	size_t			i, n;
-	size_t			numpixels = prof->numpixels;
+	if (n <= 2)
+		return (1);
+	if (n <= 4)
+		return (2);
+	if (n <= 16)
+		return (4);
+	return (8);
+}
 
-	unsigned int	alpha = prof->alpha;
-	unsigned int	key = prof->key;
-	unsigned int	bits = prof->bits;
+static unsigned int	setup_palette_mode(t_png_color_mode *out,
+				const t_png_color_mode *in,
+				const t_png_color_profile *prof)
+{
+	unsigned int		error;
+	const unsigned char	*p;
+	size_t				i;
 
-	mode_out->key_defined = 0;
+	error = 0;
+	p = prof->palette;
+	lodepng_palette_clear(out);
+	i = 0;
+	while (i != prof->numcolors)
+	{
+		error = lodepng_palette_add(out, &p[i * 4]);
+		if (error)
+			break ;
+		i++;
+	}
+	out->colortype = LCT_PALETTE;
+	out->bitdepth = get_palette_bits(prof->numcolors);
+	if (in->colortype == LCT_PALETTE && in->bitdepth == out->bitdepth
+		&& in->palettesize >= out->palettesize)
+	{
+		lodepng_color_mode_cleanup(out);
+		lodepng_color_mode_copy(out, in);
+	}
+	return (error);
+}
 
-	if (key && numpixels <= 16)
+static void	setup_direct_mode(t_png_color_mode *out,
+				const t_png_color_profile *prof,
+				unsigned int alpha, unsigned int key)
+{
+	unsigned int	bits;
+	unsigned int	mask;
+
+	bits = prof->bits;
+	if (prof->key && prof->numpixels <= 16 && bits < 8)
+		bits = 8;
+	out->bitdepth = bits;
+	if (alpha && prof->colored)
+		out->colortype = LCT_RGBA;
+	else if (alpha)
+		out->colortype = LCT_GREY_ALPHA;
+	else if (prof->colored)
+		out->colortype = LCT_RGB;
+	else
+		out->colortype = LCT_GREY;
+	if (!key)
+		return ;
+	mask = (1u << out->bitdepth) - 1u;
+	out->key_r = prof->key_r & mask;
+	out->key_g = prof->key_g & mask;
+	out->key_b = prof->key_b & mask;
+	out->key_defined = 1;
+}
+
+unsigned int	auto_choose_color_from_profile(
+				t_png_color_mode *out,
+				const t_png_color_mode *in,
+				const t_png_color_profile *prof)
+{
+	unsigned int	alpha;
+	unsigned int	key;
+	unsigned int	bits;
+	unsigned int	pal_ok;
+
+	alpha = prof->alpha;
+	key = prof->key;
+	bits = prof->bits;
+	out->key_defined = 0;
+	if (key && prof->numpixels <= 16)
 	{
 		alpha = 1;
 		key = 0;
 		if (bits < 8)
 			bits = 8;
 	}
-	n = prof->numcolors;
-	palettebits = n <= 2 ? 1 : (n <= 4 ? 2 : (n <= 16 ? 4 : 8));
-	palette_ok = n <= 256 && bits <= 8;
-	if (numpixels < n * 2)
-		palette_ok = 0;
-	if (!prof->colored && bits <= palettebits)
-		palette_ok = 0;
-
-	if (palette_ok)
-	{
-		const unsigned char	*p = prof->palette;
-		lodepng_palette_clear(mode_out);
-		for (i = 0; i != prof->numcolors; ++i)
-		{
-			error = lodepng_palette_add(mode_out, p[i * 4 + 0], p[i * 4 + 1], p[i * 4 + 2], p[i * 4 + 3]);
-			if (error)
-				break;
-		}
-
-		mode_out->colortype = LCT_PALETTE;
-		mode_out->bitdepth = palettebits;
-
-		if (mode_in->colortype == LCT_PALETTE && mode_in->palettesize >= mode_out->palettesize && mode_in->bitdepth == mode_out->bitdepth)
-		{
-
-			lodepng_color_mode_cleanup(mode_out);
-			lodepng_color_mode_copy(mode_out, mode_in);
-		}
-	}
-	else
-	{
-		mode_out->bitdepth = bits;
-		mode_out->colortype = alpha ? (prof->colored ? LCT_RGBA : LCT_GREY_ALPHA)
-									: (prof->colored ? LCT_RGB : LCT_GREY);
-
-		if (key)
-		{
-			unsigned int	mask = (1u << mode_out->bitdepth) - 1u;
-			mode_out->key_r = prof->key_r & mask;
-			mode_out->key_g = prof->key_g & mask;
-			mode_out->key_b = prof->key_b & mask;
-			mode_out->key_defined = 1;
-		}
-	}
-
-	return error;
+	pal_ok = (prof->numcolors <= 256 && bits <= 8);
+	if (prof->numpixels < prof->numcolors * 2)
+		pal_ok = 0;
+	if (!prof->colored && bits <= get_palette_bits(prof->numcolors))
+		pal_ok = 0;
+	if (pal_ok)
+		return (setup_palette_mode(out, in, prof));
+	setup_direct_mode(out, prof, alpha, key);
+	return (0);
 }
 
-/*Automatically chooses color type that gives smallest amount of bits in the
-output image, e.g. gray if there are only grayscale pixels, palette if there
-are less than 256 colors, color key if only single transparent color, ...
-Updates values of mode with a potentially smaller color model. mode_out should
-contain the user chosen color model, but will be overwritten with the new chosen one.*/
-unsigned int lodepng_auto_choose_color(t_png_color_mode *mode_out,
-								   const unsigned char *image, unsigned int w, unsigned int h,
-								   const t_png_color_mode *mode_in)
+unsigned int	lodepng_auto_choose_color(t_png_color_mode *out,
+				const unsigned char *image,
+				size_t numpixels,
+				const t_png_color_mode *mode_in)
 {
-	unsigned int		error = 0;
+	unsigned int		error;
 	t_png_color_profile	prof;
+
 	lodepng_color_profile_init(&prof);
-	error = lodepng_get_color_profile(&prof, image, w, h, mode_in);
+	error = lodepng_get_color_profile(&prof, image,
+			numpixels, mode_in);
 	if (error)
-		return error;
-	return auto_choose_color_from_profile(mode_out, mode_in, &prof);
+		return (error);
+	return (auto_choose_color_from_profile(out, mode_in, &prof));
 }

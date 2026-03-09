@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   uivector.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 22:44:32 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 22:44:32 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 23:28:07 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ typedef struct s_uivector
 	unsigned int	*data;
 	size_t			size;
 	size_t			allocsize;
-}	uivector;
+}	t_uivector;
 
 # endif
 
-void	uivector_init(uivector *v);
-int		uivector_resize(uivector *v, size_t s);
-int		uivector_resizev(uivector *v, size_t s, unsigned int val);
-int		uivector_push_back(uivector *v, unsigned int val);
-void	uivector_cleanup(uivector *v);
+void	uivector_init(t_uivector *v);
+int		uivector_resize(t_uivector *v, size_t s);
+int		uivector_resizev(t_uivector *v, size_t s, unsigned int val);
+int		uivector_push_back(t_uivector *v, unsigned int val);
+void	uivector_cleanup(t_uivector *v);
 
 #endif

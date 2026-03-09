@@ -6,87 +6,27 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:33:01 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:41:25 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
-
-static unsigned int	itxt_fill_header(ucvector *data, const char *keyword,
-				unsigned int compressed, const char *langtag,
-				const char *transkey)
-{
-	size_t	i;
-
-	i = 0;
-	while (keyword[i] != 0)
-		ucvector_push_back(data, (unsigned char)keyword[i++]);
-	if (i < 1 || i > 79)
-		return (89);
-	ucvector_push_back(data, 0);
-	if (compressed)
-		ucvector_push_back(data, 1);
-	else
-		ucvector_push_back(data, 0);
-	ucvector_push_back(data, 0);
-	i = 0;
-	while (langtag[i] != 0)
-		ucvector_push_back(data, (unsigned char)langtag[i++]);
-	ucvector_push_back(data, 0);
-	i = 0;
-	while (transkey[i] != 0)
-		ucvector_push_back(data, (unsigned char)transkey[i++]);
-	ucvector_push_back(data, 0);
-	return (0);
-}
-
-static unsigned int	itxt_write_body(ucvector *data, unsigned int compressed,
-				const char *textstring,
-				t_compress_settings *zlibsettings)
-{
-	ucvector		comp;
-	unsigned int	error;
-	size_t			i;
-
-	if (!compressed)
-	{
-		i = 0;
-		while (textstring[i] != 0)
-			ucvector_push_back(data, (unsigned char)textstring[i++]);
-		return (0);
-	}
-	ucvector_init(&comp);
-	error = zlib_compress(&comp.data, &comp.size,
-			(unsigned char *)textstring, strlen(textstring), zlibsettings);
-	if (!error)
-	{
-		i = 0;
-		while (i != comp.size)
-			ucvector_push_back(data, comp.data[i++]);
-	}
-	ucvector_cleanup(&comp);
-	return (error);
-}
-
-unsigned int	add_chunk_itxt(ucvector *out, unsigned int compressed,
-			const char *keyword, const char *langtag,
-			const char *transkey, const char *textstring,
-			t_compress_settings *zlibsettings)
+unsigned int	add_chunk_ihdr(t_ucvector *out,
+			const t_png_info *info, unsigned int w, unsigned int h)
 {
 	unsigned int	error;
-	ucvector		data;
+	t_ucvector		header;
 
-	ucvector_init(&data);
-	error = itxt_fill_header(&data, keyword, compressed, langtag, transkey);
-	if (error)
-		return (error);
-	error = itxt_write_body(&data, compressed, textstring, zlibsettings);
-	if (!error)
-		error = add_chunk(out, "iTXt", data.data, data.size);
-	ucvector_cleanup(&data);
+	ucvector_init(&header);
+	lodepng_add_32bit_int(&header, w);
+	lodepng_add_32bit_int(&header, h);
+	ucvector_push_back(&header, (unsigned char)info->color.bitdepth);
+	ucvector_push_back(&header, (unsigned char)info->color.colortype);
+	ucvector_push_back(&header, 0);
+	ucvector_push_back(&header, 0);
+	ucvector_push_back(&header, info->interlace_method);
+	error = add_chunk(out, "IHDR", header.data, header.size);
+	ucvector_cleanup(&header);
 	return (error);
 }
-
-#endif

@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:18:28 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 01:42:24 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,18 @@ void	lodepng_compress_settings_init(t_compress_settings *s)
 	s->minmatch = 3;
 	s->nicematch = 128;
 	s->lazymatching = 1;
-	s->custom_zlib = 0;
-	s->custom_deflate = 0;
-	s->custom_context = 0;
 }
 
 void	lodepng_decompress_settings_init(t_decompress_settings *s)
 {
 	s->ignore_adler32 = 0;
-	s->custom_zlib = 0;
-	s->custom_inflate = 0;
-	s->custom_context = 0;
 }
 
 void	lodepng_decoder_settings_init(t_decoder_settings *settings)
 {
 	settings->color_convert = 1;
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 	settings->read_text_chunks = 1;
 	settings->remember_unknown_chunks = 0;
-#endif
 	settings->ignore_crc = 0;
 	settings->ignore_critical = 0;
 	settings->ignore_end = 0;

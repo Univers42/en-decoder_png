@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:19:44 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:34:00 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,20 @@ void	dd_ctx_cleanup(t_dd_ctx *ctx)
 	uivector_cleanup(&ctx->bitlen_cl);
 }
 
-unsigned int	dd_lz77_encode(t_dd_ctx *ctx, t_hash *hash,
-		const unsigned char *data, size_t datapos,
-		size_t dataend, const t_compress_settings *s)
+unsigned int	dd_lz77_encode(t_dd_ctx *ctx, t_deflate_work *w)
 {
 	size_t	datasize;
 	size_t	i;
 
-	datasize = dataend - datapos;
-	if (s->use_lz77)
-		return (encode_lz77(&ctx->lz77_encoded, hash, data,
-				datapos, dataend, s->windowsize,
-				s->minmatch, s->nicematch, s->lazymatching));
+	datasize = w->dataend - w->datapos;
+	if (w->settings->use_lz77)
+		return (encode_lz77(&ctx->lz77_encoded, w));
 	if (!uivector_resize(&ctx->lz77_encoded, datasize))
 		return (83);
-	i = datapos;
-	while (i < dataend)
+	i = w->datapos;
+	while (i < w->dataend)
 	{
-		ctx->lz77_encoded.data[i - datapos] = data[i];
+		ctx->lz77_encoded.data[i - w->datapos] = w->data[i];
 		++i;
 	}
 	return (0);
@@ -92,10 +88,12 @@ unsigned int	dd_build_trees(t_dd_ctx *ctx)
 {
 	unsigned int	error;
 
+	ctx->tree_ll.max_bit_len = 15;
 	error = huffman_tree_make_from_freq(&ctx->tree_ll,
-			ctx->freq_ll.data, 257, ctx->freq_ll.size, 15);
+			ctx->freq_ll.data, 257, ctx->freq_ll.size);
 	if (error)
 		return (error);
+	ctx->tree_d.max_bit_len = 15;
 	return (huffman_tree_make_from_freq(&ctx->tree_d,
-			ctx->freq_d.data, 2, ctx->freq_d.size, 15));
+			ctx->freq_d.data, 2, ctx->freq_d.size));
 }

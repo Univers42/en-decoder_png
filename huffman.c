@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:02:18 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:49:06 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 23:32:02 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,19 @@ void	huffman_tree_cleanup(t_huffman_tree *tree)
 	lodepng_free(tree->lengths);
 }
 
-unsigned int	huffman_tree_get_code(const t_huffman_tree *tree, unsigned int index)
+unsigned int	huffman_tree_get_code(const t_huffman_tree *tree,
+				unsigned int index)
 {
 	return (tree->tree1d[index]);
 }
 
-unsigned int	huffman_tree_get_length(const t_huffman_tree *tree, unsigned int index)
+unsigned int	huffman_tree_get_length(const t_huffman_tree *tree,
+				unsigned int index)
 {
 	return (tree->lengths[index]);
 }
 
-void	add_huffman_symbol(size_t *bp, ucvector *compressed,
+void	add_huffman_symbol(size_t *bp, t_ucvector *compressed,
 		unsigned int code, unsigned int bitlen)
 {
 	add_bits_to_stream_rev(bp, compressed, code, bitlen);

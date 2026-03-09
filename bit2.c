@@ -6,13 +6,13 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:16:03 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 23:03:09 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	add_bits_to_stream_rev(size_t *bitpointer, ucvector *bitstream,
+void	add_bits_to_stream_rev(size_t *bitpointer, t_ucvector *bitstream,
 		unsigned int value, size_t nbits)
 {
 	size_t	i;
@@ -37,7 +37,7 @@ unsigned char	read_bit_from_stream(size_t *bitpointer,
 {
 	unsigned char	result;
 
-	result = (unsigned char)(READBIT(*bitpointer, bitstream));
+	result = (unsigned char)(read_bit(*bitpointer, bitstream));
 	++(*bitpointer);
 	return (result);
 }
@@ -52,7 +52,7 @@ unsigned int	read_bits_from_stream(size_t *bitpointer,
 	i = 0;
 	while (i != nbits)
 	{
-		result += ((unsigned int)READBIT(*bitpointer, bitstream)) << i;
+		result += ((unsigned int)read_bit(*bitpointer, bitstream)) << i;
 		++(*bitpointer);
 		i++;
 	}

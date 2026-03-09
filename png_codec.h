@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   png_codec.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 17:30:48 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 17:30:48 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 23:28:09 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ typedef struct s_ctx
 	unsigned int		h;
 	t_png_color_type	color_type;
 	unsigned int		bit_depth;
-} t_ctx;
+}	t_ctx;
 
 #endif

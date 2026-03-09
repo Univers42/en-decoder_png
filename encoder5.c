@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:50:00 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:58:49 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ static void	enc_write_palette(t_enc_ctx *ctx)
 unsigned int	enc_write_pre_idat(t_enc_ctx *ctx)
 {
 	write_signature(&ctx->outv);
-	add_chunk_ihdr(&ctx->outv, ctx->w, ctx->h,
-		ctx->info.color.colortype, ctx->info.color.bitdepth,
-		ctx->info.interlace_method);
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
+	add_chunk_ihdr(&ctx->outv, &ctx->info, ctx->w, ctx->h);
 	if (ctx->info.unknown_chunks_data[0])
 	{
 		ctx->state->error = add_unknown_chunks(&ctx->outv,
@@ -54,14 +51,12 @@ unsigned int	enc_write_pre_idat(t_enc_ctx *ctx)
 		add_chunk_gama(&ctx->outv, &ctx->info);
 	if (ctx->info.chrm_defined)
 		add_chunk_chrm(&ctx->outv, &ctx->info);
-#endif
 	enc_write_palette(ctx);
 	return (0);
 }
 
 unsigned int	enc_write_idat_anc(t_enc_ctx *ctx)
 {
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 	if (ctx->info.background_defined)
 	{
 		ctx->state->error = add_chunk_bkgd(&ctx->outv, &ctx->info);
@@ -78,7 +73,6 @@ unsigned int	enc_write_idat_anc(t_enc_ctx *ctx)
 		if (ctx->state->error)
 			return (ctx->state->error);
 	}
-#endif
 	ctx->state->error = add_chunk_idat(&ctx->outv, ctx->data,
 			ctx->datasize, &ctx->state->encoder.zlibsettings);
 	return (ctx->state->error);
@@ -86,14 +80,12 @@ unsigned int	enc_write_idat_anc(t_enc_ctx *ctx)
 
 unsigned int	enc_write_post(t_enc_ctx *ctx)
 {
-#ifdef LODEPNG_COMPILE_ANCILLARY_CHUNKS
 	ctx->state->error = enc_write_text(ctx);
 	if (ctx->state->error)
 		return (ctx->state->error);
 	ctx->state->error = enc_write_itext_end(ctx);
 	if (ctx->state->error)
 		return (ctx->state->error);
-#endif
 	add_chunk_iend(&ctx->outv);
 	return (0);
 }

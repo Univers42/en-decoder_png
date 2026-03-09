@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ucvector.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 22:14:47 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 22:14:47 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 23:28:09 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,15 @@ typedef struct s_ucvector
 	unsigned char	*data;
 	size_t			size;
 	size_t			allocsize;
-}	ucvector;
+}	t_ucvector;
 
 # endif
 
-void	ucvector_init(ucvector *v);
-void	ucvector_init_buffer(ucvector *v, unsigned char *d, size_t s);
-int		ucvector_resize(ucvector *v, size_t s);
-int		ucvector_reserve(ucvector *v, size_t s);
-int		ucvector_push_back(ucvector *v, unsigned char c);
-void	ucvector_cleanup(ucvector *v);
+void	ucvector_init(t_ucvector *v);
+void	ucvector_init_buffer(t_ucvector *v, unsigned char *d, size_t s);
+int		ucvector_resize(t_ucvector *v, size_t s);
+int		ucvector_reserve(t_ucvector *v, size_t s);
+int		ucvector_push_back(t_ucvector *v, unsigned char c);
+void	ucvector_cleanup(t_ucvector *v);
 
 #endif

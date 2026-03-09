@@ -6,13 +6,13 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:33:01 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:41:27 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 01:42:27 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-static void	trns_palette(ucvector *trns, const t_png_color_mode *info)
+static void	trns_palette(t_ucvector *trns, const t_png_color_mode *info)
 {
 	size_t	amount;
 	size_t	i;
@@ -35,7 +35,7 @@ static void	trns_palette(ucvector *trns, const t_png_color_mode *info)
 	}
 }
 
-static void	trns_keys(ucvector *trns, const t_png_color_mode *info)
+static void	trns_keys(t_ucvector *trns, const t_png_color_mode *info)
 {
 	if (info->colortype == LCT_GREY && info->key_defined)
 	{
@@ -53,10 +53,10 @@ static void	trns_keys(ucvector *trns, const t_png_color_mode *info)
 	}
 }
 
-unsigned int	add_chunk_trns(ucvector *out, const t_png_color_mode *info)
+unsigned int	add_chunk_trns(t_ucvector *out, const t_png_color_mode *info)
 {
 	unsigned int	error;
-	ucvector		trns;
+	t_ucvector		trns;
 
 	ucvector_init(&trns);
 	if (info->colortype == LCT_PALETTE)
@@ -68,14 +68,14 @@ unsigned int	add_chunk_trns(ucvector *out, const t_png_color_mode *info)
 	return (error);
 }
 
-unsigned int	add_chunk_idat(ucvector *out, const unsigned char *data,
+unsigned int	add_chunk_idat(t_ucvector *out, const unsigned char *data,
 			size_t datasize, t_compress_settings *zlibsettings)
 {
-	ucvector		zlibdata;
+	t_ucvector		zlibdata;
 	unsigned int	error;
 
 	ucvector_init(&zlibdata);
-	error = zlib_compress(&zlibdata.data, &zlibdata.size,
+	error = zlib_compress(&zlibdata,
 			data, datasize, zlibsettings);
 	if (!error)
 		error = add_chunk(out, "IDAT", zlibdata.data, zlibdata.size);

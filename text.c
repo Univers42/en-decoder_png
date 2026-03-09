@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:22:56 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 23:03:10 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	lodepng_text_cleanup(t_png_info *info)
 unsigned int	lodepng_text_copy(t_png_info *dest,
 		const t_png_info *source)
 {
-	size_t	i;
+	size_t			i;
+	unsigned int	error;
 
 	dest->text_keys = 0;
 	dest->text_strings = 0;
@@ -45,8 +46,10 @@ unsigned int	lodepng_text_copy(t_png_info *dest,
 	i = 0;
 	while (i != source->text_num)
 	{
-		CERROR_TRY_RETURN(lodepng_add_text(dest,
-				source->text_keys[i], source->text_strings[i]));
+		error = lodepng_add_text(dest,
+				source->text_keys[i], source->text_strings[i]);
+		if (error)
+			return (error);
 		i++;
 	}
 	return (0);

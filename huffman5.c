@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:02:18 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:49:06 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,12 @@ unsigned int	lodepng_huffman_code_lengths(unsigned int *lengths,
 
 unsigned int	huffman_tree_make_from_freq(t_huffman_tree *tree,
 			const unsigned int *frequencies, size_t mincodes,
-			size_t numcodes, unsigned int maxbitlen)
+			size_t numcodes)
 {
 	unsigned int	error;
 
 	while (!frequencies[numcodes - 1] && numcodes > mincodes)
 		--numcodes;
-	tree->max_bit_len = maxbitlen;
 	tree->numcodes = (unsigned int)numcodes;
 	tree->lengths = (unsigned int *)lodepng_realloc(tree->lengths,
 			numcodes * sizeof(unsigned int));
@@ -96,7 +95,7 @@ unsigned int	huffman_tree_make_from_freq(t_huffman_tree *tree,
 		return (83);
 	memset(tree->lengths, 0, numcodes * sizeof(unsigned int));
 	error = lodepng_huffman_code_lengths(tree->lengths,
-			frequencies, numcodes, maxbitlen);
+			frequencies, numcodes, tree->max_bit_len);
 	if (!error)
 		error = huffman_tree_make_from_len2(tree);
 	return (error);
@@ -113,7 +112,7 @@ unsigned int	huffman_decode_symbol(const unsigned char *in, size_t *bp,
 	{
 		if (*bp >= inbitlength)
 			return ((unsigned int)(-1));
-		ct = codetree->tree2d[(treepos << 1) + READBIT(*bp, in)];
+		ct = codetree->tree2d[(treepos << 1) + read_bit(*bp, in)];
 		++(*bp);
 		if (ct < codetree->numcodes)
 			return (ct);

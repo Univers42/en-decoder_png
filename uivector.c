@@ -6,20 +6,20 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:16:00 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 23:28:08 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	uivector_init(uivector *v)
+void	uivector_init(t_uivector *v)
 {
 	v->data = NULL;
 	v->size = 0;
 	v->allocsize = 0;
 }
 
-int	uivector_resize(uivector *v, size_t s)
+int	uivector_resize(t_uivector *v, size_t s)
 {
 	size_t			n;
 	unsigned int	*p;
@@ -39,7 +39,7 @@ int	uivector_resize(uivector *v, size_t s)
 	return (1);
 }
 
-int	uivector_resizev(uivector *v, size_t s, unsigned int val)
+int	uivector_resizev(t_uivector *v, size_t s, unsigned int val)
 {
 	size_t	i;
 
@@ -54,7 +54,7 @@ int	uivector_resizev(uivector *v, size_t s, unsigned int val)
 	return (1);
 }
 
-int	uivector_push_back(uivector *v, unsigned int val)
+int	uivector_push_back(t_uivector *v, unsigned int val)
 {
 	if (v->size + 1 > v->allocsize)
 	{
@@ -66,7 +66,7 @@ int	uivector_push_back(uivector *v, unsigned int val)
 	return (1);
 }
 
-void	uivector_cleanup(uivector *v)
+void	uivector_cleanup(t_uivector *v)
 {
 	lodepng_free(v->data);
 	v->data = NULL;

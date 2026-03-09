@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signature.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:02:33 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/30 00:02:33 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/08 22:23:21 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-void	write_signature(ucvector *out)
+void	write_signature(t_ucvector *out)
 {
 	ucvector_push_back(out, 137);
 	ucvector_push_back(out, 80);

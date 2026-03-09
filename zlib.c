@@ -6,13 +6,13 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 18:55:46 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 01:42:26 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-unsigned int	zlib_decompress(unsigned char **out, size_t *outsize,
+unsigned int	zlib_decompress(t_ucvector *out,
 			const unsigned char *in, size_t insize,
 			const t_decompress_settings *settings)
 {
@@ -31,7 +31,7 @@ unsigned int	zlib_decompress(unsigned char **out, size_t *outsize,
 		return (24);
 	if (flgs & 32)
 		return (26);
-	return (inflate(out, outsize, in + 2, insize - 2, settings));
+	return (lodepng_inflatev(out, in + 2, insize - 2, settings));
 }
 
 static void	zc_build_header(unsigned char header[2], unsigned int ws)
@@ -53,48 +53,40 @@ static void	zc_build_header(unsigned char header[2], unsigned int ws)
 	header[1] = (unsigned char)(flg | fcheck);
 }
 
-static void	zc_assemble(unsigned char **out, size_t *outsize,
-			unsigned char *deflatedata, size_t deflatesize,
-			unsigned char header[2], unsigned int adler_val)
+static void	zc_append_data(t_ucvector *out,
+			t_ucvector *def, unsigned char h[2], unsigned int adl)
 {
-	ucvector	v;
-	size_t		i;
+	size_t	i;
 
-	ucvector_init(&v);
-	ucvector_push_back(&v, header[0]);
-	ucvector_push_back(&v, header[1]);
+	ucvector_push_back(out, h[0]);
+	ucvector_push_back(out, h[1]);
 	i = 0;
-	while (i < deflatesize)
-		ucvector_push_back(&v, deflatedata[i++]);
-	ucvector_push_back(&v, (unsigned char)((adler_val >> 24) & 0xff));
-	ucvector_push_back(&v, (unsigned char)((adler_val >> 16) & 0xff));
-	ucvector_push_back(&v, (unsigned char)((adler_val >> 8) & 0xff));
-	ucvector_push_back(&v, (unsigned char)(adler_val & 0xff));
-	*out = v.data;
-	*outsize = v.size;
+	while (i < def->size)
+		ucvector_push_back(out, def->data[i++]);
+	ucvector_push_back(out, (unsigned char)((adl >> 24) & 0xff));
+	ucvector_push_back(out, (unsigned char)((adl >> 16) & 0xff));
+	ucvector_push_back(out, (unsigned char)((adl >> 8) & 0xff));
+	ucvector_push_back(out, (unsigned char)(adl & 0xff));
 }
 
-unsigned int	zlib_compress(unsigned char **out, size_t *outsize,
+unsigned int	zlib_compress(t_ucvector *out,
 			const unsigned char *in, size_t insize,
 			const t_compress_settings *settings)
 {
 	unsigned int	error;
-	unsigned char	*deflatedata;
-	size_t			deflatesize;
+	t_ucvector		defdata;
 	unsigned char	header[2];
 	unsigned int	adler_val;
 
-	deflatedata = 0;
-	deflatesize = 0;
 	adler_val = adler32(in, (unsigned int)insize);
 	if (settings)
 		zc_build_header(header, settings->windowsize);
 	else
 		zc_build_header(header, 32768);
-	error = deflate(&deflatedata, &deflatesize, in, insize, settings);
+	ucvector_init(&defdata);
+	error = lodepng_deflatev(&defdata, in, insize, settings);
 	if (!error)
-		zc_assemble(out, outsize, deflatedata, deflatesize,
-			header, adler_val);
-	lodepng_free(deflatedata);
+		zc_append_data(out, &defdata, header, adler_val);
+	ucvector_cleanup(&defdata);
 	return (error);
 }

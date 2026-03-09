@@ -74,11 +74,11 @@ unsigned int	lodepng_unk_chunks_copy(t_png_info *dest,
 	return (0);
 }
 
-unsigned int	add_chunk_plte(ucvector *out, const t_png_color_mode *info)
+unsigned int	add_chunk_plte(t_ucvector *out, const t_png_color_mode *info)
 {
 	unsigned int	error;
 	size_t			i;
-	ucvector		plte;
+	t_ucvector		plte;
 
 	ucvector_init(&plte);
 	i = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bpm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:05:28 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 23:05:28 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/09 00:35:45 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,17 @@ typedef struct s_bpm_lists
 	unsigned int	memsize;
 	unsigned int	numfree;
 	unsigned int	nextfree;
+	size_t			numpresent;
 	t_bpm_node		*memory;
+	t_bpm_node		*leaves;
 	t_bpm_node		**freelist;
 	t_bpm_node		**chains0;
 	t_bpm_node		**chains1;
 }	t_bpm_lists;
 
 t_bpm_node		*bpmnode_create(t_bpm_lists *lists, int weight,
-				unsigned int	index, t_bpm_node *tail);
-void		bpmnode_sort(t_bpm_node *leaves, size_t num);
-void		boundary_pm(t_bpm_lists *lists, t_bpm_node *leaves,
-				size_t	numpresent, int c, int num);
+					unsigned int index, t_bpm_node *tail);
+void			bpmnode_sort(t_bpm_node *leaves, size_t num);
+void			boundary_pm(t_bpm_lists *lists, int c, int num);
 
 #endif

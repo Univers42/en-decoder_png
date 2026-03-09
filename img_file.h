@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   img_file.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 22:54:23 by marvin            #+#    #+#             */
-/*   Updated: 2025/12/29 22:54:23 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/09 00:12:38 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 # include <stdlib.h>
 # include <limits.h>
 
-long		lodepng_filesize(const char *filename);
+long			lodepng_filesize(const char *filename);
 unsigned int	lodepng_buffer_file(unsigned char *out,
-				size_t	size, const char *filename);
+					size_t size, const char *filename);
 unsigned int	lodepng_load_file(unsigned char **out,
-				size_t	*outsize, const char *filename);
+					size_t *outsize, const char *filename);
 unsigned int	lodepng_save_file(const unsigned char *buffer,
-				size_t	buffersize, const char *filename);
+					size_t buffersize, const char *filename);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:19:44 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:34:00 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/08 22:37:46 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	dd_rle_encode(t_dd_ctx *ctx)
 		j = 0;
 		while (i + j + 1 < (unsigned int)ctx->bitlen_lld.size
 			&& ctx->bitlen_lld.data[i + j + 1]
-				== ctx->bitlen_lld.data[i])
+			== ctx->bitlen_lld.data[i])
 			++j;
 		if (ctx->bitlen_lld.data[i] == 0 && j >= 2)
 			i = dd_rle_zeros(ctx, i, j);

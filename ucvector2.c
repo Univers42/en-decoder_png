@@ -12,21 +12,21 @@
 
 #include "all.h"
 
-void	ucvector_init(ucvector *v)
+void	ucvector_init(t_ucvector *v)
 {
 	v->data = NULL;
 	v->size = 0;
 	v->allocsize = 0;
 }
 
-void	ucvector_init_buffer(ucvector *v, unsigned char *d, size_t s)
+void	ucvector_init_buffer(t_ucvector *v, unsigned char *d, size_t s)
 {
 	v->data = d;
 	v->size = s;
 	v->allocsize = s;
 }
 
-int	ucvector_resize(ucvector *v, size_t s)
+int	ucvector_resize(t_ucvector *v, size_t s)
 {
 	size_t			n;
 	unsigned char	*p;
@@ -46,14 +46,14 @@ int	ucvector_resize(ucvector *v, size_t s)
 	return (1);
 }
 
-int	ucvector_reserve(ucvector *v, size_t s)
+int	ucvector_reserve(t_ucvector *v, size_t s)
 {
 	if (s <= v->allocsize)
 		return (1);
 	return (ucvector_resize(v, s));
 }
 
-int	ucvector_push_back(ucvector *v, unsigned char c)
+int	ucvector_push_back(t_ucvector *v, unsigned char c)
 {
 	if (v->size + 1 > v->allocsize)
 	{

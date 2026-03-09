@@ -6,7 +6,7 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 00:35:00 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:48:21 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,26 +100,22 @@ void	lz77_emit(t_lz77_ctx *ctx)
 	lz77_advance_match(ctx);
 }
 
-unsigned int	encode_lz77(uivector *out, t_hash *hash,
-		const unsigned char *in, size_t inpos,
-		size_t insize, unsigned int windowsize,
-		unsigned int minmatch, unsigned int nicematch,
-		unsigned int lazymatching)
+unsigned int	encode_lz77(t_uivector *out, t_deflate_work *w)
 {
 	t_lz77_ctx	ctx;
 
 	ctx.out = out;
-	ctx.hash = hash;
-	ctx.in = in;
-	ctx.insize = insize;
-	ctx.windowsize = windowsize;
-	ctx.minmatch = minmatch;
-	ctx.nicematch = nicematch;
-	ctx.lazymatching = lazymatching;
+	ctx.hash = w->hash;
+	ctx.in = w->data;
+	ctx.insize = w->dataend;
+	ctx.windowsize = w->settings->windowsize;
+	ctx.minmatch = w->settings->minmatch;
+	ctx.nicematch = w->settings->nicematch;
+	ctx.lazymatching = w->settings->lazymatching;
 	if (lz77_init(&ctx))
 		return (ctx.error);
-	ctx.pos = inpos;
-	while (ctx.pos < insize && !ctx.error)
+	ctx.pos = w->datapos;
+	while (ctx.pos < ctx.insize && !ctx.error)
 	{
 		lz77_hash_pos(&ctx);
 		lz77_chain_search(&ctx);

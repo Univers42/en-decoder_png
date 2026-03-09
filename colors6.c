@@ -6,28 +6,25 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/08 00:00:00 by dlesieur          #+#    #+#             */
-/*   Updated: 2026/03/08 18:21:06 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 00:35:45 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
 
-int	color_tree_has(t_color_tree *tree, unsigned char r,
-		unsigned char g, unsigned char b, unsigned char a)
+int	color_tree_has(t_color_tree *tree, const unsigned char *rgba)
 {
-	return (color_tree_get(tree, r, g, b, a) >= 0);
+	return (color_tree_get(tree, rgba) >= 0);
 }
 
-static int	ct_child_idx(unsigned char r, unsigned char g,
-		unsigned char b, unsigned char a, int bit)
+static int	ct_child_idx(const unsigned char *rgba, int bit)
 {
-	return (8 * ((r >> bit) & 1) + 4 * ((g >> bit) & 1)
-		+ 2 * ((b >> bit) & 1) + 1 * ((a >> bit) & 1));
+	return (8 * ((rgba[0] >> bit) & 1) + 4 * ((rgba[1] >> bit) & 1)
+		+ 2 * ((rgba[2] >> bit) & 1) + 1 * ((rgba[3] >> bit) & 1));
 }
 
-void	color_tree_add(t_color_tree *tree, unsigned char r,
-		unsigned char g, unsigned char b,
-		unsigned char a, unsigned int index)
+void	color_tree_add(t_color_tree *tree, const unsigned char *rgba,
+		unsigned int index)
 {
 	int	bit;
 	int	i;
@@ -35,7 +32,7 @@ void	color_tree_add(t_color_tree *tree, unsigned char r,
 	bit = 0;
 	while (bit < 8)
 	{
-		i = ct_child_idx(r, g, b, a, bit);
+		i = ct_child_idx(rgba, bit);
 		if (!tree->children[i])
 		{
 			tree->children[i] = (t_color_tree *)lodepng_malloc(

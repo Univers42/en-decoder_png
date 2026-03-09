@@ -6,21 +6,11 @@
 /*   By: dlesieur <dlesieur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 23:24:44 by marvin            #+#    #+#             */
-/*   Updated: 2026/03/08 19:34:00 by dlesieur         ###   ########.fr       */
+/*   Updated: 2026/03/09 02:00:39 by dlesieur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "all.h"
-
-unsigned int	deflate(unsigned char **out, size_t *outsize,
-		const unsigned char *in, size_t insize,
-		const t_compress_settings *settings)
-{
-	if (settings->custom_deflate)
-		return (settings->custom_deflate(out, outsize,
-				in, insize, settings));
-	return (lodepng_deflate(out, outsize, in, insize, settings));
-}
 
 /*
 ** RFC 1951 fixed Huffman literal/length tree (288 symbols):
@@ -61,4 +51,12 @@ void	get_tree_inflate_fixed(t_huffman_tree *tree_ll, t_huffman_tree *tree_d)
 {
 	gen_fixed_litlen_tree(tree_ll);
 	gen_fixed_dist_tree(tree_d);
+}
+
+unsigned int	dd_emit(t_deflate_work *w, t_dd_ctx *ctx,
+		unsigned int bfinal)
+{
+	dd_write_header(w->out, w->bp, ctx, bfinal);
+	dd_write_cls(w->out, w->bp, ctx);
+	return (dd_write_data(w, ctx));
 }
